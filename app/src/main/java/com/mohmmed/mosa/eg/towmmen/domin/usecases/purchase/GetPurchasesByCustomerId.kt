@@ -1,0 +1,14 @@
+package com.mohmmed.mosa.eg.towmmen.domin.usecases.purchase
+
+import com.mohmmed.mosa.eg.towmmen.data.repository.PurchaseRepositoryImp
+import com.mohmmed.mosa.eg.towmmen.domin.module.Purchase
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+
+class GetPurchasesByCustomerId @Inject constructor(
+    private val purchasesRepositoryImp: PurchaseRepositoryImp
+){
+    operator fun invoke(id: Int): Flow<List<Purchase>> {
+        return purchasesRepositoryImp.getPurchasesByCustomerId(id)
+    }
+}

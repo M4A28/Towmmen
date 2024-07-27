@@ -13,6 +13,14 @@ class ProductRepositoryImp @Inject constructor(
         productDao.insertProduct(product)
     }
 
+    override fun getProductByBarcode(barcode: String): Flow<List<Product>> {
+        return productDao.getProductByBarcode(barcode)
+    }
+
+    override suspend fun upsertProduct(product: Product) {
+        productDao.upsertProduct(product)
+    }
+
     override fun getAllProducts(): Flow<List<Product>> {
         return productDao.getAllProducts()
     }
@@ -29,7 +37,11 @@ class ProductRepositoryImp @Inject constructor(
         productDao.updateProduct(product)
     }
 
-    override fun getProductCount(): Flow<Int> {
+    override fun getProductCount(): Flow<Int?> {
         return productDao.getProductCount()
+    }
+
+    override fun getTotalCostOfProducts(): Flow<Double?> {
+        return productDao.getTotalCostOfProducts()
     }
 }

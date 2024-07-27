@@ -8,7 +8,7 @@ class CustomerCount @Inject constructor(
     private val customerRepository: CustomerRepositoryImp
 ) {
 
-    operator fun invoke(): Flow<Int> {
+    operator fun invoke(): Flow<Int?> {
         return customerRepository.getCustomerCount()
     }
 }

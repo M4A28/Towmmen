@@ -77,6 +77,13 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     //Splash Api
     implementation("androidx.core:core-splashscreen:1.0.1")
+    //implementation("com.google.accompanist:accompanist-permissions:0.31.0")
+    implementation("androidx.camera:camera-camera2:1.2.2")
+    implementation("androidx.camera:camera-lifecycle:1.2.2")
+    implementation("androidx.camera:camera-view:1.2.2")
+    implementation("com.google.mlkit:barcode-scanning:17.1.0")
+    // coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
     // dagger
     implementation("com.google.dagger:hilt-android:2.49")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")

@@ -17,6 +17,11 @@ class ProductViewModel @Inject constructor(
 
     val products = productUseCase.getALlProducts()
 
+
+    fun getAllProductCost(): Flow<Double?>{
+        return productUseCase.totalProductsCost()
+    }
+
     fun addNewProduct(product: Product){
         viewModelScope.launch {
             productUseCase.addNewProduct(product)
@@ -39,6 +44,10 @@ class ProductViewModel @Inject constructor(
 
     fun searchProduct(name: String): Flow<List<Product>> {
         return productUseCase.getProduct(name)
+    }
+
+    fun getProductsCount(): Flow<Int?>{
+        return productUseCase.getProductsCount()
     }
 
 

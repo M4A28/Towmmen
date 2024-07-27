@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">بقالتي</string>
+    <string name="home">الرئيسية</string>
+    <string name="customers">عميل</string>
+    <string name="products">منتج</string>
+    <string name="notifications">الاشعارات</string>
+
+    <string name="notes">ملاحظات</string>
+    <string name="wring_exp_product">تحذير: صلاحية هذا المنتج على وشك الانتهاء </string>
+    <string name="wring_exp_product2">تحذير: صلاحية هذا المنتج على وشك الانتهاء قريبا جدا</string>
+
+    <string name="wring_exp_product_in_days">تحذير: هذا المنتج على وشك الانتهاء خلال %1$s يوم</string>
+    <string name="exp_product">هذا المنتج قد انتهت صلاحيته</string>
+    <string name="exp_action_1">التصدق بهذا المنتج للفقراء</string>
+    <string name="exp_action_2">التبرع بهذا المنتج للجمعيات الخيرية</string>
+    <string name="exp_action_3">قم بيبيع المنتج في اسرع وقت ممكن</string>
+    <string name="exp_action_4">التخلص من هذا المنتج نهائيا او اطعاهمه للحيونات</string>
+    <string name="exp_date_1">تاريخ الانتهاء: %1s</string>
+    <string name="manf_date_1">تاريخ الانتاج: %1$s</string>
+    <string name="description_1">الوصف: %1$s</string>
+
+    <string name="sell_price">سعر البيع المقترح: من %1$s الى %2$s</string>
+    <string name="cost">السعر: %1$s </string>
+
+    <string name="product_name_">اسم المنتج</string>
+    <string name="add_product">اضافة منتج</string>
+    <string name="add_new_product">اضافة منتج جديد</string>
+    <string name="description">الوصف</string>
+    <string name="price">السعر</string>
+    <string name="stock_quantity">عدد القطع</string>
+    <string name="category">الفئة</string>
+    <string name="manf_date">تاريخ الانتاج</string>
+    <string name="exp_date">تاريخ الانتهاء</string>
+    <string name="measurement_unit">وحدة القياس</string>
+
+    <string name="customer_name_">اسم العميل</string>
+    <string name="email">البريد الالكتروني</string>
+    <string name="phone">رفم الهاتف</string>
+    <string name="address">العنوان</string>
+    <string name="add_customer">اضافة عميل</string>
+    <string name="add_new_customer">اضافة عميل جديد</string>
+
+    <string name="piece">قطعة</string>
+    <string name="quantity_2">الكمية: %1$d  %2$s</string>
+    <string name="lose">الخسارة المتوقعة: %1s</string>
+    <string name="recommended_action">الاجراء المقترح: %1$s</string>
+    <string name="quantity">الكمية: %1$d</string>
+    <string name="product_name">المنتج: %1$s</string>
+    <string name="settings">الاعدادت</string>
+    <string name="profit">الملف الشحصي</string>
+    <string name="about">عنا</string>
+    <string name="share">مشاركة</string>
+    <string name="days_until_expire">الايام المتبقية حتى الانتهاء: %1$s</string>
+    <string name="total_product_cost">اجمالي قيمة المنتجات</string>
+    <string name="total_customer">اجمالي العملاء</string>
+    <string name="total_product">اجمالي المنتاجات</string>
+    <string name="no_notifications_yet">لا يوجد اشعارات حتى لان</string>
+    <string name="no_products_yet">لا يوجد منتاجات لعرضها</string>
+    <string name="no_customers_yet">لا يوجد عملاء حتى الان</string>
+    <string name="no_notes_yet">لا توجد ملاحظات لعرضعها</string>
+    <string name="confirm_deletion">تأكيد الحذف</string>
+    <string name="are_you_sure_you_want_to_delete_this_product">هل انت متأكد من حذف هذا المنتج؟</string>
+    <string name="delete">حذف</string>
+    <string name="cancel">الغاء</string>
+
+    <string name="name">الاسم: %1$s</string>
+    <string name="email_2">البريد الالكتروني: %1$s</string>
+    <string name="phone_2">رقم الهاتف: %1$s</string>
+    <string name="address_2">العنوان: %1$s</string>
+    <string name="reg_data">تاريخ التسجيل: %1$s</string>
+    <string name="view_github_profile">View GitHub Profile</string>
+    <string name="about_me">About Me</string>
+    <string name="add_new_cat">اضافة تصنيف جديد</string>
+
+    <string name="my_name">Mohammed Mosa</string>
+    <string name="my_email">mohammed.mosa.eg@gmail.com</string>
+    <string name="about_my_app">About My App</string>
+    <string name="app_name_2">App Name: %1$s</string>
+    <string name="app_version">Version: %1$s</string>
+    <string name="app_description">Description: A comprehensive description of your app, highlighting its key features, purpose, and what makes it unique.</string>
+    <string name="producat_barcode">الباركود</string>
+    <string name="insert_note">اضافة ملاحظات</string>
+    <string name="search">بحث</string>
+    <string name="all">All</string>
+
+
+</resources>

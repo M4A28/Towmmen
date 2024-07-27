@@ -43,7 +43,7 @@ interface CustomerDao{
     fun getRecentCustomers(limit: Int): Flow<List<Customer>>
 
     @Query("SELECT Count(*) FROM customers")
-    fun getCustomersCount(): Flow<Int>
+    fun getCustomersCount(): Flow<Int?>
 
 
 }

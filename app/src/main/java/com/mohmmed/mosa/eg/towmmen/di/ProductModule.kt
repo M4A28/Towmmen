@@ -7,9 +7,12 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.AddNewProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.DeleteProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetAllProducts
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProduct
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductBarcode
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductsCount
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.TotalProductsCost
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.UpdateProduct
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.UpsertProduct
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,9 +42,12 @@ object ProductModule {
             deleteProduct = DeleteProduct(productRepositoryImp),
             addNewProduct = AddNewProduct(productRepositoryImp),
             updateProduct = UpdateProduct(productRepositoryImp),
+            upsertProduct = UpsertProduct(productRepositoryImp),
             getALlProducts = GetAllProducts(productRepositoryImp),
             getProduct = GetProduct(productRepositoryImp),
-            getProductsCount = ProductsCount(productRepositoryImp)
+            getProductsCount = ProductsCount(productRepositoryImp),
+            productBarcode = ProductBarcode(productRepositoryImp),
+            totalProductsCost = TotalProductsCost(productRepositoryImp)
         )
     }
 }

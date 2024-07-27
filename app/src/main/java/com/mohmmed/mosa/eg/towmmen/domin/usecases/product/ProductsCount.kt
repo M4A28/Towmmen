@@ -8,7 +8,7 @@ import javax.inject.Inject
 class ProductsCount @Inject constructor(
     private val productRepository: ProductRepositoryImp
 ) {
-    operator fun invoke(): Flow<Int>{
+    operator fun invoke(): Flow<Int?>{
         return productRepository.getProductCount()
     }
 

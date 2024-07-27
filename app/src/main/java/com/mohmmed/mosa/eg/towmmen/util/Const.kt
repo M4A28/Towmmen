@@ -9,3 +9,13 @@ const val ONE_DAY = ONE_HOUR * 24L
 const val ONE_WEEK = ONE_DAY * 7L
 
 const val TOW_WEEKS = ONE_WEEK * 2L
+
+const val ONE_MONTH = ONE_DAY * 30L
+
+const val PRODUCT_KEY = "product_key"
+
+const val CUSTOMER_KEY = "customer_key"
+
+const val APP_ENTRY_KEY = "app_entry"
+
+const val USER_SETTING = "USER_SETTING"

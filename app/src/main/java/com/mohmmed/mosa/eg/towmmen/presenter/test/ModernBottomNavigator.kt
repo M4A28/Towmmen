@@ -1,4 +1,4 @@
-package com.mohmmed.mosa.eg.towmmen.presenter.navigator.componet
+package com.mohmmed.mosa.eg.towmmen.presenter.test
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

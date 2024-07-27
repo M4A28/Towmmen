@@ -33,7 +33,7 @@ fun EmptyScreen(
         Icon(
             painter = painterResource(id = icon),
             contentDescription = null,
-            tint = if (isSystemInDarkTheme()) LightGray else DarkGray,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .size(120.dp)
                 .alpha(alphaAnim)

@@ -15,6 +15,6 @@ interface CustomerRepository {
 
     fun getCustomer(name: String): Flow<List<Customer>>
 
-    fun getCustomerCount(): Flow<Int>
+    fun getCustomerCount(): Flow<Int?>
 
 }

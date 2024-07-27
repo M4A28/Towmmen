@@ -7,6 +7,10 @@ interface ProductRepository {
 
     suspend fun addNewProduct(product: Product)
 
+    fun getProductByBarcode(barcode: String): Flow<List<Product>>
+
+    suspend fun upsertProduct(product: Product)
+
     fun getAllProducts(): Flow<List<Product>>
 
     fun getProductByName(name: String): Flow<List<Product>>
@@ -15,7 +19,10 @@ interface ProductRepository {
 
     suspend fun updateProduct(product: Product)
 
-    fun getProductCount(): Flow<Int>
+    fun getProductCount(): Flow<Int?>
+
+    fun getTotalCostOfProducts(): Flow<Double?>
+
 
 
 }

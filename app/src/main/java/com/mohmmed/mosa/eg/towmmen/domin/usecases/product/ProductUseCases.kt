@@ -4,8 +4,11 @@ data class ProductUseCases(
     val deleteProduct: DeleteProduct,
     val addNewProduct: AddNewProduct,
     val updateProduct: UpdateProduct,
+    val upsertProduct: UpsertProduct,
     val getALlProducts: GetAllProducts,
     val getProduct: GetProduct,
-    val getProductsCount: ProductsCount
+    val productBarcode: ProductBarcode,
+    val getProductsCount: ProductsCount,
+    val totalProductsCost:TotalProductsCost
 )
 

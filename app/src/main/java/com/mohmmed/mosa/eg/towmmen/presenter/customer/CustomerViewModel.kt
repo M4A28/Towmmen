@@ -25,4 +25,15 @@ class CustomerViewModel @Inject constructor(
         return customerUseCases.getAllCustomers()
     }
 
+
+    fun getCustomerCount(): Flow<Int?>{
+        return customerUseCases.getCustomerCount()
+    }
+
+    fun deleteCustomer(customer: Customer){
+        viewModelScope.launch {
+            customerUseCases.deleteCustomer(customer)
+        }
+    }
+
 }
