@@ -1,7 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.domin.usecases.note
 
 import com.mohmmed.mosa.eg.towmmen.data.repository.NoteRepositoryImp
-import com.mohmmed.mosa.eg.towmmen.domin.module.Note
+import com.mohmmed.mosa.eg.towmmen.data.module.Note
 import javax.inject.Inject
 
 class InsertNote @Inject constructor(

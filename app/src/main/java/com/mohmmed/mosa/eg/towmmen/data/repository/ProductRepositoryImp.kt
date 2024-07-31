@@ -1,9 +1,10 @@
 package com.mohmmed.mosa.eg.towmmen.data.repository
 
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.ProductDao
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.ProductRepository
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 import javax.inject.Inject
 
 class ProductRepositoryImp @Inject constructor(
@@ -13,9 +14,14 @@ class ProductRepositoryImp @Inject constructor(
         productDao.insertProduct(product)
     }
 
-    override fun getProductByBarcode(barcode: String): Flow<List<Product>> {
+    override fun getProductByBarcode(barcode: String): Flow<Product> {
         return productDao.getProductByBarcode(barcode)
     }
+
+    override fun getProductsExpiringBetween(startDate: Date, endDate: Date): Flow<List<Product>> {
+        return productDao.getProductsExpiringBetween(startDate, endDate)
+    }
+
 
     override suspend fun upsertProduct(product: Product) {
         productDao.upsertProduct(product)

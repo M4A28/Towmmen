@@ -25,12 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
 
 @Composable
 fun DrawerScreen(
     navController: NavController,
 ){
-    var selectedNavigationItem by remember { mutableStateOf(NavigationItem.Settings) }
+    var selectedNavigationItem by remember { mutableStateOf(NavigationItem.Home) }
     DrawerContent(
         navController = navController,
         selectedNavigationItem = selectedNavigationItem,
@@ -69,20 +70,23 @@ fun DrawerContent(navController: NavController,
             contentDescription = "Image"
         )
         Spacer(modifier = Modifier.height(40.dp))
-        NavigationItem.entries.toTypedArray().take(3).forEach { navigationItem ->
+        NavigationItem.entries.toTypedArray().take(4).forEach { navigationItem ->
             NavigationDrawerItem(
                 navigationItem = navigationItem,
                 selected = navigationItem == selectedNavigationItem,
                 onClick = {
                     onNavigationItemClick(navigationItem)
                     when(navigationItem){
+                        NavigationItem.Home -> {
+                            navigateToTab(navController, Route.HomeScreen.route)
+                        }
                         NavigationItem.Settings -> {
-                            navigateToTab(navController, Route.SettingScreen.route)
+                            navigateToScreen(navController, Route.SettingScreen.route)
                         }
                         NavigationItem.Profit ->
-                            navigateToTab(navController, Route.ProfitScreen.route)
+                            navigateToScreen(navController, Route.ProfitScreen.route)
                         NavigationItem.Category ->
-                            navigateToTab(navController, Route.CategoryScreen.route)
+                            navigateToScreen(navController, Route.CategoryScreen.route)
                         else -> {}
                     }
 
@@ -95,15 +99,15 @@ fun DrawerContent(navController: NavController,
         NavigationItem.entries.toTypedArray().takeLast(2).forEach { navigationItem ->
             NavigationDrawerItem(
                 navigationItem = navigationItem,
-                selected =  navigationItem == selectedNavigationItem,
+                selected =  false,
                 onClick = {
                     onNavigationItemClick(navigationItem)
                                when (navigationItem) {
                                    NavigationItem.Share -> {
-                                       //navigateToTab(navController, Route.SettingScreen.route)
+
                                    }
                                    NavigationItem.About -> {
-                                       navigateToTab(navController, Route.AboutScreen.route)
+                                       navigateToScreen(navController, Route.AboutScreen.route)
                                    }
 
                                    else -> {}

@@ -1,7 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.data.repository
 
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.EmployeeDao
-import com.mohmmed.mosa.eg.towmmen.domin.module.Employee
+import com.mohmmed.mosa.eg.towmmen.data.module.Employee
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.EmployeeRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -2,6 +2,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.comman
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Category
+import com.mohmmed.mosa.eg.towmmen.data.module.Category
 
 @Composable
 fun CategoryCard(
@@ -45,9 +46,21 @@ fun CategoryCard(
             },
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(16.dp) .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Text(
+                text = category.category,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography
+                    .bodyLarge
+                    .copy(fontWeight = FontWeight.Bold)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
             IconButton(
                 modifier = Modifier
                     .size(20.dp),
@@ -58,15 +71,7 @@ fun CategoryCard(
                     contentDescription = ""
                 )
             }
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = category.category,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography
-                    .bodyLarge
-                    .copy(fontWeight = FontWeight.Bold)
-            )
+
         }
     }
 

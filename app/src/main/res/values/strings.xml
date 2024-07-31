@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Towmmen</string>
+    <string name="app_name">Shop Management</string>
     <string name="home">Home</string>
     <string name="customers">Customers</string>
     <string name="products">Products</string>
@@ -23,11 +23,6 @@
     <string name="address">Address</string>
     <string name="add_customer">Add Customer</string>
     <string name="add_new_customer">Add New Customer</string>
-
-
-
-
-
 
     <string name="notifications">Notifi</string>
     <string name="notes">Notes</string>
@@ -54,6 +49,7 @@
     <string name="about">About</string>
     <string name="share">Share</string>
     <string name="days_until_expire">Days until expire: %1$s</string>
+    <string name="days_until_expire_">Days until expire</string>
     <string name="total_product_cost">Total Product Cost:</string>
     <string name="total_customer">Total Customers</string>
     <string name="total_product">Total Products</string>
@@ -71,7 +67,9 @@
     <string name="phone_2">Phone: %1$s</string>
     <string name="address_2">Address: %1$s</string>
     <string name="reg_data">Registration Date: %1$s</string>
-    <string name="view_github_profile">View GitHub Profile</string>
+    <string name="reg_data_2">Registration Date</string>
+    <string name="view_github_profile">GitHub Profile</string>
+    <string name="view_my_website">My Web Site</string>
     <string name="about_me">About Me</string>
     <string name="my_name">Mohammed Mosa</string>
     <string name="my_email">mohammed.mosa.eg@gmail.com</string>
@@ -79,10 +77,58 @@
     <string name="app_name_2">App Name: %1$s</string>
     <string name="app_version">Version: %1$s</string>
     <string name="app_description">Description: A comprehensive description of your app, highlighting its key features, purpose, and what makes it unique.</string>
-    <string name="producat_barcode">Producat Barcode</string>
+    <string name="producat_barcode">Product Barcode</string>
+    <string name="producat_barcode_2">Barcode: %1$s</string>
+    <string name="version">1.0.0</string>
+
+    <string name="next">next</string>
+    <string name="back">back</string>
+    <string name="get_start">get started</string>
+
+
+    <string name="on_borading_titel_1">Welcome to Shop Management Appliction</string>
+    <string name="on_boarding_description_1">You will find a a lot of feturs you need it</string>
+
+    <string name="on_borading_titel_2">All you need in one palace</string>
+    <string name="on_boarding_description_2">Customers, Products, Purchases, Invoice and More</string>
+
+    <string name="on_borading_titel_3">Start Wright Now !!</string>
+    <string name="on_boarding_description_3">Just start to mange your Shop and make it grow faster </string>
+
+
+
+
+
     <string name="insert_note">Insert Note</string>
     <string name="search">Search</string>
     <string name="all">All</string>
+    <string name="app_setting">إعدادات التطبيق</string>
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="exchange_dark_light">تبديل بين الوضع الفاتح والداكن</string>
+    <string name="export_to_csv">تصدير الملفات إلى CSV</string>
+    <string name="save_data_as_csv">حفظ بياناتك بتنسيق CSV</string>
+    <string name="export">تصدير</string>
+    <string name="data_exported">تم تصدير الملفات بنجاح</string>
+    <string name="app_color">لون التطبيق</string>
+    <string name="choice_app_main_color">اختر اللون الرئيسي للتطبيق</string>
+    <string name="delete_app_data">محو جميع بيانات التطبيق</string>
+    <string name="delete_app_data_wring">سيؤدي هذا إلى حذف جميع البيانات نهائيًا</string>
+    <string name="delete_data">محو البيانات</string>
+    <string name="delete_data_msg">تم محو جميع البيانات</string>
+    <string name="latest_add_products">Latest Add Products</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="delete_customer_masge">Are you sure you want to delete this customer?</string>
+    <string name="new_customer">New Customers</string>
+    <string name="quantity_">Quantity</string>
+    <string name="camera_permission">Camera permission is required to scan barcodes</string>
+    <string name="align_the_barcode">Align the barcode within the frame to scan</string>
+    <string name="note_delete_conformation">Are you sure to delete this note ?</string>
+    <string name="note_delete_warring">you about to delete this note</string>
+    <string name="save_edit">save edited product</string>
+    <string name="edit_product">Edit Product</string>
+    <string name="add_purchase">Add Purchase</string>
+    <string name="edit_customer">Edit Customer Data</string>
 
 
 </resources>

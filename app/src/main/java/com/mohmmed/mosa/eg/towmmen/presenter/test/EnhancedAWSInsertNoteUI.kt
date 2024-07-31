@@ -34,7 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mohmmed.mosa.eg.towmmen.domin.module.Note
+import com.mohmmed.mosa.eg.towmmen.data.module.Note
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

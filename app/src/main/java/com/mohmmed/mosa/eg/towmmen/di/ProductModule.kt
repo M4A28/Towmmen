@@ -7,6 +7,8 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.AddNewProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.DeleteProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetAllProducts
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProduct
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductByBarcode
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductsExpiringBetween
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductBarcode
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductsCount
@@ -47,7 +49,9 @@ object ProductModule {
             getProduct = GetProduct(productRepositoryImp),
             getProductsCount = ProductsCount(productRepositoryImp),
             productBarcode = ProductBarcode(productRepositoryImp),
-            totalProductsCost = TotalProductsCost(productRepositoryImp)
+            totalProductsCost = TotalProductsCost(productRepositoryImp),
+            getProductsExpiringBetween = GetProductsExpiringBetween(productRepositoryImp),
+            getProductByBarcode = GetProductByBarcode(productRepositoryImp)
         )
     }
 }

@@ -2,7 +2,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.drawer.category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mohmmed.mosa.eg.towmmen.domin.module.Category
+import com.mohmmed.mosa.eg.towmmen.data.module.Category
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.category.CategoryUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

@@ -1,5 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.customer
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,11 +12,16 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Customer
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomTextFiled
 import java.util.Date
 
@@ -41,6 +47,7 @@ fun AddNewCustomerScreen() {
     })
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewCustomerContent(
     modifier: Modifier = Modifier,
@@ -54,7 +61,7 @@ fun AddNewCustomerContent(
 
 
     Scaffold (
-        /* topBar = {
+         topBar = {
              TopAppBar(
                  colors = TopAppBarDefaults.topAppBarColors(
                      containerColor = MaterialTheme.colorScheme.primary,
@@ -80,7 +87,7 @@ fun AddNewCustomerContent(
                      }
 
                  })
-         }*/
+         }
     ){ padding ->
         val topPadding = padding.calculateTopPadding()
         Column(
@@ -129,7 +136,8 @@ fun AddNewCustomerContent(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if(name.isNotEmpty()){
-                        onAddClick(Customer(
+                        onAddClick(
+                            Customer(
                             name = name.trim(),
                             email = email.trim(),
                             phone = phone.trim(),

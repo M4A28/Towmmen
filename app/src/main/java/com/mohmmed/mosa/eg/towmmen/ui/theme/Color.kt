@@ -17,6 +17,21 @@ val Gray20 = Color(0xFFC2BAB9)
 
 
 
+val semiTransparentBlack40 = Color(0x66000000) // #00000040
+val semiTransparentBlack33 = Color(0x55000000) // #00000033
+val darkGray = Color(0xFF191919) // #191919
+val gray = Color(0xFF535353) // #535353
+val green = Color(0xFFA4C739) // #a4c739
+val lightGray = Color(0xFF8C8C8C) // #8c8c8c
+val red = Color(0xFFFd384f) // #fd384f
+val silver = Color(0xFFCCCCCC) // #cccccc
+val lightSilver = Color(0xFFEFEFEF) // #efefef
+val offWhite = Color(0xFFF5F5F5) // #f5f5f5
+
+
+
+
+
 // Base colors
 val Coral = Color(0xFFFF6B6B)
 val LightCoral = Color(0xFFFFD6D6)
@@ -107,7 +122,7 @@ val light_tertiary = Color(0xFF6B5778)
 val light_onTertiary = Color(0xFFFFFFFF)
 val light_tertiaryContainer = Color(0xFFF2DAFF)
 val light_onTertiaryContainer = Color(0xFF251431)
-val light_error = Color(0xFFBA1A1A)
+val light_error = Color(0xFFFd384f)
 val light_errorContainer = Color(0xFFFFDAD6)
 val light_onError = Color(0xFFFFFFFF)
 val light_onErrorContainer = Color(0xFF410002)

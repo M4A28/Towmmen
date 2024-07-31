@@ -25,7 +25,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.hilt.common)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,40 +75,46 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // for desugring
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
     //Splash Api
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.androidx.core.splashscreen)
     //implementation("com.google.accompanist:accompanist-permissions:0.31.0")
-    implementation("androidx.camera:camera-camera2:1.2.2")
-    implementation("androidx.camera:camera-lifecycle:1.2.2")
-    implementation("androidx.camera:camera-view:1.2.2")
-    implementation("com.google.mlkit:barcode-scanning:17.1.0")
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.barcode.scanning)
+    //calendar view
+    implementation(libs.caleandra.view)
+
+    // work manger
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation (libs.androidx.work.multiprocess)
+    implementation(libs.androidx.hilt.work)
     // coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.coil.compose)
     // dagger
-    implementation("com.google.dagger:hilt-android:2.49")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.49")
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.android.compiler)
     // data store
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.androidx.datastore.preferences)
     // Compose Foundation
-    implementation("androidx.compose.foundation:foundation:1.4.3")
+    implementation(libs.androidx.foundation)
     // Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.4-beta")
+    implementation(libs.accompanist.systemuicontroller)
     // Paging 3
-    val  paging_version = "3.1.1"
-    implementation ("androidx.paging:paging-runtime:$paging_version")
-    implementation ("androidx.paging:paging-compose:3.2.0-rc01")
+    implementation (libs.androidx.paging.runtime)
+    implementation (libs.androidx.paging.compose)
     //Room
-    implementation ("androidx.room:room-runtime:2.6.1")
-    kapt ("androidx.room:room-compiler:2.6.1")
-    implementation( "androidx.room:room-ktx:2.6.1")
+    implementation (libs.androidx.room.runtime)
+    kapt (libs.androidx.room.compiler)
+    implementation( libs.androidx.room.ktx)
     // window size class
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.0")
+    implementation(libs.androidx.material3.window.size)
     // navigation-compose
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.navigation.compose)
     // pretty time
-    implementation("org.ocpsoft.prettytime:prettytime:5.0.4.Final")
+    implementation(libs.prettytime)
     // to show fake data eg: name, emil
-    implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation(libs.javafaker)
 }

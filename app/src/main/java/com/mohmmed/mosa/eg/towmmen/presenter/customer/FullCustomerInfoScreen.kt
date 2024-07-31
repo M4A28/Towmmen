@@ -1,59 +1,110 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.customer
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Customer
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.TextWithIcon
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.ActionButton
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.DetailItem
+import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
+import com.mohmmed.mosa.eg.towmmen.util.PRODUCT_KEY
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
+import kotlinx.coroutines.launch
 
 @Composable
 fun FullCustomerInfoScreen(navController: NavHostController) {
     val customerViewModel: CustomerViewModel = hiltViewModel()
+    val coroutineScope = rememberCoroutineScope()
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    var showPurchaseDialog by remember { mutableStateOf(false) }
     navController.previousBackStackEntry
         ?.savedStateHandle
-        ?.get<Customer?>(CUSTOMER_KEY)?.let {customer ->
+        ?.get<Customer?>(CUSTOMER_KEY)?.let { customer ->
             FullCustomerInfoContent(
                 customer = customer,
-                onClickDeleteClick = {
-                    customerViewModel.deleteCustomer(customer)
-                    navController.popBackStack()
-                },
-                onClickEditClick = {
+                onDeleteClick = {
+                    showDeleteConfirmation = true
 
+                },
+                onEditClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
+                    navController.navigate(Route.EditCustomerScreen.route)
                 }
             )
+
+
+            if (showDeleteConfirmation) {
+                DeleteConfirmationDialog(
+                    title = stringResource(id = R.string.are_you_sure_you_want_to_delete_this_product),
+                    massage = stringResource(id = R.string.confirm_deletion),
+                    onConfirm = {
+                        coroutineScope.launch {
+                            customerViewModel.deleteCustomer(customer)
+                            navController.popBackStack()
+                        }
+                    },
+                    onDismiss = { showDeleteConfirmation = false }
+                )
+            }
+
+            if (showPurchaseDialog) {
+                PurchaseDialog(
+                    customer = customer,
+                    onConfirm = { amount ->
+                        coroutineScope.launch {
+                            //customerViewModel.recordPurchase(customer, amount)
+                            showPurchaseDialog = false
+                        }
+                    },
+                    onDismiss = { showPurchaseDialog = false }
+                )
+            }
         }
+
+
+
 
 }
 
@@ -61,127 +112,161 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
 fun FullCustomerInfoContent(
     modifier: Modifier = Modifier,
     customer: Customer,
-    onClickDeleteClick:  (Customer)  -> Unit,
-    onClickEditClick: (Customer)  -> Unit
+    onDeleteClick:  (Customer)  -> Unit,
+    onEditClick: (Customer)  -> Unit,
+    onPurchaseClick: (Customer) -> Unit = {},
 ) {
 
     Column(
         modifier = modifier
-            .padding(8.dp)
-            .fillMaxWidth()
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .clip(RoundedCornerShape(8.dp))
-            .shadow(4.dp)
-            .background(MaterialTheme.colorScheme.surface),
-    ){
-        Box(
+            .padding(16.dp)
+    ) {
+        CustomerHeader(customer,
+            onEditClick = {onEditClick(customer)},
+            onDeleteClick = { onDeleteClick(customer) })
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomerDetails(customer)
+        Spacer(modifier = Modifier.height(24.dp))
+        PurchaseButton(onClick = { onPurchaseClick(customer) } )
+    }
+
+}
+
+
+
+@Composable
+fun CustomerHeader(
+    customer: Customer,
+    onEditClick: (Customer) -> Unit,
+    onDeleteClick: (Customer) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+            .clip(RoundedCornerShape(16.dp))
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.person),
+            contentDescription = "Customer Image",
+            alpha = 0.4f,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp)
-        ){
-
-            Image(
-                painter = painterResource(id = R.drawable.person),
-                contentDescription = "Product Image",
-                modifier = Modifier
-                    .height(150.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.Crop
-            )
-
-            Row(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 6.dp, end = 16.dp)
-            ){
-                FilledIconButton(
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    onClick = { onClickEditClick(customer) }) {
-                    Icon(
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        painter = painterResource(id = R.drawable.edit ),
-                        contentDescription = null
-                    )
-                }
-
-                Spacer(Modifier.width(8.dp))
-
-                // delete
-                FilledIconButton(
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    ),
-                    onClick = { onClickDeleteClick(customer) }) {
-                    Icon(
-                        tint = MaterialTheme.colorScheme.onError,
-                        painter = painterResource(id = R.drawable.delete ),
-                        contentDescription = null
-                    )
-                }
-            }
-
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Column(
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
         ) {
-
-            TextWithIcon(
-                icon = R.drawable.person,
-                text = String.format(stringResource(R.string.name), customer.name),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
+            ActionButton(
+                icon = R.drawable.edit,
+                backgroundColor = MaterialTheme.colorScheme.primary,
+                onClick = { onEditClick(customer) }
             )
-            Spacer(modifier = Modifier.height(6.dp))
 
-            TextWithIcon(
-                icon = R.drawable.email,
-                text = String.format(stringResource(R.string.email_2), customer.email),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
+            Spacer(Modifier.width(32.dp))
+
+            ActionButton(
+                icon = R.drawable.delete,
+                backgroundColor = MaterialTheme.colorScheme.error,
+                onClick = { onDeleteClick(customer) }
             )
-            Spacer(modifier = Modifier.height(6.dp))
-
-            TextWithIcon(
-                icon = R.drawable.phone,
-                text = String.format(stringResource(id = R.string.phone_2), customer.phone),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-
-            TextWithIcon(
-                icon = R.drawable.location_pin,
-                text = String.format(stringResource(id = R.string.address_2), customer.address),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-
-            TextWithIcon(
-                icon = R.drawable.calendar_month,
-                text = String.format(
-                    stringResource(id = R.string.reg_data),
-                    dateToString(customer.registrationDate, "yyyy/MM/dd")
-                ),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-
         }
 
-
+        Text(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp),
+            fontFamily = CairoFont,
+            fontWeight = FontWeight.Bold,
+            text = customer.name,
+            style = MaterialTheme.typography.headlineMedium,
+            color = Color.White
+        )
     }
 }
+
+@Composable
+fun CustomerDetails(customer: Customer) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp)),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            DetailItem(icon = R.drawable.email, label = stringResource(id = R.string.email), value = customer.email)
+            DetailItem(icon = R.drawable.phone, label = stringResource(id = R.string.phone), value = customer.phone)
+            DetailItem(icon = R.drawable.location_pin, label = stringResource(id = R.string.address), value = customer.address)
+            DetailItem(
+                icon = R.drawable.calendar_month,
+                label = stringResource(id = R.string.reg_data),
+                value = dateToString(customer.registrationDate, "yyyy/MM/dd")
+            )
+        }
+    }
+}
+
+
+@Composable
+fun PurchaseButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.shopping_cart),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(Modifier.width(8.dp))
+        Text("Record Purchase")
+    }
+}
+
+
+
+@Composable
+fun PurchaseDialog(
+    customer: Customer,
+    onConfirm: (Double) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var amount by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Record Purchase") },
+        text = {
+            Column {
+                Text("Enter purchase amount for ${customer.name}")
+                Spacer(Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = amount,
+                    onValueChange = { amount = it },
+                    label = { Text("Amount") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    amount.toDoubleOrNull()?.let { onConfirm(it) }
+                },
+                enabled = amount.isNotBlank()
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+

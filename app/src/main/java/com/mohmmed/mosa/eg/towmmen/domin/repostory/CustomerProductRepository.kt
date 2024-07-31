@@ -1,10 +1,10 @@
 package com.mohmmed.mosa.eg.towmmen.domin.repostory
 
-import com.mohmmed.mosa.eg.towmmen.domin.module.Customer
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerProductCrossRef
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerWithProducts
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
-import com.mohmmed.mosa.eg.towmmen.domin.module.ProductWithCustomers
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerProductCrossRef
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerWithProducts
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.ProductWithCustomers
 import kotlinx.coroutines.flow.Flow
 
 interface CustomerProductRepository {

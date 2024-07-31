@@ -1,6 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.domin.repostory
 
-import com.mohmmed.mosa.eg.towmmen.domin.module.Note
+import com.mohmmed.mosa.eg.towmmen.data.module.Note
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {

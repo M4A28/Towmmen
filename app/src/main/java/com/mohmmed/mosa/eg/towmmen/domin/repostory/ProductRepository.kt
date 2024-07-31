@@ -1,13 +1,17 @@
 package com.mohmmed.mosa.eg.towmmen.domin.repostory
 
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 interface ProductRepository {
 
     suspend fun addNewProduct(product: Product)
 
-    fun getProductByBarcode(barcode: String): Flow<List<Product>>
+    fun getProductByBarcode(barcode: String): Flow<Product>
+
+    fun getProductsExpiringBetween(startDate: Date, endDate: Date): Flow<List<Product>>
+
 
     suspend fun upsertProduct(product: Product)
 

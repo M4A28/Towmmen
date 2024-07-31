@@ -36,7 +36,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Note
+import com.mohmmed.mosa.eg.towmmen.data.module.Note
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,7 +69,7 @@ fun AddNoteScreen(
                         .padding(15.dp)
                 ) {
                     Text(
-                        text = "Insert Note",
+                        text = stringResource(id = R.string.insert_note),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF16191F)
@@ -81,7 +81,7 @@ fun AddNoteScreen(
                     modifier = Modifier.padding(20.dp)
                 ) {
                     Text(
-                        text = "Title:",
+                        text = stringResource(R.string.title),
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF16191F),
                         modifier = Modifier.padding(bottom = 5.dp)
@@ -114,7 +114,7 @@ fun AddNoteScreen(
                     }
 
                     Text(
-                        text = "Content:",
+                        text = stringResource(R.string.content),
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF16191F),
                         modifier = Modifier.padding(bottom = 5.dp)
@@ -163,10 +163,9 @@ fun AddNoteScreen(
                         onClick = { /* Handle cancel logic */ },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                         border = ButtonDefaults.outlinedButtonBorder,
-                        shape = RoundedCornerShape(2.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.insert_note),
+                            text = stringResource(R.string.cancel),
                             color = Color(0xFF16191F)
                         )
                     }

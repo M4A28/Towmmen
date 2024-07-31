@@ -1,4 +1,4 @@
-package com.mohmmed.mosa.eg.towmmen.domin.module
+package com.mohmmed.mosa.eg.towmmen.data.module
 
 import android.os.Parcelable
 import androidx.room.Entity

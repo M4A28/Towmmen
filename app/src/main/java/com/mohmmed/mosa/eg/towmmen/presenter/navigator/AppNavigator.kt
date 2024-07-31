@@ -3,7 +3,6 @@ package com.mohmmed.mosa.eg.towmmen.presenter.navigator
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
@@ -26,10 +25,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -37,15 +34,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Customer
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.presenter.barcode.BarcodeScannerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.AddNewCustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.customer.EditCustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.FullCustomerInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.DrawerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.about.AboutScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.AddCategoryScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.SettingsScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.home.HomeScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.componet.AppBottomNavigation
@@ -55,6 +55,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.note.NoteScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.note.NoteViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.notifications.NotificationScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.AddNewProductScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.product.EditProductScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.FullProductInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductsScreen
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
@@ -114,14 +115,12 @@ fun AppNavigator() {
                     }
                 },
                 topBar = {
-                    if(selectedItem == 0 ||
+                    if(selectedItem == 0
                         //selectedItem == 1 ||
                         //selectedItem == 2 ||
-                        selectedItem == 3) {
+                        /*selectedItem == 3*/) {
 
                         TopAppBar(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(bottomEnd = 25.dp, bottomStart = 25.dp)),
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 titleContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -175,7 +174,7 @@ fun AppNavigator() {
 
 
                     composable(route = Route.HomeScreen.route){
-                        HomeScreen()
+                        HomeScreen(navController)
                     }
 
                     composable(route = Route.NotificationScreen.route){
@@ -192,6 +191,13 @@ fun AppNavigator() {
                         FullProductInfoScreen(navController)
                     }
 
+                    composable(route = Route.EditProductScreen.route){
+                        EditProductScreen(navController)
+                    }
+                    composable(route = Route.EditCustomerScreen.route){
+                        EditCustomerScreen(navController)
+                    }
+
                     composable(route = Route.CustomerFullInfoScreen.route){
                         FullCustomerInfoScreen(navController)
                     }
@@ -200,12 +206,15 @@ fun AppNavigator() {
                         ProductsScreen(
                             onProductClick = { product -> navigateToProductDetails(navController, product) },
                             onFapClick = {
-                                navigateToAddTab(navController, Route.AddProductScreen.route, Route.ProductScreen.route)
+                                navigateToScreen(navController, Route.AddProductScreen.route)
                             }
                         )
                     }
                     composable(route = Route.AddProductScreen.route){
                         AddNewProductScreen(navController)
+                    }
+                    composable(route = Route.BarcodeScannerScreen.route){
+                        BarcodeScannerScreen(navController)
                     }
 
                     composable(route = Route.AddCustomerScreen.route){
@@ -222,7 +231,7 @@ fun AppNavigator() {
                     composable(route = Route.NoteScreen.route){
                         NoteScreen(
                             onFapClick = {
-                                navigateToAddTab(navController, Route.AddNoteScreen.route, Route.NoteScreen.route)
+                                navigateToScreen(navController, Route.AddNoteScreen.route)
                             }
                         )
                     }
@@ -244,7 +253,7 @@ fun AppNavigator() {
                     }
 
                     composable(route = Route.SettingScreen.route){
-                        //HomeScreen()
+                        SettingsScreen()
                     }
 
                 }
@@ -255,7 +264,7 @@ fun AppNavigator() {
 
 }
 
-private fun navigateToTab(navController: NavController, route: String){
+fun navigateToTab(navController: NavController, route: String){
     navController.navigate(route = route){
         navController.graph.startDestinationRoute?.let{
             popUpTo(it){ saveState = true }
@@ -269,22 +278,13 @@ fun navigateToProductDetails(navController: NavController, product: Product){
     navController.currentBackStackEntry?.savedStateHandle?.set(PRODUCT_KEY, product)
     navController.navigate(Route.ProductFullInfoScreen.route)
 }
-private fun navigateToCustomerDetails(navController: NavController, customer: Customer){
+fun navigateToCustomerDetails(navController: NavController, customer: Customer){
     navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
     navController.navigate(Route.CustomerFullInfoScreen.route)
 }
 
-fun navigateToAddTab(navController: NavController,
-                             route: String,
-                             backstack: String = Route.HomeScreen.route){
-    navController.navigate(route = route){
-        navController.graph.startDestinationRoute?.let{
-            popUpTo(backstack){
-                saveState = true
-            }
-            restoreState = true
-            launchSingleTop = true
-
-        }
+fun navigateToScreen(navController: NavController, route: String){
+    navController.navigate(route = route) {
+        launchSingleTop = true
     }
 }

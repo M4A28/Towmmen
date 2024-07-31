@@ -1,7 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.domin.usecases.product
 
 import com.mohmmed.mosa.eg.towmmen.data.repository.ProductRepositoryImp
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import javax.inject.Inject
 
 class UpsertProduct @Inject constructor(

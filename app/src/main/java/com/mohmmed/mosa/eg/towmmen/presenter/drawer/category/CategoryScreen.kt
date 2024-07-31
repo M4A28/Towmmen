@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,17 +21,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Category
+import com.mohmmed.mosa.eg.towmmen.data.module.Category
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.CategoryCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
-import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToAddTab
+import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToTab
 
 
 @Composable
@@ -42,7 +40,7 @@ fun CategoryScreen(navController: NavHostController){
     val categoryList by categoryViewModel.getAllCategory().collectAsState(initial = emptyList())
     CategoryContent(
         onFapClick = {
-            navigateToAddTab(navController, Route.AddCategoryScreen.route, Route.ProductScreen.route)
+            navigateToTab(navController, Route.AddCategoryScreen.route)
         },
         onDeleteClick = { categoryViewModel.deleteCategory(it) },
         categories = categoryList
@@ -59,8 +57,6 @@ fun CategoryContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(bottomEnd = 25.dp, bottomStart = 25.dp)),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,

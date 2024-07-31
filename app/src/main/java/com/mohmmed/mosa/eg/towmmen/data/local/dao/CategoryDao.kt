@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.mohmmed.mosa.eg.towmmen.domin.module.Category
+import com.mohmmed.mosa.eg.towmmen.data.module.Category
 import kotlinx.coroutines.flow.Flow
 
 @Dao

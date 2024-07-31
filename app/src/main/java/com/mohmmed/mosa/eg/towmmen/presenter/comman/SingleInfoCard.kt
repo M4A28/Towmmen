@@ -10,6 +10,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -62,6 +63,7 @@ fun SingleInfoCard(
             .width(250.dp)
             .height(150.dp)
             .scale(scale)
+            .clickable { onCardClick() }
             .rotate(rotationAngle)
             .clip(RoundedCornerShape(24.dp))
             .background(

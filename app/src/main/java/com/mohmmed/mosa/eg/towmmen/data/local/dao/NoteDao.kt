@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.mohmmed.mosa.eg.towmmen.domin.module.Note
+import com.mohmmed.mosa.eg.towmmen.data.module.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao

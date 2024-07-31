@@ -1,31 +1,28 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.product
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,15 +36,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ProductCard2
@@ -90,10 +85,8 @@ fun ProductsContent(
     var searchQuery by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("All") }
     Scaffold(
-         topBar = {
+        topBar = {
                   TopAppBar(
-                      modifier = Modifier
-                      .clip(RoundedCornerShape(bottomEnd = 25.dp, bottomStart = 25.dp)),
                       colors = TopAppBarDefaults.topAppBarColors(
                           containerColor = MaterialTheme.colorScheme.primary,
                           titleContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -103,17 +96,10 @@ fun ProductsContent(
                               modifier = Modifier.fillMaxWidth(),
                               contentAlignment = Alignment.Center
                           ) {
-                              Text(
-                                  text = stringResource(id = R.string.products))
+                              Text(text = stringResource(id = R.string.products))
 
                           }
-                              },
-                      navigationIcon = {
-                          Icon(
-                              tint = MaterialTheme.colorScheme.onPrimary,
-                              imageVector = Icons.Default.Menu,
-                              contentDescription = "Menu"
-                          )
+
                       })
          },
         floatingActionButton = {
@@ -134,36 +120,21 @@ fun ProductsContent(
     ) { paddingValue ->
         val topPadding = paddingValue.calculateTopPadding()
         if(products.isNotEmpty()){
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(top = topPadding),
+            LazyVerticalGrid(
+                modifier = modifier.fillMaxWidth(),
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(8.dp)
             ) {
-                item{
-                    Column(modifier = Modifier.padding(16.dp)) {
 
-                        Row{
-                            FilledIconButton(
-                                shape = RoundedCornerShape(4.dp),
-                                colors = IconButtonDefaults.filledIconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.surface
-                                ),
-                                onClick = {  }) {
-                                Icon(
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    painter = painterResource(id = R.drawable.filter ),
-                                    contentDescription = null
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(6.dp))
-
-                            ModernSearchBar(
-                                searchQuery = searchQuery,
-                                onSearchQueryChange = { searchQuery = it },
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
-                        }
-
+                item(span = { GridItemSpan(2) }){
+                    Column(modifier = Modifier
+                        .padding(top =topPadding)
+                      ) {
+                        ModernSearchBar(
+                            searchQuery = searchQuery,
+                            onSearchQueryChange = { searchQuery = it },
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
                         // Filter Chips
                         Row(
                             modifier = Modifier
@@ -172,6 +143,7 @@ fun ProductsContent(
                                 .padding(bottom = 4.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
+
                             categories.forEach { category ->
                                 FilterChip(
                                     selected = category == selectedCategory,
@@ -187,7 +159,6 @@ fun ProductsContent(
                             }
                         }
                     }
-
                 }
                 items(
                     products.filter {
@@ -199,7 +170,6 @@ fun ProductsContent(
                         onClick = {onProductClick(products[product])}
                     )
                 }
-
             }
         }else{
             EmptyScreen(

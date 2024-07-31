@@ -1,10 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.product
 
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,36 +15,38 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.TextWithIcon
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.DetailItem
+import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.util.ONE_DAY
 import com.mohmmed.mosa.eg.towmmen.util.PRODUCT_KEY
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
+import kotlinx.coroutines.launch
 import java.util.Date
 
 
@@ -55,19 +54,40 @@ import java.util.Date
 @Composable
 fun FullProductInfoScreen(navController: NavHostController) {
     val productViewModel:ProductViewModel = hiltViewModel()
+    val coroutineScope = rememberCoroutineScope()
+
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+
     navController.previousBackStackEntry
         ?.savedStateHandle
         ?.get<Product?>(PRODUCT_KEY)?.let { product ->
             FullProductInfoContent(
                 product = product,
                 onClickDeleteClick = {
-                    productViewModel.deleteProduct(it)
-                    navController.popBackStack()
+                    showDeleteConfirmation = true
                 },
-                onClickEditClick = {}
+                onClickEditClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(PRODUCT_KEY, product)
+                    navController.navigate(Route.EditProductScreen.route)
+                }
 
             )
+
+            if (showDeleteConfirmation) {
+                DeleteConfirmationDialog(
+                    title = stringResource(id = R.string.are_you_sure_you_want_to_delete_this_product),
+                    massage = stringResource(id = R.string.confirm_deletion),
+                    onConfirm = {
+                        coroutineScope.launch {
+                            productViewModel.deleteProduct(product)
+                            navController.popBackStack()
+                        }
+                    },
+                    onDismiss = { showDeleteConfirmation = false }
+                )
+            }
         }
+
 
 }
 
@@ -80,6 +100,7 @@ fun FullProductInfoContent(
     onClickDeleteClick:  (Product)  -> Unit,
     onClickEditClick: (Product)  -> Unit
 ) {
+
     Column(
         modifier = modifier
             .padding(8.dp)
@@ -106,7 +127,7 @@ fun FullProductInfoContent(
                     .height(200.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.None
+                contentScale = ContentScale.Fit
             )
             
 /*            Image(
@@ -162,134 +183,75 @@ fun FullProductInfoContent(
                 .clip(RoundedCornerShape(8.dp))
         ) {
 
-            TextWithIcon(
+            DetailItem(
                 icon = R.drawable.bag,
-                text = String.format(stringResource(R.string.product_name), product.name),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
+                label = stringResource(R.string.product_name_),
+                value = product.name
             )
+
+
             Spacer(modifier = Modifier.height(6.dp))
 
-            TextWithIcon(
+            DetailItem(
                 icon = R.drawable.description,
-                text = String.format(stringResource(R.string.description_1), product.description),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
+                label = stringResource(R.string.description),
+                value = product.description
             )
             Spacer(modifier = Modifier.height(6.dp))
 
-            TextWithIcon(
+            DetailItem(
+                icon = R.drawable.barcode,
+                label = stringResource(R.string.producat_barcode),
+                value = product.barcode
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+
+            DetailItem(
                 icon = R.drawable.tag,
-                text = String.format(
-                    stringResource(id = R.string.cost),
-                    formatCurrency(product.price)
-                ),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
+                label = stringResource(id = R.string.price),
+                value = formatCurrency(product.price)
             )
             Spacer(modifier = Modifier.height(6.dp))
 
-            TextWithIcon(
-                icon = R.drawable.money,
-                text = String.format(
-                    stringResource(id = R.string.sell_price),
-                    formatCurrency(product.price * 1.15)  ,
-                    formatCurrency(product.price * 1.2)
-                ),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.height(6.dp))
 
-            TextWithIcon(
+            DetailItem(
                 icon = R.drawable.box,
-                text = String.format(
-                    stringResource(id = R.string.quantity_2),
-                    product.stockQuantity,
-                    product.unit),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
+                label = stringResource(id = R.string.quantity_),
+                value = "${product.stockQuantity}  ${product.unit}",
             )
             Spacer(modifier = Modifier.height(6.dp))
 
-            TextWithIcon(
+            DetailItem(
                 icon = R.drawable.calendar_month,
-                text = String.format(
-                    stringResource(id = R.string.manf_date_1),
-                    dateToString(product.manufactureDate, "yyyy/MM/dd")
-                ),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
+                label = stringResource(id = R.string.manf_date),
+                value = dateToString(product.manufactureDate, "yyyy/MM/dd"),
             )
             Spacer(modifier = Modifier.height(6.dp))
 
-            TextWithIcon(
+            DetailItem(
+                icon = R.drawable.date,
+                label = stringResource(id = R.string.exp_date),
+                value = dateToString(product.expireDate, "yyyy/MM/dd"),
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+
+            DetailItem(
                 icon = R.drawable.calendar_month,
-                text = String.format(
-                    stringResource(id = R.string.exp_date_1),
-                    dateToString(product.expireDate, "yyyy/MM/dd")
-                ),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
+                label =  stringResource(id = R.string.days_until_expire_),
+                value = if(product.expireDate.time - Date().time > 0)
+                        ((product.expireDate.time - Date().time) / ONE_DAY).toString()
+                else stringResource(id = R.string.exp_product),
             )
             Spacer(modifier = Modifier.height(6.dp))
 
-            TextWithIcon(
-                icon = R.drawable.calendar_month,
-                text =
-                    if(product.expireDate.time - Date().time > 0){
-                        String.format(
-                            stringResource(id = R.string.days_until_expire),
-                            ((product.expireDate.time - Date().time) / ONE_DAY)
-                        )
-                    } else{
-                        stringResource(id = R.string.exp_product)
-                    },
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-
-            TextWithIcon(
-                icon = R.drawable.category,
-                text = String.format(stringResource(id = R.string.category)),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
-                    .padding(bottom = 6.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ){
-                product.category.split(",").forEach { category ->
-                    if(category.isNotEmpty()){
-                        FilterChip(
-                            selected = true,
-                            onClick = {},
-                            modifier = Modifier.height(32.dp),
-                            colors = FilterChipDefaults.filterChipColors(
-                                containerColor = Color(0xFFF3F4F6),
-                                selectedContainerColor = MaterialTheme.colorScheme.primary,
-                                selectedLabelColor = Color.White,
-                            ),
-                            label = { Text(category, fontWeight = FontWeight.Medium) }
-                        )
-                    }
-                }
+            if(product.category.isNotEmpty()){
+                DetailItem(
+                    icon = R.drawable.category,
+                    label = String.format(stringResource(id = R.string.category)),
+                    value = product.category
+                )
             }
+            Spacer(modifier = Modifier.height(6.dp))
 
         }
     }

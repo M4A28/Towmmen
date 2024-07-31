@@ -5,9 +5,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerWithPurchases
-import com.mohmmed.mosa.eg.towmmen.domin.module.Purchase
-import com.mohmmed.mosa.eg.towmmen.domin.module.PurchaseWithDetails
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerWithPurchases
+import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
+import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseWithDetails
 import kotlinx.coroutines.flow.Flow
 
 @Dao

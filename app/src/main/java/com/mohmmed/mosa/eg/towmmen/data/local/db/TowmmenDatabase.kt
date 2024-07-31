@@ -11,13 +11,13 @@ import com.mohmmed.mosa.eg.towmmen.data.local.dao.EmployeeDao
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.NoteDao
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.ProductDao
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.PurchaseDao
-import com.mohmmed.mosa.eg.towmmen.domin.module.Category
-import com.mohmmed.mosa.eg.towmmen.domin.module.Customer
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerProductCrossRef
-import com.mohmmed.mosa.eg.towmmen.domin.module.Employee
-import com.mohmmed.mosa.eg.towmmen.domin.module.Note
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
-import com.mohmmed.mosa.eg.towmmen.domin.module.Purchase
+import com.mohmmed.mosa.eg.towmmen.data.module.Category
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerProductCrossRef
+import com.mohmmed.mosa.eg.towmmen.data.module.Employee
+import com.mohmmed.mosa.eg.towmmen.data.module.Note
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
 
 @Database(entities = [Product::class, Customer::class,
     Employee::class,

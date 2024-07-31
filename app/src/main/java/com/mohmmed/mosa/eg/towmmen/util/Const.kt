@@ -16,6 +16,8 @@ const val PRODUCT_KEY = "product_key"
 
 const val CUSTOMER_KEY = "customer_key"
 
+const val SCANNED_BARCODE = "scannedBarcode"
+
 const val APP_ENTRY_KEY = "app_entry"
 
 const val USER_SETTING = "USER_SETTING"

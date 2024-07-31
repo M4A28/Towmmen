@@ -9,6 +9,8 @@ data class ProductUseCases(
     val getProduct: GetProduct,
     val productBarcode: ProductBarcode,
     val getProductsCount: ProductsCount,
-    val totalProductsCost:TotalProductsCost
+    val totalProductsCost:TotalProductsCost,
+    val getProductsExpiringBetween: GetProductsExpiringBetween,
+    val getProductByBarcode: GetProductByBarcode
 )
 

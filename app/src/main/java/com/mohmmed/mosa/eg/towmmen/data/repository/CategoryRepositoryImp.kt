@@ -1,7 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.data.repository
 
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.CategoryDao
-import com.mohmmed.mosa.eg.towmmen.domin.module.Category
+import com.mohmmed.mosa.eg.towmmen.data.module.Category
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.CategoryRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

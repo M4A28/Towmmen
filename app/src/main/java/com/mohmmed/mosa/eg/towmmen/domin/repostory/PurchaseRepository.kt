@@ -1,8 +1,8 @@
 package com.mohmmed.mosa.eg.towmmen.domin.repostory
 
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerWithPurchases
-import com.mohmmed.mosa.eg.towmmen.domin.module.Purchase
-import com.mohmmed.mosa.eg.towmmen.domin.module.PurchaseWithDetails
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerWithPurchases
+import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
+import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseWithDetails
 import kotlinx.coroutines.flow.Flow
 
 interface PurchaseRepository {

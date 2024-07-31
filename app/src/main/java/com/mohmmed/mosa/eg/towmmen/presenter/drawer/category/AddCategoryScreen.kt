@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -27,13 +26,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Category
+import com.mohmmed.mosa.eg.towmmen.data.module.Category
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomTextFiled
 
 
@@ -62,8 +60,6 @@ fun AddCategoryContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(bottomEnd = 25.dp, bottomStart = 25.dp)),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
@@ -103,8 +99,8 @@ fun AddCategoryContent(
             CustomTextFiled(
                 value = category,
                 onValueChange = { category = it },
-                label = stringResource(id = R.string.product_name_),
-                leadingIcon = R.drawable.shopping
+                label = stringResource(id = R.string.category),
+                leadingIcon = R.drawable.category
             )
 
             Spacer(modifier = Modifier.height(4.dp))

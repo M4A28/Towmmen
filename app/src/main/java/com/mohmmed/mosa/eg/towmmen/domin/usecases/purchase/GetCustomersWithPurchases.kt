@@ -1,7 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.domin.usecases.purchase
 
 import com.mohmmed.mosa.eg.towmmen.data.repository.PurchaseRepositoryImp
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerWithPurchases
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerWithPurchases
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

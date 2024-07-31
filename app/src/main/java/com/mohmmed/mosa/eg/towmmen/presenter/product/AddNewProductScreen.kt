@@ -36,6 +36,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,10 +51,13 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomExposedDropdownMenu
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomTextFiled
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryViewModel
+import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
+import com.mohmmed.mosa.eg.towmmen.util.SCANNED_BARCODE
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -63,15 +67,25 @@ import java.util.Locale
 fun AddNewProductScreen(navController: NavHostController){
     val productViewModel: ProductViewModel = hiltViewModel()
     val categoryViewModel: CategoryViewModel = hiltViewModel()
+    //val viewModel: BarcodeScannerViewModel = hiltViewModel()
+    //val barcode by viewModel.barcode.collectAsState()
     val categoryList by categoryViewModel.getAllCategory().collectAsState(initial = emptyList())
+    var code by remember { mutableStateOf("") }
+    navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.get<String?>(SCANNED_BARCODE)?.let {
+            code = it
+        }
 
-    AddNewProductContent(onAddClick = {
-        productViewModel.addNewProduct(it)
-    },
-        onBackClick = {
-            navController.popBackStack()
-        },
-        options = categoryList.map{ it.category} )
+
+
+    AddNewProductContent(
+        onAddClick = {product ->  productViewModel.addNewProduct(product) },
+        onBackClick = { navController.popBackStack() },
+        options = categoryList.map{ it.category},
+        barCode = code,
+        onBarcodeClick = { navigateToScreen(navController, Route.BarcodeScannerScreen.route) }
+    )
 }
 
 
@@ -80,19 +94,22 @@ fun AddNewProductScreen(navController: NavHostController){
 fun AddNewProductContent(
     modifier: Modifier = Modifier,
     options: List<String>,
+    barCode: String? = "",
     onAddClick: (Product) -> Unit,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onBarcodeClick: () -> Unit = {}
 ) {
-    var name by remember { mutableStateOf("") }
-    var barcode by remember { mutableStateOf("") }
+
+    var name by rememberSaveable { mutableStateOf("") }
+    var barcode by remember { mutableStateOf(barCode?:"") }
     var nameError by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var price by rememberSaveable { mutableStateOf("") }
     var priceError by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("") }
-    var stockQuantity by remember { mutableStateOf("") }
-    var unit by remember { mutableStateOf("") }
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var category by rememberSaveable { mutableStateOf("") }
+    var stockQuantity by rememberSaveable { mutableStateOf("") }
+    var unit by rememberSaveable { mutableStateOf("") }
+    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {uri ->
@@ -101,24 +118,19 @@ fun AddNewProductContent(
             }
         }
     )
-    var defaultUnit = stringResource(id = R.string.piece)
     var stockQuantityError by remember { mutableStateOf("") }
-    var manfDateState = rememberDatePickerState()
-    var manfDate by remember { mutableStateOf(Date()) }
-    var expDateState = rememberDatePickerState()
-    var expDate by remember { mutableStateOf(Date()) }
+    val manfDateState = rememberDatePickerState()
+    var manfDate by rememberSaveable { mutableStateOf(Date()) }
+    val expDateState = rememberDatePickerState()
+    var expDate by rememberSaveable { mutableStateOf(Date()) }
     var showManfDatePicker by remember { mutableStateOf(false) }
     var showExpDatePicker by remember { mutableStateOf(false) }
 
-    val dateFormatter = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }
-
-    //val options = listOf("",  "حبوب","معلبات", "مواد غذائية", "منظفات")
+    val dateFormatter =  SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     Scaffold(
           topBar = {
               TopAppBar(
-                  modifier = Modifier
-                      .clip(RoundedCornerShape(bottomEnd = 25.dp, bottomStart = 25.dp)),
                   colors = TopAppBarDefaults.topAppBarColors(
                       containerColor = MaterialTheme.colorScheme.primary,
                       titleContentColor = MaterialTheme.colorScheme.onPrimary
@@ -167,7 +179,7 @@ fun AddNewProductContent(
                     .placeholder(R.drawable.image)
                     .build(),
                 contentDescription = "",
-                contentScale = ContentScale.None
+                contentScale = ContentScale.Fit
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -186,8 +198,10 @@ fun AddNewProductContent(
                 onValueChange = {
                     barcode = it
                 },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                onIconClick = { onBarcodeClick() },
                 label = stringResource(R.string.producat_barcode),
-                leadingIcon = R.drawable.qr_code
+                leadingIcon = R.drawable.barcode
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -239,7 +253,7 @@ fun AddNewProductContent(
 
             CustomExposedDropdownMenu(
                 options = options,
-                selectedOption = if(options.size == 0) "" else options[0],
+                selectedOption = if(options.isEmpty()) "" else options[0],
                 readOnly = true,
                 label = stringResource(id = R.string.category),
                 onValueChangeEvent = {
@@ -260,22 +274,20 @@ fun AddNewProductContent(
             Spacer(modifier = Modifier.height(4.dp))
 
             CustomTextFiled(
-                modifier = Modifier
-                    .clickable { showManfDatePicker = true },
                 value = dateFormatter.format(manfDate),
                 onValueChange = { },
+                onIconClick = {showManfDatePicker = true},
                 label = stringResource(id = R.string.manf_date),
-                leadingIcon = R.drawable.date,
+                leadingIcon = R.drawable.calendar_month,
                 readOnly = true
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             CustomTextFiled(
-                modifier = Modifier
-                    .clickable { showExpDatePicker = true },
                 value = dateFormatter.format(expDate),
                 onValueChange = { },
+                onIconClick = {showExpDatePicker = true},
                 label = stringResource(id = R.string.exp_date),
                 leadingIcon = R.drawable.date,
                 readOnly = true
@@ -329,15 +341,12 @@ fun AddNewProductContent(
                 onClick = {
                     nameError =  if (name.isBlank()) "Name is required" else ""
                     priceError =  if (price.isBlank()) "Price is required" else ""
-                    unit.apply{
-                        if(this.isBlank())
-                            defaultUnit
-                    }
 
                     stockQuantityError =  if (stockQuantity.isBlank()) "stockQuantity is required" else ""
 
                     if(name.isNotEmpty() && price.isNotEmpty() && stockQuantity.isNotEmpty()){
-                        onAddClick(Product(
+                        onAddClick(
+                            Product(
                             name = name.trim(),
                             description = description.trim(),
                             price = price.toDoubleOrNull() ?: 0.0,
@@ -349,7 +358,8 @@ fun AddNewProductContent(
                             createdAt = Date(),
                             unit = unit.trim(),
                             barcode = barcode
-                        ))
+                        )
+                        )
                         // clearData
                         name = ""
                         description = ""
@@ -373,6 +383,7 @@ fun AddNewProductContent(
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
+            Spacer(modifier = Modifier.height(6.dp))
         }
     }
 

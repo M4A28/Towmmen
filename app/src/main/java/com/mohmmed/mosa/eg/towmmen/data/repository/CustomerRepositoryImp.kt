@@ -1,7 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.data.repository
 
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.CustomerDao
-import com.mohmmed.mosa.eg.towmmen.domin.module.Customer
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.CustomerRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -1,6 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.note
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -12,12 +13,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Note
+import com.mohmmed.mosa.eg.towmmen.data.module.Note
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.ConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.NoteCard
 
@@ -30,15 +35,38 @@ fun NoteScreen(
     val notes by noteViewModel
         .getAllNote()
         .collectAsState(initial = emptyList())
+    var showDeleteDialog by remember {
+        mutableStateOf(false)
+    }
 
+    var note by remember{
+        mutableStateOf<Note?>(null)
+    }
     NoteContent(
+        modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer),
         notes = notes,
         onEditClick = {},
-        onDeleteClick = {},
+        onDeleteClick = {
+            showDeleteDialog = !showDeleteDialog
+            note = it
+        },
         onFapClick = {
             onFapClick()
         }
     )
+    if(showDeleteDialog){
+        ConfirmationDialog(
+            title = stringResource(R.string.note_delete_conformation),
+            text = stringResource(R.string.note_delete_warring),
+            onConfirm = { note?.let { noteViewModel.deleteNote(it)
+                showDeleteDialog = !showDeleteDialog
+            } },
+            onDismiss = {
+                showDeleteDialog = !showDeleteDialog
+            }
+        )
+    }
+
 
 }
 
@@ -52,6 +80,8 @@ fun NoteContent(
     onDeleteClick: (Note) -> Unit,
     onFapClick: () -> Unit =  {}
 ) {
+
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -69,11 +99,13 @@ fun NoteContent(
 
         }
     ) {
+
         if(notes.isNotEmpty()){
             LazyColumn(
                 modifier = modifier
             ) {
                 items(notes.size){
+
                         note ->
                     NoteCard(
                         note = notes[note],
@@ -85,6 +117,8 @@ fun NoteContent(
                         }
 
                     )
+
+
                 }
             }
         }else{

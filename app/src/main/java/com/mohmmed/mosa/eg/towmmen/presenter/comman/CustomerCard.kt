@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +30,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.domin.module.Customer
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
+import com.mohmmed.mosa.eg.towmmen.ui.theme.BlueShades
+import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import java.util.Date
 
 @Composable
@@ -45,20 +47,16 @@ fun CustomerCard(
             .padding(8.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .shadow(4.dp)
-            .background(MaterialTheme.colorScheme.surface)
-            .clickable {
-                onClick(customer)
-            },
+            .clickable{onClick(customer)}
+            .background(Brush.linearGradient(BlueShades)),
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(16.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = R.drawable.person),
                 contentDescription = "Customer image",
-
                 modifier = Modifier
                     .size(60.dp)
                     .clip(RoundedCornerShape(16.dp)),
@@ -66,11 +64,11 @@ fun CustomerCard(
             )
             Spacer(modifier = Modifier.width(16.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
-
+            Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = customer.name,
                     maxLines = 1,
+                    fontFamily = CairoFont,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography
                         .bodyLarge
@@ -81,6 +79,8 @@ fun CustomerCard(
 
                 Text(
                     text = customer.email,
+                    maxLines = 1,
+                    fontFamily = CairoFont,
                     style = MaterialTheme.typography.bodyMedium
                 )
 
@@ -88,6 +88,8 @@ fun CustomerCard(
 
                 Text(
                     text = customer.phone,
+                    maxLines = 1,
+                    fontFamily = CairoFont,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

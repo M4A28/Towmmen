@@ -8,8 +8,8 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
-import com.mohmmed.mosa.eg.towmmen.domin.module.ProductWithCustomers
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.ProductWithCustomers
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
@@ -25,16 +25,17 @@ interface ProductDao {
     @Query("SELECT SUM((price * stockQuantity)) FROM products")
     fun getTotalCostOfProducts(): Flow<Double?>
 
-    @Query("SELECT * FROM products WHERE expireDate = :expDate ORDER BY expireDate DESC")
-    fun getProductsByItExpDate(expDate: Date): Flow<List<Product>>
+    @Query("SELECT * FROM products WHERE expireDate BETWEEN :startDate AND :endDate")
+    fun getProductsExpiringBetween(startDate: Date, endDate: Date): Flow<List<Product>>
 
     @Query("SELECT * FROM products WHERE productId = :id ORDER BY createdAt DESC")
     fun getProductById(id: Int): Flow<Product>
 
     @Query("SELECT * FROM products WHERE name = :name ORDER BY createdAt DESC")
     fun getProductByName(name: String): Flow<List<Product>>
-    @Query("SELECT * FROM products WHERE name = :barcode ORDER BY createdAt DESC")
-    fun getProductByBarcode(barcode: String): Flow<List<Product>>
+
+    @Query("SELECT * FROM products WHERE barcode = :barcode")
+    fun getProductByBarcode(barcode: String): Flow<Product>
 
     @Query("SELECT * FROM products WHERE category = :category ORDER BY createdAt DESC")
     fun getProductsByCategory(category: String): Flow<List<Product>>

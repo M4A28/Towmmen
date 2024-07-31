@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.mohmmed.mosa.eg.towmmen.domin.module.Employee
-import com.mohmmed.mosa.eg.towmmen.domin.module.EmployeeWithCustomers
+import com.mohmmed.mosa.eg.towmmen.data.module.Employee
+import com.mohmmed.mosa.eg.towmmen.data.module.EmployeeWithCustomers
 import kotlinx.coroutines.flow.Flow
 
 @Dao

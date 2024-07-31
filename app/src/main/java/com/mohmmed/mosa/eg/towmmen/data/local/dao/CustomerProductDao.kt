@@ -5,11 +5,11 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.mohmmed.mosa.eg.towmmen.domin.module.Customer
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerProductCrossRef
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerWithProducts
-import com.mohmmed.mosa.eg.towmmen.domin.module.Product
-import com.mohmmed.mosa.eg.towmmen.domin.module.ProductWithCustomers
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerProductCrossRef
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerWithProducts
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.ProductWithCustomers
 import kotlinx.coroutines.flow.Flow
 
 @Dao

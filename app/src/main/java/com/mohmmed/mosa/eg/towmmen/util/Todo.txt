@@ -1,0 +1,6 @@
+thing to todo in my app
+- add prucase
+- add pardoce scan
+- intract with product
+- find use case to prevent crash
+- fill home screen

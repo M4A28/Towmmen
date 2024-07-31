@@ -1,9 +1,9 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.purchase
 
 import androidx.lifecycle.ViewModel
-import com.mohmmed.mosa.eg.towmmen.domin.module.CustomerWithPurchases
-import com.mohmmed.mosa.eg.towmmen.domin.module.Purchase
-import com.mohmmed.mosa.eg.towmmen.domin.module.PurchaseWithDetails
+import com.mohmmed.mosa.eg.towmmen.data.module.CustomerWithPurchases
+import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
+import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseWithDetails
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.purchase.PurchaseUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
