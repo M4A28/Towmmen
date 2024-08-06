@@ -130,16 +130,6 @@ fun FullProductInfoContent(
                 contentScale = ContentScale.Fit
             )
             
-/*            Image(
-                painter = painterResource(id = R.drawable.image),
-                contentDescription = "Product Image",
-                modifier = Modifier
-                    .height(200.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.None
-            )*/
-
             Row(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -203,6 +193,13 @@ fun FullProductInfoContent(
                 icon = R.drawable.barcode,
                 label = stringResource(R.string.producat_barcode),
                 value = product.barcode
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+
+            DetailItem(
+                icon = R.drawable.cash,
+                label = stringResource(id = R.string.cost_),
+                value = formatCurrency(product.cost)
             )
             Spacer(modifier = Modifier.height(6.dp))
 

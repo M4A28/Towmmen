@@ -21,6 +21,14 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+                arguments["room.incremental"] = "true"
+                arguments["room.expandProjection"] = "true"
+            }
+        }
     }
 
     buildTypes {
@@ -117,4 +125,8 @@ dependencies {
     implementation(libs.prettytime)
     // to show fake data eg: name, emil
     implementation(libs.javafaker)
+    // chart vice
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
+    implementation(libs.vico.core)
 }

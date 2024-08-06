@@ -1,6 +1,8 @@
 package com.mohmmed.mosa.eg.towmmen.data.repository
 
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.ProductDao
+import com.mohmmed.mosa.eg.towmmen.data.module.CategoryCount
+import com.mohmmed.mosa.eg.towmmen.data.module.MonthlyAvgPrice
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.ProductRepository
 import kotlinx.coroutines.flow.Flow
@@ -45,6 +47,30 @@ class ProductRepositoryImp @Inject constructor(
 
     override fun getProductCount(): Flow<Int?> {
         return productDao.getProductCount()
+    }
+
+    override fun getAveragePrice(): Flow<Double?> {
+        return productDao.getAveragePrice()
+    }
+
+    override fun getTotalStock(): Flow<Int?> {
+        return productDao.getTotalStock()
+    }
+
+    override fun getProductCountByCategory(): Flow<List<CategoryCount>> {
+        return productDao.getProductCountByCategory()
+    }
+
+    override fun getMaxPrice(): Flow<Double?> {
+        return productDao.getMaxPrice()
+    }
+
+    override fun getMinPrice(): Flow<Double?> {
+        return productDao.getMinPrice()
+    }
+
+    override fun getAveragePriceByMonth(): Flow<List<MonthlyAvgPrice>> {
+        return productDao.getAveragePriceByMonth()
     }
 
     override fun getTotalCostOfProducts(): Flow<Double?> {

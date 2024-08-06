@@ -18,7 +18,6 @@ import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToProductDetails
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 import com.mohmmed.mosa.eg.towmmen.ui.theme.Green40
 import com.mohmmed.mosa.eg.towmmen.ui.theme.Red40
-import com.mohmmed.mosa.eg.towmmen.ui.theme.Red80
 import com.mohmmed.mosa.eg.towmmen.ui.theme.Yellow40
 import com.mohmmed.mosa.eg.towmmen.util.ONE_DAY
 import com.mohmmed.mosa.eg.towmmen.util.ONE_MONTH
@@ -114,7 +113,7 @@ fun indicatorColor(date: Date): Color {
         value <= ONE_DAY -> Red40
         value <= ONE_WEEK -> Yellow40
         value <= TOW_WEEKS -> Green40
-        else -> Red80
+        else -> Color.Gray
     }
 }
 

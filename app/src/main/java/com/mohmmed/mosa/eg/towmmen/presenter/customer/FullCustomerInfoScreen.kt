@@ -1,6 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.customer
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,7 +49,6 @@ import com.mohmmed.mosa.eg.towmmen.presenter.comman.DetailItem
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
-import com.mohmmed.mosa.eg.towmmen.util.PRODUCT_KEY
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import kotlinx.coroutines.launch
 
@@ -58,7 +57,6 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
     val customerViewModel: CustomerViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
     var showDeleteConfirmation by remember { mutableStateOf(false) }
-    var showPurchaseDialog by remember { mutableStateOf(false) }
     navController.previousBackStackEntry
         ?.savedStateHandle
         ?.get<Customer?>(CUSTOMER_KEY)?.let { customer ->
@@ -66,11 +64,15 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
                 customer = customer,
                 onDeleteClick = {
                     showDeleteConfirmation = true
-
                 },
                 onEditClick = {
                     navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
                     navController.navigate(Route.EditCustomerScreen.route)
+                },
+                onPurchaseClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
+                    navController.navigate(Route.AddInvoiceScreen.route)
+
                 }
             )
 
@@ -88,19 +90,6 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
                     onDismiss = { showDeleteConfirmation = false }
                 )
             }
-
-            if (showPurchaseDialog) {
-                PurchaseDialog(
-                    customer = customer,
-                    onConfirm = { amount ->
-                        coroutineScope.launch {
-                            //customerViewModel.recordPurchase(customer, amount)
-                            showPurchaseDialog = false
-                        }
-                    },
-                    onDismiss = { showPurchaseDialog = false }
-                )
-            }
         }
 
 
@@ -115,6 +104,7 @@ fun FullCustomerInfoContent(
     onDeleteClick:  (Customer)  -> Unit,
     onEditClick: (Customer)  -> Unit,
     onPurchaseClick: (Customer) -> Unit = {},
+    onShowInvoicesClick: (Customer) -> Unit = {}
 ) {
 
     Column(
@@ -129,7 +119,31 @@ fun FullCustomerInfoContent(
         Spacer(modifier = Modifier.height(16.dp))
         CustomerDetails(customer)
         Spacer(modifier = Modifier.height(24.dp))
-        PurchaseButton(onClick = { onPurchaseClick(customer) } )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ){
+            Button(
+                onClick = { onPurchaseClick(customer) },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            ) {
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = stringResource(R.string.record_purchase),
+                    fontFamily = CairoFont
+                )
+            }
+            Button(
+                onClick = {onShowInvoicesClick(customer)},
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            ) {
+                Spacer(Modifier.width(8.dp))
+                Text(text = stringResource(R.string.show_invoices),
+                    fontFamily = CairoFont)
+            }
+        }
     }
 
 }
@@ -184,7 +198,7 @@ fun CustomerHeader(
             fontWeight = FontWeight.Bold,
             text = customer.name,
             style = MaterialTheme.typography.headlineMedium,
-            color = Color.White
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -202,7 +216,7 @@ fun CustomerDetails(customer: Customer) {
             DetailItem(icon = R.drawable.location_pin, label = stringResource(id = R.string.address), value = customer.address)
             DetailItem(
                 icon = R.drawable.calendar_month,
-                label = stringResource(id = R.string.reg_data),
+                label = stringResource(id = R.string.reg_data_2),
                 value = dateToString(customer.registrationDate, "yyyy/MM/dd")
             )
         }
@@ -223,7 +237,7 @@ fun PurchaseButton(onClick: () -> Unit) {
             modifier = Modifier.size(24.dp)
         )
         Spacer(Modifier.width(8.dp))
-        Text("Record Purchase")
+        Text(stringResource(R.string.record_purchase))
     }
 }
 

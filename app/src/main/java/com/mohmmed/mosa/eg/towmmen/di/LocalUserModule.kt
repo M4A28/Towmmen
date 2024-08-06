@@ -6,6 +6,8 @@ import com.mohmmed.mosa.eg.towmmen.domin.localusermanger.LocalUserManger
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.AppEntryUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.ReadAppEntry
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.SaveAppEntry
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.SaveLastInvoiceNumber
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.ReadLastInvoiceNumber
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +29,8 @@ object LocalUserModule {
     fun provideAppEntryUseCases(
         localUserManger: LocalUserManger): AppEntryUseCases = AppEntryUseCases(
         readAppEntry = ReadAppEntry(localUserManger),
-        saveAppEntry = SaveAppEntry(localUserManger)
+        saveAppEntry = SaveAppEntry(localUserManger),
+        saveLastInvoiceNumber = SaveLastInvoiceNumber(localUserManger),
+        readLastInvoiceNumber = ReadLastInvoiceNumber(localUserManger),
     )
 }

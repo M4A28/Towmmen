@@ -1,7 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.note
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -20,15 +19,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Note
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.NoteCard
+import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.util.NOTE_KEY
+
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NoteScreen(
+    navController: NavHostController,
     onFapClick:() -> Unit
 ){
     val noteViewModel: NoteViewModel = hiltViewModel()
@@ -39,13 +44,14 @@ fun NoteScreen(
         mutableStateOf(false)
     }
 
-    var note by remember{
-        mutableStateOf<Note?>(null)
-    }
+    var note by remember{ mutableStateOf<Note?>(null) }
+
     NoteContent(
-        modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer),
         notes = notes,
-        onEditClick = {},
+        onEditClick = {
+            navController.currentBackStackEntry?.savedStateHandle?.set(NOTE_KEY, it)
+            navController.navigate(Route.EditNoteScreen.route)
+        },
         onDeleteClick = {
             showDeleteDialog = !showDeleteDialog
             note = it
@@ -58,6 +64,8 @@ fun NoteScreen(
         ConfirmationDialog(
             title = stringResource(R.string.note_delete_conformation),
             text = stringResource(R.string.note_delete_warring),
+            dismissText = stringResource(id = R.string.cancel),
+            confirmText = stringResource(id = R.string.delete),
             onConfirm = { note?.let { noteViewModel.deleteNote(it)
                 showDeleteDialog = !showDeleteDialog
             } },

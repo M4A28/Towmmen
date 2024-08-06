@@ -85,36 +85,29 @@
     <string name="back">back</string>
     <string name="get_start">get started</string>
 
-
     <string name="on_borading_titel_1">Welcome to Shop Management Appliction</string>
     <string name="on_boarding_description_1">You will find a a lot of feturs you need it</string>
-
     <string name="on_borading_titel_2">All you need in one palace</string>
     <string name="on_boarding_description_2">Customers, Products, Purchases, Invoice and More</string>
-
     <string name="on_borading_titel_3">Start Wright Now !!</string>
     <string name="on_boarding_description_3">Just start to mange your Shop and make it grow faster </string>
-
-
-
-
 
     <string name="insert_note">Insert Note</string>
     <string name="search">Search</string>
     <string name="all">All</string>
-    <string name="app_setting">إعدادات التطبيق</string>
-    <string name="dark_mode">الوضع الداكن</string>
-    <string name="exchange_dark_light">تبديل بين الوضع الفاتح والداكن</string>
-    <string name="export_to_csv">تصدير الملفات إلى CSV</string>
-    <string name="save_data_as_csv">حفظ بياناتك بتنسيق CSV</string>
-    <string name="export">تصدير</string>
-    <string name="data_exported">تم تصدير الملفات بنجاح</string>
-    <string name="app_color">لون التطبيق</string>
-    <string name="choice_app_main_color">اختر اللون الرئيسي للتطبيق</string>
-    <string name="delete_app_data">محو جميع بيانات التطبيق</string>
-    <string name="delete_app_data_wring">سيؤدي هذا إلى حذف جميع البيانات نهائيًا</string>
+    <string name="app_setting">app setting </string>
+    <string name="dark_mode">dark mode</string>
+    <string name="exchange_dark_light">switch to dark/light mode</string>
+    <string name="export_to_csv">export data as CSV</string>
+    <string name="save_data_as_csv">save data as CSV file</string>
+    <string name="export">export</string>
+    <string name="data_exported">all file exported</string>
+    <string name="app_color">app color</string>
+    <string name="choice_app_main_color">choice app mian color</string>
+    <string name="delete_app_data">Delete All App data</string>
+    <string name="delete_app_data_wring">this will delete all data</string>
     <string name="delete_data">محو البيانات</string>
-    <string name="delete_data_msg">تم محو جميع البيانات</string>
+    <string name="delete_data_msg">All Data was deleted </string>
     <string name="latest_add_products">Latest Add Products</string>
     <string name="title">Title</string>
     <string name="content">Content</string>
@@ -129,6 +122,27 @@
     <string name="edit_product">Edit Product</string>
     <string name="add_purchase">Add Purchase</string>
     <string name="edit_customer">Edit Customer Data</string>
+    <string name="save_edit_note">save edited note</string>
+    <string name="_1000_characters">%1$s / 1000 characters</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="record_purchase">Record Purchase</string>
+    <string name="invoice">Invoice</string>
+    <string name="price_">price: %1$s</string>
+    <string name="total_cost">total cost: %1$s</string>
+    <string name="scan">scan</string>
+    <string name="show_invoices">show invoices</string>
+    <string name="cost_">Cost</string>
+    <string name="save_invoice">Save Invoice</string>
+    <string name="close">close</string>
+    <string name="total">Toatal: %1$s</string>
+    <string name="invoice_number">Invoice #%1$s</string>
+    <string name="clear">Clear</string>
+    <string name="confirm">confirm</string>
+    <string name="basic_statistics">Basic Statistics</string>
+    <string name="total_products">Total Products: %1$s</string>
+    <string name="average_price">Average Price: %1$s</string>
+    <string name="total_stock">Total Stock: %1$s</string>
+    <string name="inventory_value">Inventory Value: %1$s</string>
 
 
 </resources>

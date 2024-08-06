@@ -7,13 +7,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.mohmmed.mosa.eg.towmmen.R
 
 @Composable
 fun ConfirmationDialog(
     title: String,
     text: String,
+    confirmText: String,
+    dismissText: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -25,14 +25,14 @@ fun ConfirmationDialog(
         confirmButton = {
             Button(
                 onClick = onConfirm,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) {
-                Text(stringResource(R.string.delete))
+                Text(confirmText)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.cancel))
+                Text(dismissText)
             }
         }
     )

@@ -17,16 +17,20 @@ import javax.inject.Inject
 class MainViewModel @Inject  constructor(
     private val appEntryUseCases: AppEntryUseCases
 ): ViewModel() {
+
     var splashCondition by mutableStateOf(true)
         private set
 
     var startDestination by mutableStateOf(Route.AppNavigation.route)
         private set
 
+    var festLaunch by mutableStateOf(true)
+        private set
     init{
         appEntryUseCases.readAppEntry().onEach { canStartFromHomeScreen ->
             if(canStartFromHomeScreen){
                 startDestination = Route.AppNavigation.route
+                festLaunch = false
             }else{
                 startDestination = Route.AppStartNavigation.route
             }

@@ -8,6 +8,8 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
+import com.mohmmed.mosa.eg.towmmen.data.module.CategoryCount
+import com.mohmmed.mosa.eg.towmmen.data.module.MonthlyAvgPrice
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.data.module.ProductWithCustomers
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +24,7 @@ interface ProductDao {
     @Upsert
     suspend fun upsertProduct(product: Product)
 
-    @Query("SELECT SUM((price * stockQuantity)) FROM products")
+    @Query("SELECT SUM((cost * stockQuantity)) FROM products")
     fun getTotalCostOfProducts(): Flow<Double?>
 
     @Query("SELECT * FROM products WHERE expireDate BETWEEN :startDate AND :endDate")
@@ -46,10 +48,30 @@ interface ProductDao {
     @Query("SELECT count(*) FROM products")
     fun getProductCount(): Flow<Int?>
 
+    @Query("SELECT AVG(price) FROM products")
+    fun getAveragePrice(): Flow<Double?>
+
+    @Query("SELECT SUM(stockQuantity) FROM products")
+    fun getTotalStock(): Flow<Int?>
+
+    @Query("SELECT category, COUNT(*) as count FROM products GROUP BY category")
+    fun getProductCountByCategory(): Flow<List<CategoryCount>>
+
+    @Query("SELECT MAX(price) FROM products")
+    fun getMaxPrice(): Flow<Double?>
+
+    @Query("SELECT MIN(price) FROM products")
+    fun getMinPrice(): Flow<Double?>
+
+    @Query("SELECT strftime('%Y-%m', createdAt) as month, AVG(price) as avgPrice " +
+            "FROM products GROUP BY month ORDER BY month")
+    fun getAveragePriceByMonth(): Flow<List<MonthlyAvgPrice>>
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProduct(product: Product)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun updateProduct(product: Product)
 
     @Delete

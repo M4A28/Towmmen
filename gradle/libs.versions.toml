@@ -33,6 +33,7 @@ roomRuntime = "2.6.1"
 workMultiprocess = "2.9.0"
 workRuntimeKtx = "2.9.0"
 caleandraview = "2.5.3"
+vico = "2.0.0-alpha.26"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
@@ -77,6 +78,9 @@ androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.
 prettytime = { module = "org.ocpsoft.prettytime:prettytime", version.ref = "prettytime" }
 caleandra-view = { module = "com.kizitonwose.calendar:compose", version.ref = "caleandraview" }
 
+vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

@@ -18,8 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -65,10 +65,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProductScreen(navController: NavHostController){
     val productViewModel: ProductViewModel = hiltViewModel()
+    val producats by productViewModel.products.collectAsState(initial = emptyList())
     val categoryViewModel: CategoryViewModel = hiltViewModel()
     //val viewModel: BarcodeScannerViewModel = hiltViewModel()
     //val barcode by viewModel.barcode.collectAsState()
@@ -84,13 +84,14 @@ fun EditProductScreen(navController: NavHostController){
 
         EditProductContent(
             modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer),
-            product = product,
+            editedProduct = product,
             onEditClick = {
                 productViewModel.updateProduct(it)
                 navController.popBackStack() },
             onBackClick = { navController.popBackStack() },
             options = categoryList.map{ it.category},
             barCode = code,
+            allProducts = producats,
             onBarcodeClick = { navigateToScreen(navController, Route.BarcodeScannerScreen.route) }
         )
     }
@@ -101,7 +102,8 @@ fun EditProductScreen(navController: NavHostController){
 @Composable
 fun EditProductContent(
     modifier: Modifier = Modifier,
-    product: Product?,
+    editedProduct: Product?,
+    allProducts: List<Product>,
     options: List<String>,
     barCode: String?,
     onEditClick: (Product) -> Unit,
@@ -109,16 +111,17 @@ fun EditProductContent(
     onBarcodeClick: () -> Unit = {}
 ) {
 
-    var name by rememberSaveable { mutableStateOf(product?.name ?:"") }
-    var barcode by remember { mutableStateOf(if(barCode == null) product?.barcode else barCode ) }
+    var name by rememberSaveable { mutableStateOf(editedProduct?.name ?:"") }
+    var barcode by remember { mutableStateOf(barCode ?: editedProduct?.barcode) }
     var nameError by remember { mutableStateOf("") }
-    var description by rememberSaveable { mutableStateOf(product?.description?: "") }
-    var price by rememberSaveable { mutableStateOf(product?.price.toString()) }
+    var description by rememberSaveable { mutableStateOf(editedProduct?.description?: "") }
+    var cost by rememberSaveable { mutableStateOf(editedProduct?.cost.toString()) }
+    var price by rememberSaveable { mutableStateOf(editedProduct?.price.toString()) }
     var priceError by remember { mutableStateOf("") }
-    var category by rememberSaveable { mutableStateOf(product?.category ?:"") }
-    var stockQuantity by rememberSaveable { mutableStateOf(product?.stockQuantity.toString()) }
-    var unit by rememberSaveable { mutableStateOf(product?.unit.toString()) }
-    var imageUri by rememberSaveable { mutableStateOf<Uri?>(Uri.parse(product?.imagePath)) }
+    var category by rememberSaveable { mutableStateOf(editedProduct?.category ?:"") }
+    var stockQuantity by rememberSaveable { mutableStateOf(editedProduct?.stockQuantity.toString()) }
+    var unit by rememberSaveable { mutableStateOf(editedProduct?.unit.toString()) }
+    var imageUri by rememberSaveable { mutableStateOf<Uri?>(Uri.parse(editedProduct?.imagePath)) }
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {uri ->
@@ -129,9 +132,9 @@ fun EditProductContent(
     )
     var stockQuantityError by remember { mutableStateOf("") }
     val manfDateState = rememberDatePickerState()
-    var manfDate by rememberSaveable { mutableStateOf(product?.manufactureDate) }
+    var manfDate by rememberSaveable { mutableStateOf(editedProduct?.manufactureDate) }
     val expDateState = rememberDatePickerState()
-    var expDate by rememberSaveable { mutableStateOf(product?.expireDate) }
+    var expDate by rememberSaveable { mutableStateOf(editedProduct?.expireDate) }
     var showManfDatePicker by remember { mutableStateOf(false) }
     var showExpDatePicker by remember { mutableStateOf(false) }
 
@@ -150,7 +153,7 @@ fun EditProductContent(
                     }){
                         Icon(
                             tint = MaterialTheme.colorScheme.onPrimary,
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "ArrowBack"
                         )
                     }
@@ -203,7 +206,7 @@ fun EditProductContent(
             Spacer(modifier = Modifier.height(4.dp))
 
             CustomTextFiled(
-                value = barcode!!,
+                value = if(barcode == null || barcode!!.isEmpty()) editedProduct?.barcode!! else barcode!!,
                 onValueChange = {
                     barcode = it
                 },
@@ -226,6 +229,18 @@ fun EditProductContent(
 
             Spacer(modifier = Modifier.height(4.dp))
 
+
+            CustomTextFiled(
+                value = cost,
+                onValueChange = {
+                    cost = it
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
+                label = stringResource(id = R.string.cost_),
+                leadingIcon = R.drawable.money
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             CustomTextFiled(
                 value = price,
@@ -344,12 +359,16 @@ fun EditProductContent(
 
                     stockQuantityError =  if (stockQuantity.isBlank()) "stockQuantity is required" else ""
 
-                    if(name.isNotEmpty() && price.isNotEmpty() && stockQuantity.isNotEmpty()){
+                    if(name.isNotEmpty() &&
+                        price.isNotEmpty() &&
+                        stockQuantity.isNotEmpty() &&
+                        cost.isNotEmpty()){
                         onEditClick(
                             Product(
-                                productId = product?.productId!!,
+                                productId = editedProduct?.productId!!,
                                 name = name.trim(),
                                 description = description.trim(),
+                                cost = cost.toDoubleOrNull() ?: 0.0,
                                 price = price.toDoubleOrNull() ?: 0.0,
                                 category = category,
                                 imagePath = imageUri?.toString()?: "",
@@ -358,7 +377,7 @@ fun EditProductContent(
                                 stockQuantity = stockQuantity.toIntOrNull() ?: 0,
                                 createdAt = Date(),
                                 unit = unit.trim(),
-                                barcode = barcode!!
+                                barcode = if(barcode.isNullOrEmpty()) editedProduct.barcode else barcode!!
                             )
                         )
                         // clearData
@@ -366,6 +385,7 @@ fun EditProductContent(
                         description = ""
                         price = ""
                         unit = ""
+                        cost = ""
                         category = ""
                         barcode = ""
                         imageUri = null

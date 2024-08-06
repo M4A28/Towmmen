@@ -6,9 +6,15 @@ import com.mohmmed.mosa.eg.towmmen.data.repository.ProductRepositoryImp
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.AddNewProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.DeleteProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetAllProducts
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetAveragePrice
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetAveragePriceByMonth
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetMaxPrice
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetMinPrice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductByBarcode
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductCountByCategory
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductsExpiringBetween
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetTotalStock
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductBarcode
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductsCount
@@ -51,7 +57,13 @@ object ProductModule {
             productBarcode = ProductBarcode(productRepositoryImp),
             totalProductsCost = TotalProductsCost(productRepositoryImp),
             getProductsExpiringBetween = GetProductsExpiringBetween(productRepositoryImp),
-            getProductByBarcode = GetProductByBarcode(productRepositoryImp)
+            getProductByBarcode = GetProductByBarcode(productRepositoryImp),
+            getAveragePrice = GetAveragePrice(productRepositoryImp),
+            getTotalStock = GetTotalStock(productRepositoryImp),
+            getProductCountByCategory = GetProductCountByCategory(productRepositoryImp),
+            getMinPrice = GetMinPrice(productRepositoryImp),
+            getMaxPrice = GetMaxPrice(productRepositoryImp),
+            getAveragePriceByMonth = GetAveragePriceByMonth(productRepositoryImp)
         )
     }
 }

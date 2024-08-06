@@ -1,5 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.domin.repostory
 
+import com.mohmmed.mosa.eg.towmmen.data.module.CategoryCount
+import com.mohmmed.mosa.eg.towmmen.data.module.MonthlyAvgPrice
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
@@ -23,10 +25,19 @@ interface ProductRepository {
 
     suspend fun updateProduct(product: Product)
 
-    fun getProductCount(): Flow<Int?>
-
     fun getTotalCostOfProducts(): Flow<Double?>
 
+    fun getProductCount(): Flow<Int?>
+    fun getAveragePrice(): Flow<Double?>
 
+    fun getTotalStock(): Flow<Int?>
+
+    fun getProductCountByCategory(): Flow<List<CategoryCount>>
+
+    fun getMaxPrice(): Flow<Double?>
+
+    fun getMinPrice(): Flow<Double?>
+
+    fun getAveragePriceByMonth(): Flow<List<MonthlyAvgPrice>>
 
 }

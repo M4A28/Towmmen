@@ -50,7 +50,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
+import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
+import com.mohmmed.mosa.eg.towmmen.util.exportCustomersToCsv
 import com.mohmmed.mosa.eg.towmmen.util.exportProductsToCsv
 import kotlinx.coroutines.launch
 
@@ -60,7 +62,9 @@ fun SettingsScreen() {
     var appColor by remember { mutableStateOf(Color(0xFF6200EE)) }
     val scope = rememberCoroutineScope()
     val productViewModel: ProductViewModel = hiltViewModel()
+    val customerViewModel: CustomerViewModel = hiltViewModel()
     val products by productViewModel.products.collectAsState(initial = emptyList())
+    val custmers by customerViewModel.getAllCustomer().collectAsState(initial = emptyList())
     val snackbarHostState = remember { SnackbarHostState() }
     val permissions = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -74,6 +78,7 @@ fun SettingsScreen() {
         if (permissionsResult.all { it.value }) {
             scope.launch {
                 exportProductsToCsv(products)
+                exportCustomersToCsv(custmers)
             }
         } else {
             // Handle permission denial

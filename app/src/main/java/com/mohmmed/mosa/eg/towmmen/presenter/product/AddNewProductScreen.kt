@@ -16,8 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -62,13 +62,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewProductScreen(navController: NavHostController){
     val productViewModel: ProductViewModel = hiltViewModel()
     val categoryViewModel: CategoryViewModel = hiltViewModel()
-    //val viewModel: BarcodeScannerViewModel = hiltViewModel()
-    //val barcode by viewModel.barcode.collectAsState()
     val categoryList by categoryViewModel.getAllCategory().collectAsState(initial = emptyList())
     var code by remember { mutableStateOf("") }
     navController.currentBackStackEntry
@@ -99,13 +96,11 @@ fun AddNewProductContent(
     onBackClick: () -> Unit = {},
     onBarcodeClick: () -> Unit = {}
 ) {
-
     var name by rememberSaveable { mutableStateOf("") }
     var barcode by remember { mutableStateOf(barCode?:"") }
-    var nameError by remember { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
+    var cost by rememberSaveable { mutableStateOf("") }
     var price by rememberSaveable { mutableStateOf("") }
-    var priceError by remember { mutableStateOf("") }
     var category by rememberSaveable { mutableStateOf("") }
     var stockQuantity by rememberSaveable { mutableStateOf("") }
     var unit by rememberSaveable { mutableStateOf("") }
@@ -118,14 +113,12 @@ fun AddNewProductContent(
             }
         }
     )
-    var stockQuantityError by remember { mutableStateOf("") }
     val manfDateState = rememberDatePickerState()
     var manfDate by rememberSaveable { mutableStateOf(Date()) }
     val expDateState = rememberDatePickerState()
     var expDate by rememberSaveable { mutableStateOf(Date()) }
     var showManfDatePicker by remember { mutableStateOf(false) }
     var showExpDatePicker by remember { mutableStateOf(false) }
-
     val dateFormatter =  SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     Scaffold(
@@ -141,7 +134,7 @@ fun AddNewProductContent(
                       }){
                           Icon(
                               tint = MaterialTheme.colorScheme.onPrimary,
-                              imageVector = Icons.Default.ArrowBack,
+                              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                               contentDescription = "ArrowBack"
                           )
                       }
@@ -217,6 +210,17 @@ fun AddNewProductContent(
 
             Spacer(modifier = Modifier.height(4.dp))
 
+            CustomTextFiled(
+                value = cost,
+                onValueChange = {
+                    cost = it
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
+                label = stringResource(id = R.string.cost_),
+                leadingIcon = R.drawable.money
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             CustomTextFiled(
                 value = price,
@@ -227,8 +231,8 @@ fun AddNewProductContent(
                 label = stringResource(id = R.string.price),
                 leadingIcon = R.drawable.money
             )
-
             Spacer(modifier = Modifier.height(4.dp))
+
 
 
             CustomTextFiled(
@@ -262,15 +266,6 @@ fun AddNewProductContent(
                 leadingIcon = R.drawable.category
             )
 
-
-
-      /*      CustomTextFiled(
-                value = category,
-                onValueChange = { category = it },
-                label = stringResource(id = R.string.category),
-                leadingIcon = R.drawable.category
-            )*/
-
             Spacer(modifier = Modifier.height(4.dp))
 
             CustomTextFiled(
@@ -292,6 +287,7 @@ fun AddNewProductContent(
                 leadingIcon = R.drawable.date,
                 readOnly = true
             )
+
 
 
             if (showManfDatePicker) {
@@ -332,39 +328,36 @@ fun AddNewProductContent(
                         state = expDateState
                     )
                     expDate = expDateState.selectedDateMillis?.let { Date(it) } ?: Date()
-
                 }
             }
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    nameError =  if (name.isBlank()) "Name is required" else ""
-                    priceError =  if (price.isBlank()) "Price is required" else ""
-
-                    stockQuantityError =  if (stockQuantity.isBlank()) "stockQuantity is required" else ""
-
-                    if(name.isNotEmpty() && price.isNotEmpty() && stockQuantity.isNotEmpty()){
-                        onAddClick(
-                            Product(
-                            name = name.trim(),
-                            description = description.trim(),
-                            price = price.toDoubleOrNull() ?: 0.0,
+                    if(name.isNotBlank() &&
+                        price.isNotBlank() &&
+                        stockQuantity.isNotBlank() &&
+                        barcode.isNotBlank() &&
+                        cost.isNotBlank()){
+                        val product = Product(
+                            name = name, barcode = barcode,
+                            cost = cost.toDoubleOrNull()?: 0.0,
+                            price = price.toDoubleOrNull()?: 0.0,
+                            description = description,
+                            imagePath = imageUri.toString(),
                             category = category,
-                            imagePath = imageUri?.toString()?: "",
-                            manufactureDate = manfDate,
-                            expireDate = expDate,
-                            stockQuantity = stockQuantity.toIntOrNull() ?: 0,
-                            createdAt = Date(),
-                            unit = unit.trim(),
-                            barcode = barcode
+                            stockQuantity = stockQuantity.toIntOrNull()?: 0,
+                            unit = unit,
+                            manufactureDate = manfDate, expireDate = expDate,
+                            createdAt = Date(), updatedAt = Date()
                         )
-                        )
+                        onAddClick(product)
                         // clearData
                         name = ""
                         description = ""
                         price = ""
                         unit = ""
+                        cost = ""
                         category = ""
                         barcode = ""
                         imageUri = null
@@ -378,6 +371,7 @@ fun AddNewProductContent(
                     Icons.Filled.Add,
                     contentDescription = "Add Product"
                 )
+
                 Text(
                     text = stringResource(id = R.string.add_product),
                     modifier = Modifier.padding(start = 8.dp)

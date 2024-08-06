@@ -2,6 +2,8 @@ package com.mohmmed.mosa.eg.towmmen.presenter.product
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mohmmed.mosa.eg.towmmen.data.module.CategoryCount
+import com.mohmmed.mosa.eg.towmmen.data.module.MonthlyAvgPrice
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -82,6 +84,29 @@ class ProductViewModel @Inject constructor(
         return productUseCase.getProductsCount()
     }
 
+    fun getAveragePrice(): Flow<Double?> {
+        return productUseCase.getAveragePrice()
+    }
+
+    fun getTotalStock(): Flow<Int?> {
+        return productUseCase.getTotalStock()
+    }
+
+    fun getProductCountByCategory(): Flow<List<CategoryCount>> {
+        return productUseCase.getProductCountByCategory()
+    }
+
+    fun getMaxPrice(): Flow<Double?> {
+        return productUseCase.getMaxPrice()
+    }
+
+    fun getMinPrice(): Flow<Double?> {
+        return productUseCase.getMinPrice()
+    }
+
+    fun getAveragePriceByMonth(): Flow<List<MonthlyAvgPrice>> {
+        return productUseCase.getAveragePriceByMonth()
+    }
 
 
 }

@@ -47,10 +47,13 @@ import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.AddCategoryScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.SettingsScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.home.HomeScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.invoic.AddInvoiceScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.componet.AppBottomNavigation
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.componet.BottomNavigationItem
 import com.mohmmed.mosa.eg.towmmen.presenter.note.AddNoteScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.note.EditNoteScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.note.NoteScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.note.NoteViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.notifications.NotificationScreen
@@ -187,15 +190,22 @@ fun AppNavigator() {
                         })
                     }
 
+
                     composable(route = Route.ProductFullInfoScreen.route){
                         FullProductInfoScreen(navController)
+                    }
+
+                    composable(route = Route.EditCustomerScreen.route){
+                        EditCustomerScreen(navController)
                     }
 
                     composable(route = Route.EditProductScreen.route){
                         EditProductScreen(navController)
                     }
-                    composable(route = Route.EditCustomerScreen.route){
-                        EditCustomerScreen(navController)
+
+
+                    composable(route = Route.EditNoteScreen.route){
+                        EditNoteScreen(navController)
                     }
 
                     composable(route = Route.CustomerFullInfoScreen.route){
@@ -230,9 +240,11 @@ fun AppNavigator() {
 
                     composable(route = Route.NoteScreen.route){
                         NoteScreen(
+                            navController = navController,
                             onFapClick = {
                                 navigateToScreen(navController, Route.AddNoteScreen.route)
                             }
+
                         )
                     }
 
@@ -242,7 +254,11 @@ fun AppNavigator() {
                     }
 
                     composable(route = Route.ProfitScreen.route){
-                        //HomeScreen()
+                        InvoiceScreen()
+                    }
+
+                    composable(route = Route.AddInvoiceScreen.route){
+                        AddInvoiceScreen(navController)
                     }
 
                     composable(route = Route.CategoryScreen.route){

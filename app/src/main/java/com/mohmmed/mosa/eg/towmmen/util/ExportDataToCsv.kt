@@ -16,6 +16,7 @@ fun exportProductsToCsv(products: List<Product>) {
     fileWriter.append("productId," +
             "name," +
             "barcode," +
+            "cost," +
             "price," +
             "description," +
             "imagePath," +
@@ -31,6 +32,7 @@ fun exportProductsToCsv(products: List<Product>) {
             append("${product.productId},")
             append("${product.name},")
             append(product.barcode)
+            append(product.cost)
             append(product.price)
             append(product.description)
             append(product.imagePath)
