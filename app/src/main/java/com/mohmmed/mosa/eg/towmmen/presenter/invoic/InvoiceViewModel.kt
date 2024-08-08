@@ -1,21 +1,18 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.invoic
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
+import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.InvoiceUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.AppEntryUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
 import javax.inject.Inject
 
 
@@ -31,17 +28,36 @@ class InvoiceViewModel @Inject constructor(
         }
     }
 
-/*    fun generateInvoiceNumber(currentDate: Date = Date()): String{
-        val date = SimpleDateFormat("yyyyddmm").format(currentDate)
-        var lastInvoiceNumber by mutableIntStateOf(0)
-        localMangerUseCases.readLastInvoiceNumber().onEach {
-            lastInvoiceNumber  = it
-        }
-        viewModelScope.launch {
-            localMangerUseCases.saveLastInvoiceNumber(lastInvoiceNumber)
-        }
-        return String.format("INV-%s-%04d", date, lastInvoiceNumber )
-    }*/
+
+    fun getMinInvoice(): Flow<Invoice>{
+        return invoiceUseCases.getMinInvoice()
+    }
+    fun getMaxInvoice(): Flow<Invoice>{
+        return invoiceUseCases.getMaxInvoice()
+    }
+
+    fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByMonth>> {
+        return invoiceUseCases.getInvoiceProfitByMonth()
+    }
+
+    fun getInvoiceAvg(): Flow<Double?> {
+        return invoiceUseCases.getInvoiceAvg()
+    }
+
+    fun getInvoiceCountByMonth(): Flow<List<InvoiceByMonth>> {
+        return invoiceUseCases.getInvoiceCountByMonth()
+    }
+
+    fun getAllInvoiceProfit(): Flow<Double?> {
+        return invoiceUseCases.getAllInvoiceProfit()
+    }
+    fun getInvoicesWithItemsByCustomerId(customerId: Int): Flow<List<InvoiceWithItems>>{
+    return invoiceUseCases.getInvoicesWithItemsByCustomerId(customerId)
+    }
+
+    fun getInvoiceByCustomer(customerName: String): Flow<List<Invoice>> {
+        return invoiceUseCases.getInvoiceByCustomer(customerName)
+    }
 
     suspend fun upsertInvoiceItems(items: List<InvoiceItem>){
         viewModelScope.launch {
@@ -59,6 +75,16 @@ class InvoiceViewModel @Inject constructor(
 
     fun getAllInvoicesWithItems(): Flow<List<InvoiceWithItems>>{
         return invoiceUseCases.getAllInvoicesWithItems()
+    }
+    fun getTopSellingItem(): Flow<List<TopProduct>>{
+        return invoiceUseCases.getTopSelling()
+    }
+    fun getTopSellingItemCurrentMonth(): Flow<List<TopProduct>>{
+        return invoiceUseCases.getTopSellingCurrentMonth()
+    }
+
+    fun getTopSellingItemCurrentDay(): Flow<List<TopProduct>>{
+        return invoiceUseCases.getTopSellingCurrentDay()
     }
 
 
@@ -79,5 +105,7 @@ class InvoiceViewModel @Inject constructor(
             invoiceUseCases.insertFullInvoice(invoice, items )
         }
     }
+
+
 
 }

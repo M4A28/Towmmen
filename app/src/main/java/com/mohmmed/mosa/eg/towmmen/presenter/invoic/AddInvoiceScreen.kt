@@ -53,7 +53,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
-import com.mohmmed.mosa.eg.towmmen.presenter.barcode.BarcodeScannerViewModel
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.InvoiceItemCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
@@ -74,7 +74,6 @@ fun AddInvoiceScreen(navController: NavHostController){
         ?.get<Customer?>(CUSTOMER_KEY)?.let { customer ->
             AddInvoiceContent(products = products,
                 customer = customer,
-                invoiceId = generateInvoiceNumber(),
                 onSaveInvoiceClick = {
                 invoice, item ->
                 invoiceViewModel.insertFullInvoice(invoice, item)
@@ -96,17 +95,18 @@ fun AddInvoiceScreen(navController: NavHostController){
 fun AddInvoiceContent(
     products: List<Product>,
     customer: Customer,
-    invoiceId: String,
     onSaveInvoiceClick: (Invoice, List<InvoiceItem>) -> Unit
 ) {
 
     var barcodeValue by remember { mutableStateOf("") }
     var searchQuery by remember { mutableStateOf(barcodeValue.ifEmpty { "" }) }
     var invoiceItem by remember { mutableStateOf(mutableSetOf<InvoiceItem>()) }
-    var _invoice by remember{ mutableStateOf<Invoice?>(null) }
+    var finalInvoice by remember{ mutableStateOf<Invoice?>(null) }
     var showBarcodeScan by remember { mutableStateOf(false) }
     var showInvoiceDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    var invoiceId = generateInvoiceNumber()
+    var invoiceDate = Date()
     val mediaPlayer = remember { MediaPlayer.create(context, R.raw.scanner_beep) }
 
     Scaffold (
@@ -128,121 +128,136 @@ fun AddInvoiceContent(
         val topPadding = paddingValue.calculateTopPadding()
         LazyColumn(modifier = Modifier.padding(top = topPadding, start = 4.dp, end = 4.dp)) {
 
-            item{
+                item{
 
-                if(showBarcodeScan){
-                    // Clean up MediaPlayer when leaving the composition
-                    DisposableEffect(Unit) {
-                        onDispose {
-                            mediaPlayer.release()
+                    if(showBarcodeScan){
+                        // Clean up MediaPlayer when leaving the composition
+                        DisposableEffect(Unit) {
+                            onDispose {
+                                mediaPlayer.release()
+                            }
+                        }
+
+                        LaunchedEffect(barcodeValue) {
+                            if(barcodeValue.isNotEmpty()){
+                                mediaPlayer.start()
+                                delay(500L)
+                                barcodeValue = ""
+                            }
+                        }
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)){
+                            BarcodeReader(onBarcodeDetected = {
+                                //searchQuery = it
+                                barcodeValue = it
+                            })
                         }
                     }
-
-                    LaunchedEffect(barcodeValue) {
-                        if(barcodeValue.isNotEmpty()){
-                            mediaPlayer.start()
-                            delay(500L)
-                            barcodeValue = ""
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Button(
+                            onClick = { showBarcodeScan = !showBarcodeScan },
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.barcode),
+                                contentDescription = null
+                            )
                         }
-                    }
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)){
-                        BarcodeReader(onBarcodeDetected = {
-                            searchQuery = it
-                            barcodeValue = it
-                        })
-                    }
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Button(
-                        onClick = { showBarcodeScan = !showBarcodeScan },
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.barcode),
-                            contentDescription = null
+                        Spacer(modifier = Modifier.width(4.dp))
+                        ModernSearchBar(
+                            searchQuery = searchQuery,
+                            onSearchQueryChange = { searchQuery = it }
                         )
                     }
-                    Spacer(modifier = Modifier.width(4.dp))
-                    ModernSearchBar(
-                        searchQuery = searchQuery,
-                        onSearchQueryChange = { searchQuery = it }
+                }
+
+                val p = products.filter { it.barcode == searchQuery ||
+                        it.barcode == barcodeValue ||
+                        it.name == searchQuery }
+                p.forEach{
+                    invoiceItem.add(
+                        InvoiceItem(
+                            //itemId = 0,
+                            invoiceId = invoiceId,
+                            productId = it.productId,
+                            productName = it.name,
+                            quantity = 1,
+                            purchaseDate = invoiceDate,
+                            unitPrice = it.price
+                        )
                     )
                 }
-            }
 
-            val p = products.filter { it.barcode == searchQuery ||
-                    it.name == searchQuery }
-            p.forEach{
-                invoiceItem.add(
-                    InvoiceItem(
-                        //itemId = 0,
-                        invoiceId = invoiceId.toString(),
-                        productId = it.productId,
-                        productName = it.name,
-                        quantity = 1,
-                        unitPrice = it.price
-                    )
-                )
-            }
-
-            items(invoiceItem.toList()){ item ->
-                InvoiceItemCard(
-                    itemName = item.productName ,
-                    price = item.unitPrice,
-                    initialQuantity = 1,
-                    onQuantityChange = {
-                        item.quantity = it
-                    },
-                    onCloseClick = {
-                        invoiceItem = invoiceItem.toMutableSet().apply { remove(item) }
+                items(invoiceItem.toList()){ item ->
+                    if(invoiceItem.isNotEmpty()){
+                        InvoiceItemCard(
+                            itemName = item.productName ,
+                            price = item.unitPrice,
+                            initialQuantity = 1,
+                            onQuantityChange = {
+                                item.quantity = it
+                            },
+                            onCloseClick = {
+                                invoiceItem = invoiceItem
+                                    .toMutableSet().apply { remove(item) }
+                            }
+                        )
+                    }else{
+                        EmptyScreen(
+                            massage = stringResource(R.string.no_item_added),
+                            icon = R.drawable.box,
+                            alphaAnim = 0.3f
+                        )
                     }
-                )
-            }
 
-            if(invoiceItem.isNotEmpty()){
-                item{
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Button(
-                            onClick = {
-                                val invoice = Invoice(
-                                    invoiceId = invoiceId,
-                                    customerId = customer.customerId,
-                                    customerName = customer.name,
-                                    date = Date(),
-                                    totalAmount = invoiceItem.sumOf {
-                                        it.unitPrice * it.quantity
-                                    }
-                                )
-                                _invoice = invoice
-                                showInvoiceDialog = !showInvoiceDialog
-                            }
-                        ) { Text(stringResource(R.string.save_invoice)) }
+                }
 
-                        Button(
-                            onClick = {
+                if(invoiceItem.isNotEmpty()){
+                    item{
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Button(
+                                onClick = {
+                                    val invoice = Invoice(
+                                        invoiceId = invoiceId,
+                                        customerId = customer.customerId,
+                                        customerName = customer.name,
+                                        date = invoiceDate,
+                                        totalAmount = invoiceItem.sumOf {
+                                            it.unitPrice * it.quantity
+                                        }
+                                    )
+                                    finalInvoice = invoice
+                                    showInvoiceDialog = !showInvoiceDialog
+                                    invoiceId = generateInvoiceNumber()
+                                    invoiceDate = Date()
+                                }
+                            ) { Text(stringResource(R.string.save_invoice)) }
 
-                                invoiceItem = mutableSetOf()
-                            }
-                        ) { Text(stringResource(R.string.clear)) }
+                            Button(
+                                onClick = {
+                                    invoiceItem = mutableSetOf()
+                                    invoiceId = generateInvoiceNumber()
+                                }
+                            ) { Text(stringResource(R.string.clear)) }
+                        }
                     }
                 }
-            }
         }
+
         if(showInvoiceDialog){
-            InvoiceDialog(_invoice!!, invoiceItem.toList(),
+            InvoiceDialog(finalInvoice!!, invoiceItem.toList(),
                 onDismiss = {
                 showInvoiceDialog = !showInvoiceDialog
 
             },
                 onConform = {
                     showInvoiceDialog = !showInvoiceDialog
-                    onSaveInvoiceClick(_invoice!!, invoiceItem.toList())
+                    onSaveInvoiceClick(finalInvoice!!, invoiceItem.toList())
                     invoiceItem = mutableSetOf()
                 })
         }
@@ -253,8 +268,6 @@ fun AddInvoiceContent(
 @Composable
 fun BarcodeReader(onBarcodeDetected: (String) -> Unit) {
     val context = LocalContext.current
-    val viewModel: BarcodeScannerViewModel = hiltViewModel()
-    val barcode by viewModel.barcode.collectAsState()
     val lifecycleOwner = LocalLifecycleOwner.current
     var cameraPermissionGranted by remember { mutableStateOf(false) }
 

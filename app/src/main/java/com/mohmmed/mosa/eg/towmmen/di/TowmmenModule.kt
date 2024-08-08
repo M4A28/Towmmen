@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.mohmmed.mosa.eg.towmmen.data.local.converters.DateTypeConverter
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.CustomerProductDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
+import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_5_6
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +18,8 @@ object TowmmenModule {
 
 
 
+
+    // todo remove this
 
     @Provides
     @Singleton
@@ -36,6 +39,7 @@ object TowmmenModule {
             klass = TowmmenDatabase::class.java,
             name = "towwmen_db")
             .addTypeConverter(DateTypeConverter())
+            .addMigrations(migration_5_6)
             .fallbackToDestructiveMigration()
             .build()
     }

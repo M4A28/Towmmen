@@ -13,6 +13,7 @@ sealed class Route(
 
     // secondary screens
     object AddProductScreen: Route(route = "addProductScreen")
+    object CustomerInvoiceScreen: Route(route = "customerInvoiceScreen")
     object AddCustomerScreen: Route(route = "addCustomerScreen")
     object AddNoteScreen: Route(route = "addNoteScreen")
     object AddCategoryScreen: Route(route = "addCategoryScreen")

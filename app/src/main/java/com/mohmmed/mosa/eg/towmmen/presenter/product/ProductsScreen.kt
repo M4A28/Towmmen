@@ -1,7 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.product
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,9 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -120,13 +119,13 @@ fun ProductsContent(
     ) { paddingValue ->
         val topPadding = paddingValue.calculateTopPadding()
         if(products.isNotEmpty()){
-            LazyVerticalGrid(
+            LazyVerticalStaggeredGrid(
                 modifier = modifier.fillMaxWidth(),
-                columns = GridCells.Fixed(2),
+                columns = StaggeredGridCells.Fixed(2),
                 contentPadding = PaddingValues(8.dp)
             ) {
 
-                item(span = { GridItemSpan(2) }){
+                item(span = StaggeredGridItemSpan.FullLine ){
                     Column(modifier = Modifier
                         .padding(top =topPadding)
                       ) {
@@ -162,8 +161,8 @@ fun ProductsContent(
                 }
                 items(
                     products.filter {
-                        (selectedCategory == "All" || it.category == selectedCategory) &&
-                                it.name.contains(searchQuery, ignoreCase = true)
+                        (it.category == selectedCategory) ||
+                                it.name.lowercase() == searchQuery.lowercase()
                     }.size){product ->
                     ProductCard2(
                         product = products[product],

@@ -162,7 +162,8 @@ fun AddInvoiceContent2(
                         productId = it.productId,
                         productName = it.name,
                         quantity = 1,
-                        unitPrice = it.price
+                        unitPrice = it.price,
+                        purchaseDate = Date()
                     )
                 )
             }

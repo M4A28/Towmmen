@@ -34,7 +34,8 @@ data class InvoiceItem(
     val productId: Int,
     val productName: String,
     var quantity: Int,
-    val unitPrice: Double
+    val unitPrice: Double,
+    val purchaseDate: Date
 )
 
 data class InvoiceWithItems(

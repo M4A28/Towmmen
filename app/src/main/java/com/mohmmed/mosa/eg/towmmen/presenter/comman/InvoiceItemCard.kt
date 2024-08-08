@@ -93,6 +93,7 @@ fun InvoiceItemCard(
                     text = stringResource(id = R.string.price_, formatCurrency(price)),
                     style = MaterialTheme.typography.bodyMedium,
                     fontFamily = CairoFont,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
@@ -100,6 +101,7 @@ fun InvoiceItemCard(
                     text = stringResource(id = R.string.total_cost ,formatCurrency(price * quantity)),
                     style = MaterialTheme.typography.bodyMedium,
                     fontFamily = CairoFont,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
@@ -199,69 +201,3 @@ fun QuantityButton(
     }
 }
 
-/*
-@Composable
-fun QuantityControl(
-    quantity: Int,
-    onIncrement: () -> Unit,
-    onDecrement: () -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(4.dp)
-            .wrapContentHeight()
-            .wrapContentWidth()
-    ) {
-        QuantityButton(
-            onClick = onDecrement,
-            enabled = quantity > 1,
-            icon = painterResource(id = R.drawable.remove)
-        )
-
-        Spacer(modifier = Modifier.width(25.dp))
-        Text(
-            text = "$quantity",
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Medium
-        )
-        Spacer(modifier = Modifier.width(25.dp))
-
-        QuantityButton(
-            onClick = onIncrement,
-            enabled = true,
-            icon = painterResource(id = R.drawable.add)
-        )
-    }
-}
-
-@Composable
-fun QuantityButton(
-    onClick: () -> Unit,
-    enabled: Boolean,
-    icon: Painter
-) {
-    val backgroundColor by animateColorAsState(
-        if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
-    )
-    val contentColor by animateColorAsState(
-        if (enabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
-    )
-
-    IconButton(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier
-            .size(25.dp)
-            .clip(CircleShape)
-            .background(backgroundColor)
-    ) {
-        Icon(icon, contentDescription = null, tint = contentColor)
-    }
-}
-
-
-
-*/

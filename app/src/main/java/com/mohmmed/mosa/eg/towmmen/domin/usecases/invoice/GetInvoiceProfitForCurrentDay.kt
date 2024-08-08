@@ -4,10 +4,10 @@ import com.mohmmed.mosa.eg.towmmen.data.repository.InvoiceRepositoryImp
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetInvoiceAvg @Inject constructor(
+class GetInvoiceProfitForCurrentDay @Inject constructor(
     private val invoiceRepositoryImp: InvoiceRepositoryImp
 ){
     operator fun  invoke(): Flow<Double?> {
-        return invoiceRepositoryImp.getInvoiceAvg()
+        return invoiceRepositoryImp.getInvoiceProfitForCurrentDay()
     }
 }

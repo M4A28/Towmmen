@@ -5,6 +5,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
+import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import kotlinx.coroutines.flow.Flow
 
 interface InvoiceRepository {
@@ -36,6 +37,17 @@ interface InvoiceRepository {
 
     fun getMaxInvoice(): Flow<Invoice>
 
+    fun getInvoicesWithItemsByCustomerId(customerId: Int): Flow<List<InvoiceWithItems>>
+
+    fun getTopSelling(): Flow<List<TopProduct>>
+
+    fun getTopSellingCurrentMonth(): Flow<List<TopProduct>>
+
+    fun getTopSellingCurrentDay(): Flow<List<TopProduct>>
+
+    fun getInvoiceProfitForCurrentMonth(): Flow<Double?>
+
+    fun getInvoiceProfitForCurrentDay(): Flow<Double?>
 
     fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByMonth>>
 

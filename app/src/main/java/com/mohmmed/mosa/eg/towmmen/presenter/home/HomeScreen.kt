@@ -27,6 +27,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.comman.ProductCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.SimpleInfo
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.SingleInfoCard
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerViewModel
+import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToCustomerDetails
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToProductDetails
@@ -35,6 +36,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToTab
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 import com.mohmmed.mosa.eg.towmmen.ui.theme.BlueShades
 import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
+import com.mohmmed.mosa.eg.towmmen.ui.theme.GreenShades
 import com.mohmmed.mosa.eg.towmmen.ui.theme.OrangeShades
 import com.mohmmed.mosa.eg.towmmen.ui.theme.RedShades
 
@@ -43,7 +45,8 @@ fun HomeScreen(navController: NavHostController) {
     val productViewModel: ProductViewModel = hiltViewModel()
     val productsCost by productViewModel
         .getAllProductCost().collectAsState(initial = 0.0)
-
+    val invoiceViewModel: InvoiceViewModel = hiltViewModel()
+    val totalInvoice by invoiceViewModel.getAllInvoiceProfit().collectAsState(initial = 0.0)
     val products by productViewModel.products.collectAsState(initial = emptyList())
     val productsCount by productViewModel.getProductsCount().collectAsState(initial = 0)
     val customerViewModel: CustomerViewModel = hiltViewModel()
@@ -72,7 +75,15 @@ fun HomeScreen(navController: NavHostController) {
             icon = R.drawable.cash,
             gradientColors = BlueShades
 
+        ),
+        SimpleInfo(
+            title = stringResource(R.string.total_invoice_Value),
+            subtitle = String.format("%.2f", totalInvoice?: 0.0),
+            icon = R.drawable.cash,
+            gradientColors = GreenShades
+
         )
+
     )
     HomeContent(
         navController = navController,
@@ -133,7 +144,9 @@ fun HomeContent(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 LazyRow {
-                    items(newCustomers.take(3)) { customer ->
+                    items(newCustomers.take(3), key = {
+                        it.registrationDate
+                    }) { customer ->
                         CustomerCard(
                             customer = customer, onClick = {
                                 onCustomerClick(customer)

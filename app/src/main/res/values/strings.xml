@@ -143,6 +143,15 @@
     <string name="average_price">Average Price: %1$s</string>
     <string name="total_stock">Total Stock: %1$s</string>
     <string name="inventory_value">Inventory Value: %1$s</string>
+    <string name="total_invoice_Value">Total Invoice value</string>
+    <string name="invoice_date">Invoice Date: %1$s</string>
+    <string name="no_invoice_for_this_customer">No invoice for this customer</string>
+    <string name="no_item_added">No Item added yet add one by scan barcode or search it</string>
+    <string name="top_selling">Top Selling</string>
+    <string name="statistic">statistic</string>
+    <string name="top_selling_product_for_current_day">Top selling product for current day</string>
+    <string name="top_selling_current_month">Top selling product for current month</string>
+    <string name="top_selling_all_time">Top selling product for All time</string>
 
 
 </resources>

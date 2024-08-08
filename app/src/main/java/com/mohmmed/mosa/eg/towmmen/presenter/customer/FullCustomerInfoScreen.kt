@@ -48,6 +48,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DetailItem
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
+import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_ID
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import kotlinx.coroutines.launch
@@ -73,6 +74,10 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
                     navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
                     navController.navigate(Route.AddInvoiceScreen.route)
 
+                },
+                onShowInvoicesClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_ID, customer.customerId)
+                    navController.navigate(Route.CustomerInvoiceScreen.route)
                 }
             )
 
@@ -127,7 +132,8 @@ fun FullCustomerInfoContent(
         ){
             Button(
                 onClick = { onPurchaseClick(customer) },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                colors = ButtonDefaults
+                    .buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 Spacer(Modifier.width(8.dp))
                 Text(
@@ -137,7 +143,7 @@ fun FullCustomerInfoContent(
             }
             Button(
                 onClick = {onShowInvoicesClick(customer)},
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 Spacer(Modifier.width(8.dp))
                 Text(text = stringResource(R.string.show_invoices),
@@ -229,7 +235,7 @@ fun PurchaseButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
     ) {
         Icon(
             painter = painterResource(id = R.drawable.shopping_cart),

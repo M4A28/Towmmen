@@ -6,6 +6,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
+import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.InvoiceRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -70,6 +71,30 @@ class InvoiceRepositoryImp @Inject constructor(
 
     override fun getMaxInvoice(): Flow<Invoice> {
         return invoiceDao.getMaxInvoice()
+    }
+
+    override fun getInvoicesWithItemsByCustomerId(customerId: Int): Flow<List<InvoiceWithItems>> {
+        return invoiceDao.getInvoicesWithItemsByCustomerId(customerId)
+    }
+
+    override fun getTopSelling(): Flow<List<TopProduct>> {
+        return invoiceDao.getTopSelling()
+    }
+
+    override fun getTopSellingCurrentMonth(): Flow<List<TopProduct>> {
+        return invoiceDao.getTopSellingCurrentMonth()
+    }
+
+    override fun getTopSellingCurrentDay(): Flow<List<TopProduct>> {
+        return invoiceDao.getTopSellingCurrentDay()
+    }
+
+    override fun getInvoiceProfitForCurrentMonth(): Flow<Double?> {
+        return invoiceDao.getInvoiceProfitForCurrentMonth()
+    }
+
+    override fun getInvoiceProfitForCurrentDay(): Flow<Double?> {
+        return invoiceDao.getInvoiceProfitForCurrentDay()
     }
 
     override fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByMonth>> {

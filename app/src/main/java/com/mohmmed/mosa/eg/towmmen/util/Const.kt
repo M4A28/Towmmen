@@ -15,6 +15,7 @@ const val ONE_MONTH = ONE_DAY * 30L
 const val PRODUCT_KEY = "product_key"
 
 const val CUSTOMER_KEY = "customer_key"
+const val CUSTOMER_ID = "customer_id"
 const val NOTE_KEY = "Note_key"
 
 const val SCANNED_BARCODE = "scannedBarcode"

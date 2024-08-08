@@ -14,6 +14,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -78,7 +79,7 @@ fun InvoiceDialog(invoice: Invoice,
                         Button(onClick = onConform,) {
                             Text(stringResource(id = R.string.confirm))
                         }
-                        Button(onClick = onDismiss,) {
+                        TextButton(onClick = onDismiss,) {
                             Text(stringResource(id = R.string.close))
                         }
                     }

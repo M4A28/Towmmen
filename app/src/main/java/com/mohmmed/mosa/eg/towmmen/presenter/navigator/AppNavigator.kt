@@ -38,6 +38,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.presenter.barcode.BarcodeScannerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.AddNewCustomerScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerInvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.EditCustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.FullCustomerInfoScreen
@@ -48,7 +49,6 @@ import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.SettingsScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.home.HomeScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.AddInvoiceScreen
-import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.componet.AppBottomNavigation
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.componet.BottomNavigationItem
@@ -61,6 +61,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.product.AddNewProductScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.EditProductScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.FullProductInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductsScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.profit.ProfitScreen
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 import com.mohmmed.mosa.eg.towmmen.util.PRODUCT_KEY
 import kotlinx.coroutines.launch
@@ -203,6 +204,10 @@ fun AppNavigator() {
                         EditProductScreen(navController)
                     }
 
+                    composable(route = Route.CustomerInvoiceScreen.route){
+                        CustomerInvoiceScreen(navController)
+                    }
+
 
                     composable(route = Route.EditNoteScreen.route){
                         EditNoteScreen(navController)
@@ -254,7 +259,7 @@ fun AppNavigator() {
                     }
 
                     composable(route = Route.ProfitScreen.route){
-                        InvoiceScreen()
+                        ProfitScreen()
                     }
 
                     composable(route = Route.AddInvoiceScreen.route){
