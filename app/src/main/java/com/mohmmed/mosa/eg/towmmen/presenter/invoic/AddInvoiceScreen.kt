@@ -27,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -53,6 +52,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.presenter.barcode.ScannerOverlay
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.InvoiceItemCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
@@ -61,7 +61,6 @@ import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 import com.mohmmed.mosa.eg.towmmen.util.generateInvoiceNumber
 import kotlinx.coroutines.delay
 import java.util.Date
-
 
 @Composable
 fun AddInvoiceScreen(navController: NavHostController){
@@ -97,7 +96,6 @@ fun AddInvoiceContent(
     customer: Customer,
     onSaveInvoiceClick: (Invoice, List<InvoiceItem>) -> Unit
 ) {
-
     var barcodeValue by remember { mutableStateOf("") }
     var searchQuery by remember { mutableStateOf(barcodeValue.ifEmpty { "" }) }
     var invoiceItem by remember { mutableStateOf(mutableSetOf<InvoiceItem>()) }
@@ -112,10 +110,7 @@ fun AddInvoiceContent(
     Scaffold (
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                ),
+            
                 title = {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -140,14 +135,18 @@ fun AddInvoiceContent(
 
                         LaunchedEffect(barcodeValue) {
                             if(barcodeValue.isNotEmpty()){
-                                mediaPlayer.start()
-                                delay(500L)
-                                barcodeValue = ""
+                                try{
+                                    mediaPlayer.start()
+                                    delay(500L)
+                                    barcodeValue = ""
+                                }catch (e: Exception){
+                                    e.printStackTrace()
+                                }
                             }
                         }
                         Box(modifier = Modifier
                             .fillMaxWidth()
-                            .height(100.dp)){
+                            .height(80.dp)){
                             BarcodeReader(onBarcodeDetected = {
                                 //searchQuery = it
                                 barcodeValue = it
@@ -174,17 +173,17 @@ fun AddInvoiceContent(
 
                 val p = products.filter { it.barcode == searchQuery ||
                         it.barcode == barcodeValue ||
-                        it.name == searchQuery }
-                p.forEach{
+                        it.name == searchQuery
+                }
+                p.forEach{ product ->
                     invoiceItem.add(
                         InvoiceItem(
-                            //itemId = 0,
                             invoiceId = invoiceId,
-                            productId = it.productId,
-                            productName = it.name,
+                            productId = product.productId,
+                            productName = product.name,
                             quantity = 1,
                             purchaseDate = invoiceDate,
-                            unitPrice = it.price
+                            unitPrice = product.price
                         )
                     )
                 }
@@ -271,9 +270,6 @@ fun BarcodeReader(onBarcodeDetected: (String) -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     var cameraPermissionGranted by remember { mutableStateOf(false) }
 
-
-
-
     LaunchedEffect(Unit) {
         cameraPermissionGranted = ContextCompat.checkSelfPermission(
             context,
@@ -318,6 +314,7 @@ fun BarcodeReader(onBarcodeDetected: (String) -> Unit) {
                 .fillMaxWidth()
                 .height(100.dp)
         )
+        ScannerOverlay()
     } else {
         Box(
             modifier = Modifier

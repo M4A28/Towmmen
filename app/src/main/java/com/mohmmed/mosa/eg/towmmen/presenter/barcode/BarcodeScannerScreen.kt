@@ -1,15 +1,15 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.barcode
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -17,15 +17,10 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,10 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -51,6 +43,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.barcode.BarcodeAnalyzer
 import com.mohmmed.mosa.eg.towmmen.util.SCANNED_BARCODE
@@ -79,24 +75,54 @@ fun BarcodeScannerScreen(navController: NavController) {
 
     LaunchedEffect(barcode) {
         if (barcode != null) {
-            mediaPlayer.start()
-            delay(1000L)
-            // Return to the previous screen with the barcode value
-            navController.previousBackStackEntry
-                ?.savedStateHandle
-                ?.set(SCANNED_BARCODE, barcode)
+            try{
+                mediaPlayer.start()
+                delay(1000L)
+                // Return to the previous screen with the barcode value
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(SCANNED_BARCODE, barcode)
+                navController.popBackStack()
 
-            navController.popBackStack()
-            Log.d("code", barcode!!)
+            }catch(e: Exception){
+                e.printStackTrace()
+            }
         }
     }
 
 
-    Column(
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "Scan BarCode",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                BarcodeScanner(onBarcodeDetected = {
+                    viewModel.onBarcodeDetected(it)
+                })
+
+                ScannerOverlay()
+            }
+        }
+    }
+
+/*    Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.3f))
-            .padding(16.dp),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -107,40 +133,48 @@ fun BarcodeScannerScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .aspectRatio(1f)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.Black)
-        ) {
 
             BarcodeScanner(onBarcodeDetected = {
                 viewModel.onBarcodeDetected(it)
             })
 
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+
             ScannerOverlay()
         }
-
-    }
+    }*/
 }
 
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BarcodeScanner(
     onBarcodeDetected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     var cameraPermissionGranted by remember { mutableStateOf(false) }
+    val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+    val requestPermissionLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts
+        .RequestPermission()) { cameraPermissionGranted = it }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(Unit) {
-        cameraPermissionGranted = ContextCompat.checkSelfPermission(
+
+    LaunchedEffect(cameraPermissionState) {
+        if(!cameraPermissionState.status.isGranted
+            && cameraPermissionState.status.shouldShowRationale){
+
+        }else{
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+       /* cameraPermissionGranted = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED*/
     }
 
     if (cameraPermissionGranted) {
@@ -187,72 +221,6 @@ fun BarcodeScanner(
                 stringResource(R.string.camera_permission),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.error
-            )
-        }
-    }
-}
-
-
-@Composable
-fun ScannerOverlay2() {
-    val infiniteTransition = rememberInfiniteTransition()
-    val scanLinePosition by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f)),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        val canvasWidth = size.width
-        val canvasHeight = size.height
-        
-        val windowWidth = canvasWidth * 0.8f
-        val windowHeight = canvasHeight * 0.3f
-        val windowLeft = (canvasWidth - windowWidth) / 2
-        val windowTop = (canvasHeight - windowHeight) / 2
-        
-        // Draw semi-transparent black overlay
-        drawRect(Color(0x80000000))
-        
-        // Clear the scanning window area
-        drawRect(
-            color = Color.Transparent,
-            topLeft = Offset(windowLeft, windowTop),
-            size = Size(windowWidth, windowHeight),
-            blendMode = BlendMode.Clear
-        )
-        
-        // Draw scanning line
-        val lineY = windowTop + (windowHeight * scanLinePosition)
-        drawLine(
-            color = Color.Red,
-            start = Offset(windowLeft, lineY),
-            end = Offset(windowLeft + windowWidth, lineY),
-            strokeWidth = 4f
-        )
-        
-        val cornerLength = windowWidth * 0.1f
-        val cornerStrokeWidth = 4f
-        
-        // Draw corners
-        listOf(
-            Offset(windowLeft, windowTop) to Offset(windowLeft + cornerLength, windowTop),
-            Offset(windowLeft, windowTop) to Offset(windowLeft, windowTop + cornerLength),
-            Offset(windowLeft + windowWidth - cornerLength, windowTop) to Offset(windowLeft + windowWidth, windowTop),
-            Offset(windowLeft + windowWidth, windowTop) to Offset(windowLeft + windowWidth, windowTop + cornerLength),
-            Offset(windowLeft, windowTop + windowHeight - cornerLength) to Offset(windowLeft, windowTop + windowHeight),
-            Offset(windowLeft, windowTop + windowHeight) to Offset(windowLeft + cornerLength, windowTop + windowHeight),
-            Offset(windowLeft + windowWidth, windowTop + windowHeight - cornerLength) to Offset(windowLeft + windowWidth, windowTop + windowHeight),
-            Offset(windowLeft + windowWidth - cornerLength, windowTop + windowHeight) to Offset(windowLeft + windowWidth, windowTop + windowHeight)
-        ).forEach { (start, end) ->
-            drawLine(
-                color = Color.White,
-                start = start,
-                end = end,
-                strokeWidth = cornerStrokeWidth
             )
         }
     }

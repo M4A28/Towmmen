@@ -10,21 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +32,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -60,7 +54,8 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
     var showDeleteConfirmation by remember { mutableStateOf(false) }
     navController.previousBackStackEntry
         ?.savedStateHandle
-        ?.get<Customer?>(CUSTOMER_KEY)?.let { customer ->
+        ?.get<Customer?>(CUSTOMER_KEY)?.let {
+            val customer by customerViewModel.getCustomerById(it.customerId).collectAsState(initial = it)
             FullCustomerInfoContent(
                 customer = customer,
                 onDeleteClick = {
@@ -228,65 +223,3 @@ fun CustomerDetails(customer: Customer) {
         }
     }
 }
-
-
-@Composable
-fun PurchaseButton(onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.shopping_cart),
-            contentDescription = null,
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.record_purchase))
-    }
-}
-
-
-
-@Composable
-fun PurchaseDialog(
-    customer: Customer,
-    onConfirm: (Double) -> Unit,
-    onDismiss: () -> Unit
-) {
-    var amount by remember { mutableStateOf("") }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Record Purchase") },
-        text = {
-            Column {
-                Text("Enter purchase amount for ${customer.name}")
-                Spacer(Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = amount,
-                    onValueChange = { amount = it },
-                    label = { Text("Amount") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    amount.toDoubleOrNull()?.let { onConfirm(it) }
-                },
-                enabled = amount.isNotBlank()
-            ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
-}
-

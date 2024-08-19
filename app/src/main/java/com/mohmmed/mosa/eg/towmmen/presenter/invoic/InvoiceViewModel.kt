@@ -12,6 +12,9 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.InvoiceUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.AppEntryUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +31,10 @@ class InvoiceViewModel @Inject constructor(
         }
     }
 
+
+    fun getTotalInvoices():Flow<Double?>{
+        return invoiceUseCases.getTotalInvoices()
+    }
 
     fun getMinInvoice(): Flow<Invoice>{
         return invoiceUseCases.getMinInvoice()
@@ -105,6 +112,11 @@ class InvoiceViewModel @Inject constructor(
             invoiceUseCases.insertFullInvoice(invoice, items )
         }
     }
+
+
+    val avgInvoicePerMonth : StateFlow<Double?> = invoiceUseCases
+        .getAvgInvoicePerMonth()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
 
 
 

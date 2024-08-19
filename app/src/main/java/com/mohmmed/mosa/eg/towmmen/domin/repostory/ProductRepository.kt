@@ -37,6 +37,8 @@ interface ProductRepository {
     fun getMaxPrice(): Flow<Double?>
 
     fun getMinPrice(): Flow<Double?>
+    fun getProductById(id: Int): Flow<Product>
+
 
     fun getAveragePriceByMonth(): Flow<List<MonthlyAvgPrice>>
 

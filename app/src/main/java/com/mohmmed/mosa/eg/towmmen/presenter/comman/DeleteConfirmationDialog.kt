@@ -7,14 +7,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 
 
 @Composable
@@ -26,40 +25,32 @@ fun DeleteConfirmationDialog(
 
 ) {
     AlertDialog(
-        containerColor = MaterialTheme.colorScheme.surface,
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(8.dp),
-
         title = {
             Text(text = title,
-                fontFamily = CairoFont,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
             ) },
 
         text = { Text( text = massage,
-            fontFamily = CairoFont,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
             )},
         confirmButton = {
             Button(
                 modifier = Modifier.padding(8.dp),
                 onClick = { onConfirm() },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.surface)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) {
 
                 Text(stringResource(id = R.string.delete))
             }
         },
         dismissButton = {
-            Button(
+            TextButton(
                 modifier = Modifier.padding(8.dp),
-                onClick = { onDismiss() },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface),
-                border = ButtonDefaults.outlinedButtonBorder) {
+                onClick = { onDismiss() }
+            ) {
                 Text(stringResource(id = R.string.cancel))
             }
         }

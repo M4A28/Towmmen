@@ -29,7 +29,13 @@ class CustomerRepositoryImp @Inject constructor(
         return customerDao.getCustomerByName(name)
     }
 
+
+
     override fun getCustomerCount(): Flow<Int?> {
         return customerDao.getCustomersCount()
+    }
+
+    override fun getCustomerById(id: Int): Flow<Customer> {
+        return customerDao.getCustomerById(id)
     }
 }

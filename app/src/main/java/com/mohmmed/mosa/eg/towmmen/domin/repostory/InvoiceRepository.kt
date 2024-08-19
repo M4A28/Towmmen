@@ -19,6 +19,9 @@ interface InvoiceRepository {
 
     fun getInvoiceItems(invoiceId: String): Flow<List<InvoiceItem>>
 
+    fun getTotalInvoices(): Flow<Double?>
+
+
     fun getAllInvoicesWithItems(): Flow<List<InvoiceWithItems>>
 
 
@@ -56,5 +59,8 @@ interface InvoiceRepository {
     fun getInvoiceCountByMonth(): Flow<List<InvoiceByMonth>>
 
     fun getInvoiceByCustomer(customerName: String): Flow<List<Invoice>>
+
+    fun getAvgInvoicePerMonth(): Flow<Double?>
+
 
 }

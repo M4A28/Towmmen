@@ -3,9 +3,11 @@ package com.mohmmed.mosa.eg.towmmen.di
 import android.app.Application
 import androidx.room.Room
 import com.mohmmed.mosa.eg.towmmen.data.local.converters.DateTypeConverter
-import com.mohmmed.mosa.eg.towmmen.data.local.dao.CustomerProductDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_5_6
+import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_6_7
+import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_7_8
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,18 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object TowmmenModule {
-
-
-
-
-    // todo remove this
-
-    @Provides
-    @Singleton
-    fun provideCustomerProductDao(towmmenDatabase: TowmmenDatabase): CustomerProductDao {
-        return towmmenDatabase.customerProductDao
-    }
-
 
 
     @Provides
@@ -39,7 +29,7 @@ object TowmmenModule {
             klass = TowmmenDatabase::class.java,
             name = "towwmen_db")
             .addTypeConverter(DateTypeConverter())
-            .addMigrations(migration_5_6)
+            .addMigrations(migration_5_6, migration_6_7, migration_7_8)
             .fallbackToDestructiveMigration()
             .build()
     }

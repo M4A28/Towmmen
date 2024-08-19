@@ -13,35 +13,4 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltAndroidApp
-class TowmmenApplication: Application(), Configuration.Provider{
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
-
-    override fun onCreate() {
-        super.onCreate()
-        setupWorkManager()
-    }
-
-    private fun setupWorkManager() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val workRequest = PeriodicWorkRequestBuilder<ProductExpirationWorker>(1, TimeUnit.DAYS)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(this).enqueue(workRequest)
-    }
-
-    /*fun getWorkManagerConfiguration(): Configuration {
-        return Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
-    }*/
-
-    override val workManagerConfiguration: Configuration
-        get() =   Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
-}
+class TowmmenApplication: Application()

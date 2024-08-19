@@ -9,6 +9,7 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.CustomerUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.DeleteCustomer
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.GetAllCustomers
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.GetCustomer
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.GetCustomerById
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.UpdateCustomer
 import dagger.Module
 import dagger.Provides
@@ -40,7 +41,8 @@ object CustomerModule {
             getAllCustomers = GetAllCustomers(customerRepository),
             getCustomer = GetCustomer(customerRepository),
             deleteCustomer = DeleteCustomer(customerRepository),
-            getCustomerCount = CustomerCount(customerRepository)
+            getCustomerCount = CustomerCount(customerRepository),
+            getCustomerById = GetCustomerById(customerRepository)
         )
     }
 }

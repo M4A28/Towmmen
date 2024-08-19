@@ -44,6 +44,7 @@ fun NoteCard(
             .fillMaxWidth()
             .shadow(4.dp, RoundedCornerShape(16.dp))
             .clickable { canExpand = !canExpand },
+        elevation = CardDefaults.cardElevation(6.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {

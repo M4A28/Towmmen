@@ -57,6 +57,7 @@ fun InvoiceItemCard(
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .shadow(elevation.dp, RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(

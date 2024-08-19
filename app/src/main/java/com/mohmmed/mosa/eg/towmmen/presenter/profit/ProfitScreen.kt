@@ -9,13 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -23,9 +22,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
+import com.mohmmed.mosa.eg.towmmen.presenter.expanse.ExpanseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.TopSellingItemScreen
 import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
@@ -34,7 +36,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ProfitScreen(){
+fun ProfitScreen(navController: NavHostController){
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { Tabs.entries.size })
     val selectedTabIndex by remember{
@@ -44,10 +46,6 @@ fun ProfitScreen(){
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                ),
                 title = {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -67,9 +65,8 @@ fun ProfitScreen(){
                 .padding(top = paddingVale.calculateTopPadding())
         ) {
 
-            ScrollableTabRow(
+            TabRow(
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = MaterialTheme.colorScheme.primary,
                 selectedTabIndex = selectedTabIndex) {
                 Tabs.entries.forEachIndexed { index, currentTab ->
                     Tab(
@@ -86,8 +83,10 @@ fun ProfitScreen(){
                                 fontWeight = FontWeight.Bold
                             )
                         },
-                        selectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                        unselectedContentColor = MaterialTheme.colorScheme.onPrimary
+                        icon = {
+                            Icon(painter = painterResource(id = currentTab.icon),
+                                contentDescription = null)
+                        }
                     )
                 }
                 
@@ -100,15 +99,9 @@ fun ProfitScreen(){
                 when(selectedTabIndex){
                     0 -> InvoiceScreen()
                     1 -> TopSellingItemScreen()
-                    3 -> StatisticsScreen()
+                    2 -> ExpanseScreen(navController = navController)
                 }
             }
-
         }
-
-
     }
-
-
-
 }

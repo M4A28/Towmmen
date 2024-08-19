@@ -69,6 +69,10 @@ class ProductRepositoryImp @Inject constructor(
         return productDao.getMinPrice()
     }
 
+    override fun getProductById(id: Int): Flow<Product> {
+        return productDao.getProductById(id)
+    }
+
     override fun getAveragePriceByMonth(): Flow<List<MonthlyAvgPrice>> {
         return productDao.getAveragePriceByMonth()
     }

@@ -34,6 +34,10 @@ class InvoiceRepositoryImp @Inject constructor(
         return invoiceDao.getInvoiceItems(invoiceId)
     }
 
+    override fun getTotalInvoices(): Flow<Double?> {
+        return invoiceDao.getTotalInvoices()
+    }
+
     override fun getAllInvoicesWithItems(): Flow<List<InvoiceWithItems>> {
         return invoiceDao.getAllInvoicesWithItems()
     }
@@ -52,10 +56,7 @@ class InvoiceRepositoryImp @Inject constructor(
     }
 
     override suspend fun insertFullInvoice(invoice: Invoice, items: List<InvoiceItem>) {
-        //val invoiceId = invoice.invoiceId
-        //invoiceDao.upsertInvoice(invoice)
-        //invoiceDao.upsertInvoiceItems(items)
-        invoiceDao.insertFullInvoice(invoice, items)
+            invoiceDao.insertFullInvoice(invoice, items)
 
     }
 
@@ -113,5 +114,8 @@ class InvoiceRepositoryImp @Inject constructor(
         return invoiceDao.getInvoiceByCustomer(customerName)
     }
 
+    override fun getAvgInvoicePerMonth(): Flow<Double?> {
+        return invoiceDao.getAvgInvoicePerMonth()
+    }
 
 }

@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,7 +61,8 @@ fun FullProductInfoScreen(navController: NavHostController) {
 
     navController.previousBackStackEntry
         ?.savedStateHandle
-        ?.get<Product?>(PRODUCT_KEY)?.let { product ->
+        ?.get<Product?>(PRODUCT_KEY)?.let {
+            val product by productViewModel.getProductById(it.productId).collectAsState(initial = it)
             FullProductInfoContent(
                 product = product,
                 onClickDeleteClick = {
@@ -120,6 +122,7 @@ fun FullProductInfoContent(
                 model = ImageRequest.Builder(LocalContext.current)
                 .data(Uri.parse(product.imagePath))
                 .placeholder(R.drawable.image)
+                .error(R.drawable.image)
                 .build(),
                 contentDescription = "",
                 modifier = Modifier

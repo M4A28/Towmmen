@@ -45,8 +45,12 @@ interface InvoiceDao {
     @Query("SELECT * FROM invoices  ORDER BY totalAmount DESC LIMIT 1 ")
     fun getMaxInvoice(): Flow<Invoice>
 
-    @Query("SELECT * FROM invoices ORDER BY totalAmount ASC LIMIT 1")
+    @Query("SELECT * FROM invoices  ORDER BY totalAmount ASC LIMIT 1")
     fun getMinInvoice(): Flow<Invoice>
+
+    @Query("SELECT SUM(totalAmount) FROM invoices")
+    fun getTotalInvoices(): Flow<Double?>
+
 
 
     @Query("SELECT strftime('%Y-%m', date/1000, 'unixepoch') as month, COUNT(*) as count" +
@@ -108,7 +112,11 @@ interface InvoiceDao {
             "ORDER BY productQuantity DESC LIMIT 5")
     fun getTopSellingBetweenDates(start: Date, end: Date): Flow<List<TopProduct>>
 
-
+    @Query("SELECT AVG(profit) FROM" +
+            " (SELECT strftime('%Y-%m', date/1000, 'unixepoch') " +
+            " as month, SUM(totalAmount) as profit " +
+            " FROM invoices GROUP BY month ORDER BY month)")
+    fun getAvgInvoicePerMonth(): Flow<Double?>
 
     @Delete
     suspend fun deleteInvoice(invoice: Invoice)

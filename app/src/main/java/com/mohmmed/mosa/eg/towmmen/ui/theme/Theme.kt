@@ -1,64 +1,91 @@
 package com.mohmmed.mosa.eg.towmmen.ui.theme
 
 import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = dark_primary,
-    onPrimary = dark_onPrimary,
-    primaryContainer = dark_primaryContainer,
-    onPrimaryContainer = dark_onPrimaryContainer,
-    secondary = dark_secondary,
-    onSecondary = dark_onSecondary,
-    secondaryContainer = dark_secondaryContainer,
-    onSecondaryContainer = dark_onSecondaryContainer,
-    tertiary = dark_tertiary,
-    onTertiary = dark_onTertiary,
-    tertiaryContainer = dark_tertiaryContainer,
-    onTertiaryContainer = dark_onTertiaryContainer,
-    error = dark_error,
-    errorContainer = dark_errorContainer,
-    onError = dark_onError,
-    onErrorContainer = dark_onErrorContainer,
-    background = dark_background,
-    onBackground = dark_onBackground,
-    surface = dark_surface,
-    onSurface = dark_onSurface
+val DarkColorScheme = darkColorScheme(
+    primary = primaryDark,
+    onPrimary = onPrimaryDark,
+    primaryContainer = primaryContainerDark,
+    onPrimaryContainer = onPrimaryContainerDark,
+    secondary = secondaryDark,
+    onSecondary = onSecondaryDark,
+    secondaryContainer = secondaryContainerDark,
+    onSecondaryContainer = onSecondaryContainerDark,
+    tertiary = tertiaryDark,
+    onTertiary = onTertiaryDark,
+    tertiaryContainer = tertiaryContainerDark,
+    onTertiaryContainer = onTertiaryContainerDark,
+    error = errorDark,
+    onError = onErrorDark,
+    errorContainer = errorContainerDark,
+    onErrorContainer = onErrorContainerDark,
+    background = backgroundDark,
+    onBackground = onBackgroundDark,
+    surface = surfaceDark,
+    onSurface = onSurfaceDark,
+    surfaceVariant = surfaceVariantDark,
+    onSurfaceVariant = onSurfaceVariantDark,
+    outline = outlineDark,
+    outlineVariant = outlineVariantDark,
+    scrim = scrimDark,
+    inverseSurface = inverseSurfaceDark,
+    inverseOnSurface = inverseOnSurfaceDark,
+    inversePrimary = inversePrimaryDark,
+    surfaceDim = surfaceDimDark,
+    surfaceBright = surfaceBrightDark,
+    surfaceContainerLowest = surfaceContainerLowestDark,
+    surfaceContainerLow = surfaceContainerLowDark,
+    surfaceContainer = surfaceContainerDark,
+    surfaceContainerHigh = surfaceContainerHighDark,
+    surfaceContainerHighest = surfaceContainerHighestDark,
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = light_primary,
-    onPrimary = light_onPrimary,
-    primaryContainer = light_primaryContainer,
-    onPrimaryContainer = light_onPrimaryContainer,
-    secondary = light_secondary,
-    onSecondary = light_onSecondary,
-    secondaryContainer = light_secondaryContainer,
-    onSecondaryContainer = light_onSecondaryContainer,
-    tertiary = light_tertiary,
-    onTertiary = light_onTertiary,
-    tertiaryContainer = light_tertiaryContainer,
-    onTertiaryContainer = light_onTertiaryContainer,
-    error = light_error,
-    errorContainer = light_errorContainer,
-    onError = light_onError,
-    onErrorContainer = light_onErrorContainer,
-    background = light_background,
-    onBackground = light_onBackground,
-    surface = light_surface,
-    onSurface = light_onSurface,
+val LightColorScheme = lightColorScheme(
+    primary = primaryLight,
+    onPrimary = onPrimaryLight,
+    primaryContainer = primaryContainerLight,
+    onPrimaryContainer = onPrimaryContainerLight,
+    secondary = secondaryLight,
+    onSecondary = onSecondaryLight,
+    secondaryContainer = secondaryContainerLight,
+    onSecondaryContainer = onSecondaryContainerLight,
+    tertiary = tertiaryLight,
+    onTertiary = onTertiaryLight,
+    tertiaryContainer = tertiaryContainerLight,
+    onTertiaryContainer = onTertiaryContainerLight,
+    error = errorLight,
+    onError = onErrorLight,
+    errorContainer = errorContainerLight,
+    onErrorContainer = onErrorContainerLight,
+    background = backgroundLight,
+    onBackground = onBackgroundLight,
+    surface = surfaceLight,
+    onSurface = onSurfaceLight,
+    surfaceVariant = surfaceVariantLight,
+    onSurfaceVariant = onSurfaceVariantLight,
+    outline = outlineLight,
+    outlineVariant = outlineVariantLight,
+    scrim = scrimLight,
+    inverseSurface = inverseSurfaceLight,
+    inverseOnSurface = inverseOnSurfaceLight,
+    inversePrimary = inversePrimaryLight,
+    surfaceDim = surfaceDimLight,
+    surfaceBright = surfaceBrightLight,
+    surfaceContainerLowest = surfaceContainerLowestLight,
+    surfaceContainerLow = surfaceContainerLowLight,
+    surfaceContainer = surfaceContainerLight,
+    surfaceContainerHigh = surfaceContainerHighLight,
+    surfaceContainerHighest = surfaceContainerHighestLight,
 )
 
 @Composable
@@ -66,9 +93,10 @@ fun TowmmenTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
+    colorScheme : ColorScheme,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
+/*    val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -76,7 +104,7 @@ fun TowmmenTheme(
 
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
-    }
+    }*/
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -88,7 +116,7 @@ fun TowmmenTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypography,
         content = content
     )
 }

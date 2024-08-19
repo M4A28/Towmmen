@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -24,18 +25,20 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -52,12 +56,12 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomExposedDropdownMenu
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomTextFiled
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.TextFiledExposedDropdownMenu
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
 import com.mohmmed.mosa.eg.towmmen.util.SCANNED_BARCODE
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -73,8 +77,6 @@ fun AddNewProductScreen(navController: NavHostController){
         ?.get<String?>(SCANNED_BARCODE)?.let {
             code = it
         }
-
-
 
     AddNewProductContent(
         onAddClick = {product ->  productViewModel.addNewProduct(product) },
@@ -96,6 +98,7 @@ fun AddNewProductContent(
     onBackClick: () -> Unit = {},
     onBarcodeClick: () -> Unit = {}
 ) {
+    val scope = rememberCoroutineScope()
     var name by rememberSaveable { mutableStateOf("") }
     var barcode by remember { mutableStateOf(barCode?:"") }
     var description by rememberSaveable { mutableStateOf("") }
@@ -113,27 +116,25 @@ fun AddNewProductContent(
             }
         }
     )
+    val successMassage = stringResource(id = R.string.producte_add_success)
+    val snackbarHostState = remember { SnackbarHostState() }
     val manfDateState = rememberDatePickerState()
     var manfDate by rememberSaveable { mutableStateOf(Date()) }
     val expDateState = rememberDatePickerState()
     var expDate by rememberSaveable { mutableStateOf(Date()) }
     var showManfDatePicker by remember { mutableStateOf(false) }
     var showExpDatePicker by remember { mutableStateOf(false) }
-    val dateFormatter =  SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    val dateFormatter =  SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
           topBar = {
               TopAppBar(
-                  colors = TopAppBarDefaults.topAppBarColors(
-                      containerColor = MaterialTheme.colorScheme.primary,
-                      titleContentColor = MaterialTheme.colorScheme.onPrimary
-                  ),
                   navigationIcon = {
                       IconButton(onClick = {
                           onBackClick()
                       }){
                           Icon(
-                              tint = MaterialTheme.colorScheme.onPrimary,
                               imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                               contentDescription = "ArrowBack"
                           )
@@ -165,11 +166,12 @@ fun AddNewProductContent(
                     .padding(4.dp)
                     .fillMaxWidth()
                     .clickable { galleryLauncher.launch("image/*") }
-                    .height(300.dp)
+                    .height(200.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(imageUri)
                     .placeholder(R.drawable.image)
+                    .error(R.drawable.image)
                     .build(),
                 contentDescription = "",
                 contentScale = ContentScale.Fit
@@ -177,85 +179,137 @@ fun AddNewProductContent(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = name,
                 onValueChange = { name = it },
-                label = stringResource(id = R.string.product_name_),
-                leadingIcon = R.drawable.shopping
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.shopping),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.product_name_))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = barcode,
-                onValueChange = {
-                    barcode = it
-                },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                onIconClick = { onBarcodeClick() },
-                label = stringResource(R.string.producat_barcode),
-                leadingIcon = R.drawable.barcode
+                onValueChange = { barcode = it },
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.barcode),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .clickable { onBarcodeClick() }
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.producat_barcode))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = description,
-                onValueChange = {
-                    description = it
+                onValueChange = { description = it },
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.description),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
                 },
-                label = stringResource(id = R.string.description),
-                leadingIcon = R.drawable.description
+                placeholder = {
+                    Text(text = stringResource(id = R.string.description))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = cost,
-                onValueChange = {
-                    cost = it
-                },
+                onValueChange = { cost = it },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
-                label = stringResource(id = R.string.cost_),
-                leadingIcon = R.drawable.money
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.money),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.cost_))
+                }
             )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            CustomTextFiled(
+            Spacer(modifier = Modifier.height(10.dp))
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = price,
-                onValueChange = {
-                    price = it
-                },
+                onValueChange = { price = it },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
-                label = stringResource(id = R.string.price),
-                leadingIcon = R.drawable.money
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-
-
-
-            CustomTextFiled(
-                value = stockQuantity,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                onValueChange = { stockQuantity = it },
-                label = stringResource(id = R.string.stock_quantity),
-                leadingIcon = R.drawable.quantity
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.cash),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.price))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
 
-            CustomTextFiled(
+            Spacer(modifier = Modifier.height(10.dp))
 
-                value = unit,
-                onValueChange = { unit = it },
-                label = stringResource(id = R.string.measurement_unit),
-                leadingIcon = R.drawable.balance
-            )
 
-            Spacer(modifier = Modifier.height(4.dp))
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = stockQuantity,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    onValueChange = { stockQuantity = it },
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.quantity),
+                            contentDescription = null ,
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.stock_quantity))
+                    }
+                )
 
-            CustomExposedDropdownMenu(
+            Spacer(modifier = Modifier.height(10.dp))
+
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = unit,
+                    onValueChange = { unit = it },
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.balance),
+                            contentDescription = null ,
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.measurement_unit))
+                    }
+                )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            TextFiledExposedDropdownMenu(
                 options = options,
                 selectedOption = if(options.isEmpty()) "" else options[0],
                 readOnly = true,
@@ -266,28 +320,48 @@ fun AddNewProductContent(
                 leadingIcon = R.drawable.category
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
 
-            CustomTextFiled(
+
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = dateFormatter.format(manfDate),
                 onValueChange = { },
-                onIconClick = {showManfDatePicker = true},
-                label = stringResource(id = R.string.manf_date),
-                leadingIcon = R.drawable.calendar_month,
-                readOnly = true
+                readOnly = true,
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.calendar_month),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .clickable { showManfDatePicker = true }
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.manf_date))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = dateFormatter.format(expDate),
                 onValueChange = { },
-                onIconClick = {showExpDatePicker = true},
-                label = stringResource(id = R.string.exp_date),
-                leadingIcon = R.drawable.date,
-                readOnly = true
+                readOnly = true,
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.date),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .clickable { showExpDatePicker = true }
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.exp_date))
+                }
             )
-
 
 
             if (showManfDatePicker) {
@@ -295,12 +369,12 @@ fun AddNewProductContent(
                     onDismissRequest = { showManfDatePicker = false },
                     confirmButton = {
                         TextButton(onClick = { showManfDatePicker = false }) {
-                            Text("OK")
+                            Text(stringResource(id = R.string.ok))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showManfDatePicker = false }) {
-                            Text("Cancel")
+                            Text(stringResource(id = R.string.cancel))
                         }
                     }
                 ) {
@@ -330,7 +404,7 @@ fun AddNewProductContent(
                     expDate = expDateState.selectedDateMillis?.let { Date(it) } ?: Date()
                 }
             }
-
+            Spacer(modifier = Modifier.height(10.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
@@ -352,6 +426,9 @@ fun AddNewProductContent(
                             createdAt = Date(), updatedAt = Date()
                         )
                         onAddClick(product)
+                        scope.launch {
+                            snackbarHostState.showSnackbar(successMassage)
+                        }
                         // clearData
                         name = ""
                         description = ""
@@ -377,7 +454,7 @@ fun AddNewProductContent(
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 

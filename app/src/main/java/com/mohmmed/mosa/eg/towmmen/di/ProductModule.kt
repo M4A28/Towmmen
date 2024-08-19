@@ -12,6 +12,7 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetMaxPrice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetMinPrice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductByBarcode
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductById
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductCountByCategory
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetProductsExpiringBetween
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetTotalStock
@@ -63,7 +64,8 @@ object ProductModule {
             getProductCountByCategory = GetProductCountByCategory(productRepositoryImp),
             getMinPrice = GetMinPrice(productRepositoryImp),
             getMaxPrice = GetMaxPrice(productRepositoryImp),
-            getAveragePriceByMonth = GetAveragePriceByMonth(productRepositoryImp)
+            getAveragePriceByMonth = GetAveragePriceByMonth(productRepositoryImp),
+            getProductById = GetProductById(productRepositoryImp)
         )
     }
 }

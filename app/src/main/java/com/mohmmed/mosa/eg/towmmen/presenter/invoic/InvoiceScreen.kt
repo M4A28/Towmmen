@@ -1,6 +1,5 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.invoic
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,7 +37,6 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
-import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 
@@ -93,16 +90,15 @@ fun InvoiceCard(invoice: Invoice,
 ) {
 
     val quantity by remember { mutableStateOf(5) }
-    val elevation by animateFloatAsState(if (quantity > 1) 4f else 2f)
     var showItems by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 8.dp)
-            .clickable { showItems = !showItems }
-            .shadow(elevation.dp, RoundedCornerShape(16.dp)),
+            .clickable { showItems = !showItems },
         shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
@@ -113,14 +109,12 @@ fun InvoiceCard(invoice: Invoice,
 
             Text(
                 text = stringResource(id = R.string.invoice_number, invoice.invoiceId) ,
-                fontFamily = CairoFont,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodySmall
             )
 
             Text(
                 text = stringResource(id = R.string.invoice_date, dateToString(invoice.date, "yyyy-MM-dd hh:mm")) ,
-                fontFamily = CairoFont,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -129,7 +123,6 @@ fun InvoiceCard(invoice: Invoice,
 
             Text(
                 text = invoice.customerName,
-                fontFamily = CairoFont,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium
@@ -139,7 +132,6 @@ fun InvoiceCard(invoice: Invoice,
 
             Text(
                 text = stringResource(id = R.string.total, invoice.totalAmount),
-                fontFamily = CairoFont,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.bodyMedium

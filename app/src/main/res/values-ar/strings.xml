@@ -164,12 +164,41 @@
     <string name="total_invoice_Value">اجمالي الفواتير</string>
     <string name="invoice_date">تاريخ الفاتورة: %1$s</string>
     <string name="no_invoice_for_this_customer">لا يوجد اي فواتير لهذا العميل</string>
-    <string name="no_item_added">No Item added yet add one by scan barcode or search it</string>
+    <string name="no_item_added">لايوجد اي منتجات اضيفت جرب ان تبحث او تمسح الباركود</string>
     <string name="top_selling">اعلى المنتجات مبيعاً</string>
-    <string name="statistic">statistic</string>
-    <string name="top_selling_product_for_current_day">Top selling product for current day</string>
-    <string name="top_selling_current_month">Top selling product for current month</string>
-    <string name="top_selling_all_time">Top selling product for All time</string>
+    <string name="statistic">االاحصائات</string>
+    <string name="top_selling_product_for_current_day">اعلى المنتجات مبيعا لهذا اليوم</string>
+    <string name="top_selling_current_month">اعلى المنتجات مبيعا لهذا الشهر</string>
+    <string name="top_selling_all_time">اعلى المنتجات مبيعا على الاطلاق</string>
+    <string name="amount">المبلغ: %1$s</string>
+    <string name="no_expanse">لا يوجد اي مصروفات</string>
+    <string name="expanse">المصروفات</string>
+    <string name="delete_expanse">ازالة مصروف</string>
+    <string name="warring_delete_expanse">هل انت متأكد من حذف هذا المصروف؟?</string>
+    <string name="expanse_amount">مبلغ الصرف</string>
+    <string name="add_expanse">اضافة مبلغ مصروف</string>
+    <string name="ok">حسنا</string>
+    <string name="date">التاريخ</string>
+    <string name="expanse_explane">المصروفات: كل عملية دفع مباشرة مثل الفواتير و المرتبات و المصاريف الادارية "</string>
+    <string name="no_sold">لا توجد مبيعات</string>
+    <string name="min">الصغرى</string>
+    <string name="max">العظمى</string>
+    <string name="avg">المتوسط</string>
+    <string name="top_products">اعلى المنتجات مبيعا</string>
+    <string name="produts_cost">تكلفة جميع المنتجات</string>
+    <string name="total_stock_">اجمالي المخزن</string>
+    <string name="total_profit_by_month">اجمالي الفواتير لكل شهر</string>
+    <string name="total_expanse_per_month">اجمالي المصروفات لكل شهر</string>
+    <string name="light_mode">الوضع الفاتح</string>
+    <string name="recent_transaction">احدث الفواتير</string>
+    <string name="no_transcation_yet">لا يوجد عمليات بعد</string>
+    <string name="producte_add_success">producte has been added</string>
+    <string name="dealers">Dealers</string>
+    <string name="add_new_dealer">Add new dealer</string>
+    <string name="dealer_name">Dealer Name</string>
+    <string name="no_dealers_to_show">No Dealers to show</string>
+    <string name="add">Add</string>
+    <string name="delete_dealer">Are your sure to delete this dealer ?</string>
 
 
 </resources>

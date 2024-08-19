@@ -8,7 +8,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,9 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.ui.theme.IconSize1
-import com.mohmmed.mosa.eg.towmmen.ui.theme.TowmmenTheme
 
 data class BottomNavigationItem(
     @DrawableRes val icon: Int,
@@ -35,7 +32,6 @@ fun  AppBottomNavigation(
     NavigationBar(
         modifier = Modifier
             .fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.primary,
         tonalElevation = 10.dp
     ) {
         items.forEachIndexed { index, item ->
@@ -50,16 +46,15 @@ fun  AppBottomNavigation(
                 label = {
                     Text(
                         text = stringResource(id = item.text),
-                        fontFamily = CairoFont,
                         style = MaterialTheme.typography.labelSmall
                     )
                 },
-                colors = NavigationBarItemDefaults.colors(
+                /*colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                     indicatorColor = MaterialTheme.colorScheme.onPrimary,
                     unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
-                    unselectedTextColor = MaterialTheme.colorScheme.onPrimary),
+                    unselectedTextColor = MaterialTheme.colorScheme.onPrimary),*/
             )
         }
 
@@ -71,7 +66,7 @@ fun  AppBottomNavigation(
 @Preview(showBackground = true)
 @Composable
 fun BottomParagraphPreview() {
-    TowmmenTheme {
+
 
         AppBottomNavigation(
             items =    listOf(
@@ -83,6 +78,6 @@ fun BottomParagraphPreview() {
             selected = 0,
             onClick = {}
         )
-    }
+
 
 }

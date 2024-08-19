@@ -106,7 +106,7 @@
     <string name="choice_app_main_color">choice app mian color</string>
     <string name="delete_app_data">Delete All App data</string>
     <string name="delete_app_data_wring">this will delete all data</string>
-    <string name="delete_data">محو البيانات</string>
+    <string name="delete_data">Delete App Data</string>
     <string name="delete_data_msg">All Data was deleted </string>
     <string name="latest_add_products">Latest Add Products</string>
     <string name="title">Title</string>
@@ -152,6 +152,33 @@
     <string name="top_selling_product_for_current_day">Top selling product for current day</string>
     <string name="top_selling_current_month">Top selling product for current month</string>
     <string name="top_selling_all_time">Top selling product for All time</string>
-
-
+    <string name="amount">Amount: %1$s</string>
+    <string name="no_expanse">No Expanse Found</string>
+    <string name="expanse">Expanse</string>
+    <string name="delete_expanse">Delete Expanse</string>
+    <string name="warring_delete_expanse">Are you sure to delete this expanse?</string>
+    <string name="expanse_amount">Expanse Amount</string>
+    <string name="add_expanse">Add Expanse</string>
+    <string name="ok">OK</string>
+    <string name="date">date</string>
+    <string name="expanse_explane">"Expanse: all bill, charge, salary etc payed immediately "</string>
+    <string name="no_sold">No item Sold Yet</string>
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="avg">Avg</string>
+    <string name="top_products">Top Products</string>
+    <string name="produts_cost">Products Cost</string>
+    <string name="total_stock_">Products Stock</string>
+    <string name="total_profit_by_month">Total invoices profit by month</string>
+    <string name="total_expanse_per_month">Total expanse per month</string>
+    <string name="light_mode">Light</string>
+    <string name="recent_transaction">Recent Transactions</string>
+    <string name="no_transcation_yet">No Transactions yet</string>
+    <string name="producte_add_success">producte has been added</string>
+    <string name="dealers">Dealers</string>
+    <string name="add_new_dealer">Add new dealer</string>
+    <string name="dealer_name">Dealer Name</string>
+    <string name="no_dealers_to_show">No Dealers to show</string>
+    <string name="add">Add</string>
+    <string name="delete_dealer">Are your sure to delete this dealer ?</string>
 </resources>

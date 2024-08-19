@@ -1,12 +1,10 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting
 
 import android.Manifest
-import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,11 +17,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -31,7 +31,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,15 +42,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
@@ -56,37 +60,65 @@ import com.mohmmed.mosa.eg.towmmen.util.exportCustomersToCsv
 import com.mohmmed.mosa.eg.towmmen.util.exportProductsToCsv
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen() {
-    var darkMode by remember { mutableStateOf(false) }
-    var appColor by remember { mutableStateOf(Color(0xFF6200EE)) }
+
     val scope = rememberCoroutineScope()
+
     val productViewModel: ProductViewModel = hiltViewModel()
     val customerViewModel: CustomerViewModel = hiltViewModel()
+    val appThemeViewModel: AppThemeViewModel = hiltViewModel()
+    val currTheme by appThemeViewModel.theme.collectAsState()
+    var darkMode by remember { mutableStateOf(currTheme == AppTheme.DARK) }
+    var storagePermissionGranted  by remember { mutableStateOf(false) }
+    val storagePermissionState = rememberPermissionState(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val requestPermissionLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts
+        .RequestPermission()) { storagePermissionGranted = it }
     val products by productViewModel.products.collectAsState(initial = emptyList())
-    val custmers by customerViewModel.getAllCustomer().collectAsState(initial = emptyList())
+    val customers by customerViewModel.getAllCustomer().collectAsState(initial = emptyList())
     val snackbarHostState = remember { SnackbarHostState() }
-    val permissions = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+/*    val permissions = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     } else {
         emptyArray()
+    }*/
+
+
+    LaunchedEffect(storagePermissionState) {
+        if(!storagePermissionState.status.isGranted
+            && storagePermissionState.status.shouldShowRationale){
+            // todo enhance this
+        }else{
+            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
     }
 
+/*
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionsResult ->
         if (permissionsResult.all { it.value }) {
-            scope.launch {
-                exportProductsToCsv(products)
-                exportCustomersToCsv(custmers)
-            }
+
         } else {
             // Handle permission denial
             // Show a message or disable related features
         }
     }
+*/
 
         Scaffold(
+            topBar ={
+                    TopAppBar(title = {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = stringResource(id = R.string.app_setting))
+                        }
+
+                    })
+            },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Box(
@@ -108,25 +140,26 @@ fun SettingsScreen() {
                     .padding(24.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    text = stringResource(R.string.app_setting),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 24.dp)
-                )
-
                 AnimatedSettingItem(
-                    icon = painterResource(id = R.drawable.dark_mode),
-                    title = stringResource(R.string.dark_mode),
+                    icon = if(darkMode)  painterResource(id = R.drawable.dark_mode) else painterResource(id = R.drawable.light_mode),
+                    title = if(darkMode) stringResource(R.string.dark_mode) else  stringResource(R.string.light_mode) ,
                     subtitle = stringResource(R.string.exchange_dark_light),
                     control = {
                         Switch(
                             checked = darkMode,
-                            onCheckedChange = { darkMode = it }
+                            onCheckedChange = {
+                                darkMode = it
+                                if(currTheme.name == AppTheme.LIGHT.name) {
+                                    appThemeViewModel.setTheme(AppTheme.DARK)
+                                } else{
+                                    appThemeViewModel.setTheme(AppTheme.LIGHT)
+                                }
+                            }
                         )
                     }
                 )
+
+
 
                 AnimatedSettingItem(
                     icon = painterResource(id = R.drawable.export),
@@ -137,9 +170,14 @@ fun SettingsScreen() {
                         Button(
                             onClick = {
                                 scope.launch {
-
-                                    permissionLauncher.launch(permissions)
-                                    snackbarHostState.showSnackbar(expMsg)
+                                    if(storagePermissionGranted){
+                                        exportProductsToCsv(products)
+                                        exportCustomersToCsv(customers)
+                                        snackbarHostState.showSnackbar(expMsg)
+                                    }else{
+                                        snackbarHostState.showSnackbar("You need to accept permission")
+                                        requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    }
                                 }
                             },
                             shape = RoundedCornerShape(16.dp)
@@ -149,32 +187,6 @@ fun SettingsScreen() {
                     }
                 )
 
-                AnimatedSettingItem(
-                    icon = painterResource(id = R.drawable.palette),
-                    title = stringResource(R.string.app_color),
-                    subtitle = stringResource(R.string.choice_app_main_color),
-                    control = {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(CircleShape)
-                                .background(appColor)
-                                .border(
-                                    2.dp,
-                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                                    CircleShape
-                                )
-                                .clickable {
-                                    // Here you would typically open a color picker
-                                    appColor = Color(
-                                        (0..255).random(),
-                                        (0..255).random(),
-                                        (0..255).random()
-                                    )
-                                }
-                        )
-                    }
-                )
 
                 AnimatedSettingItem(
                     icon = painterResource(id = R.drawable.delete),
@@ -209,28 +221,21 @@ fun AnimatedSettingItem(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(vertical = 6.dp, horizontal = 4.dp)
             .animateContentSize()
-            .clickable { isExpanded = !isExpanded }
-   /*         .shadow(
-                elevation = animateDpAsState(
-                    if (isExpanded) 8.dp else 2.dp,
-                    animationSpec = spring(stiffness = Spring.StiffnessLow)
-                ).value,
-                shape = RoundedCornerShape(16.dp)
-            )*/
-            .clip(RoundedCornerShape(16.dp)),
+            .clickable { isExpanded = !isExpanded },
+        elevation = CardDefaults.cardElevation(6.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .clip(RoundedCornerShape(16.dp))
+            modifier = Modifier.padding(6.dp)
         ) {
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -262,31 +267,3 @@ fun AnimatedSettingItem(
         }
     }
 }
-
-
-
-/*
-@Composable
-fun ExportDatabaseScreen() {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-
-    // Only request the WRITE_EXTERNAL_STORAGE permission if the device is running Android 9 or lower
-    val permissions = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    } else {
-        emptyArray()
-    }
-
-
-
-    Column {
-        Text("Export Database to CSV")
-        Button(onClick = {
-            permissionLauncher.launch(permissions)
-        }) {
-            Text("Export")
-        }
-    }
-}
-*/

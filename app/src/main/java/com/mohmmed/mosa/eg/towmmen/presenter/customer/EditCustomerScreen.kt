@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -20,8 +21,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -36,7 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomTextFiled
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 
 @Composable
@@ -78,10 +79,6 @@ fun EditCustomerContent(
     Scaffold (
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                ),
                 navigationIcon = {
                     IconButton(onClick = {
                         onBackClick()
@@ -113,39 +110,80 @@ fun EditCustomerContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = name,
                 onValueChange = { name = it },
-                label = stringResource(id = R.string.customer_name_),
-                leadingIcon = R.drawable.person
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.person),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.customer_name_))
+                }
             )
+            Spacer(modifier = Modifier.height(10.dp))
 
-            Spacer(modifier = Modifier.height(4.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
                 value = email,
                 onValueChange = { email = it },
-                label = stringResource(id = R.string.email),
-                leadingIcon = R.drawable.email
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.email),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.email))
+                }
             )
-            Spacer(modifier = Modifier.height(4.dp))
 
-            CustomTextFiled(
+            Spacer(modifier = Modifier.height(10.dp))
+
+
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
                 value = phone,
                 onValueChange = { phone = it },
-                label = stringResource(id = R.string.phone),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
-                leadingIcon = R.drawable.phone
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.phone),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.phone))
+                }
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
+
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = address,
                 onValueChange = { address = it },
-                label = stringResource(id = R.string.address),
-                leadingIcon = R.drawable.location_pin
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.location_pin),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.address))
+                }
             )
-            Spacer(modifier = Modifier.height(4.dp))
+
+            Spacer(modifier = Modifier.height(10.dp))
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
@@ -173,7 +211,8 @@ fun EditCustomerContent(
                 }
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add Customer")
-                Text(stringResource(id = R.string.add_new_customer), modifier = Modifier.padding(start = 8.dp))
+                Text(stringResource(id = R.string.add_new_customer),
+                    modifier = Modifier.padding(start = 8.dp))
             }
         }
     }

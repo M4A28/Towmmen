@@ -93,6 +93,8 @@ dependencies {
     implementation(libs.barcode.scanning)
     //calendar view
     implementation(libs.caleandra.view)
+    // requsr permision
+    implementation(libs.accompanist.permissions)
 
     // work manger
     implementation(libs.androidx.work.runtime.ktx)

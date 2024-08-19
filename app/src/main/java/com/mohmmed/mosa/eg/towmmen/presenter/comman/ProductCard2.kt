@@ -1,5 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.comman
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,8 @@ import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 fun ProductCard2(modifier: Modifier = Modifier,
                  product: Product,
                  onClick: (Product)  -> Unit) {
+    val context = LocalContext.current
+    val persistedUri =Uri.parse(product.imagePath)
 
     Card(modifier = modifier
         .padding(8.dp)
@@ -48,9 +51,13 @@ fun ProductCard2(modifier: Modifier = Modifier,
             modifier = Modifier.padding(top = 2.dp, bottom = 6.dp, end = 6.dp, start = 6.dp)
         ) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(Uri.parse(product.imagePath))
+                model = ImageRequest.Builder(context)
+                    .data(persistedUri)
                     .placeholder(R.drawable.image)
+                    .crossfade(true)
+                    .error(R.drawable.image)
+                    .diskCacheKey(product.imagePath)
+                    .memoryCacheKey(product.imagePath)
                     .build(),
                 contentDescription = "",
                 modifier = Modifier
@@ -96,18 +103,11 @@ fun ProductCard2(modifier: Modifier = Modifier,
                 style = MaterialTheme.typography.labelSmall
             )
         }
-    // add column 
-
     }
-/*    Box(
-        modifier = modifier
-            .padding(8.dp)
-            .clickable { onClick(product) }
-            .shadow(elevation = 4.dp,
-                shape = RoundedCornerShape(8.dp))
-            .clip(RoundedCornerShape(8.dp))
-            .fillMaxWidth()
-    ) {
-    }*/
 }
-
+@Composable
+fun persistUriPermission(context: Context, uri: Uri): Uri {
+  /*  val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
+    context.contentResolver.takePersistableUriPermission(uri, takeFlags)*/
+    return uri
+}

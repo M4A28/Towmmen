@@ -23,12 +23,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
-import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 
 
 @Composable
@@ -61,20 +61,17 @@ fun TopSellingItemContent(
             TopProductItemCard(
                 title = stringResource(R.string.top_selling_product_for_current_day),
                 topProducts = currentDayTopItems,
-                onItemClick = {}
             )
             Spacer(modifier = Modifier.height(10.dp))
 
             TopProductItemCard(
                 title = stringResource(R.string.top_selling_current_month),
                 topProducts = currentMonthTopItems,
-                onItemClick = {}
             )
 
             TopProductItemCard(
                 title = stringResource(R.string.top_selling_all_time),
                 topProducts = topItems,
-                onItemClick = {}
             )
         }
     }
@@ -86,7 +83,6 @@ fun TopProductItemCard(
     title: String,
     modifier: Modifier = Modifier,
     topProducts: List<TopProduct>,
-    onItemClick: (TopProduct) -> Unit = {}
 ){
     var expand by remember { mutableStateOf(false) }
 
@@ -96,38 +92,40 @@ fun TopProductItemCard(
             .fillMaxWidth()
             .shadow(4.dp, RoundedCornerShape(8.dp))
             .clickable { expand = !expand },
+        elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ){
         Text(
             text = title,
             fontWeight = FontWeight.Bold,
-            fontFamily = CairoFont,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.titleLarge
         )
 
         Spacer(modifier = Modifier.height(4.dp))
+        if(topProducts.isNotEmpty()){
+
             topProducts.forEach{ item ->
                 ListItem(
 
                     headlineContent = { Text(
                         text = item.productName,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = CairoFont,
-                        color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodyMedium
                     ) },
                     trailingContent = {
                         Text(
                             text = "${item.productQuantity}",
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = CairoFont,
-                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 )
                 HorizontalDivider()
+            }
+        }else{
+            Text(
+                text = stringResource(R.string.no_sold),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
 
     }

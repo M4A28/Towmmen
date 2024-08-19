@@ -9,6 +9,6 @@ class GetInvoice @Inject constructor(
     private val invoiceRepositoryImp: InvoiceRepositoryImp
 ){
     operator fun invoke(customerName: String): Flow<List<Invoice>>{
-        return invoiceRepositoryImp.getAllInvoices() // todo
+        return invoiceRepositoryImp.getAllInvoices() // todo remove this
     }
 }

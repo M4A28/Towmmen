@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.CustomerUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,9 +17,13 @@ class CustomerViewModel @Inject constructor(
 
 
     fun addNewCustomer(customer: Customer){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO){
             customerUseCases.addNewCustomer(customer)
         }
+    }
+
+    fun getCustomerById(id: Int): Flow<Customer>{
+        return customerUseCases.getCustomerById(id)
     }
 
     fun getAllCustomer(): Flow<List<Customer>> {
@@ -31,14 +36,14 @@ class CustomerViewModel @Inject constructor(
     }
 
     fun deleteCustomer(customer: Customer){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             customerUseCases.deleteCustomer(customer)
         }
     }
 
 
     fun updateCustomer(customer: Customer){
-        viewModelScope.launch{
+        viewModelScope.launch(Dispatchers.IO){
             customerUseCases.updateCustomer(customer)
         }
     }

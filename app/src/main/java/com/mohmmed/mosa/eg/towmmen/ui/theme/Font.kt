@@ -6,10 +6,11 @@ import androidx.compose.ui.text.font.FontWeight
 import com.mohmmed.mosa.eg.towmmen.R
 
 
-val PopPinsFont = FontFamily(
-    Font(R.font.poppins_bold, FontWeight.Bold),
-    Font(R.font.poppins_semibold, FontWeight.SemiBold),
-    Font(R.font.poppins_regular, FontWeight.Normal)
+val RubikFont = FontFamily(
+    Font(R.font.rubik_bold, FontWeight.Bold),
+    Font(R.font.rubik_medium, FontWeight.SemiBold),
+    Font(R.font.rubik_regular, FontWeight.Normal),
+    Font(R.font.rubik_light, FontWeight.Thin)
 )
 
 val CairoFont = FontFamily(

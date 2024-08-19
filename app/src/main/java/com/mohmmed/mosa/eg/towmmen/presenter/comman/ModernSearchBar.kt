@@ -48,7 +48,7 @@ fun ModernSearchBar(
             .fillMaxWidth()
             .height(56.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(if (isFocused) MaterialTheme.colorScheme.surface else Color(0xFFF3F4F6))
+            .background(if (isFocused) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceVariant)
             .padding(horizontal = 16.dp),
         contentAlignment = Alignment.CenterStart
     ) {
@@ -60,7 +60,7 @@ fun ModernSearchBar(
             Icon(
                 Icons.Rounded.Search,
                 contentDescription = "Search",
-                tint = if (isFocused) MaterialTheme.colorScheme.primary else Color.Gray,
+                tint = if (isFocused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))

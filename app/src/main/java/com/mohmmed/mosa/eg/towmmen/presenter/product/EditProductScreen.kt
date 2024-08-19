@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,8 +31,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -45,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -54,8 +56,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomExposedDropdownMenu
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomTextFiled
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.TextFiledExposedDropdownMenu
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
@@ -68,10 +69,8 @@ import java.util.Locale
 @Composable
 fun EditProductScreen(navController: NavHostController){
     val productViewModel: ProductViewModel = hiltViewModel()
-    val producats by productViewModel.products.collectAsState(initial = emptyList())
+    val products by productViewModel.products.collectAsState(initial = emptyList())
     val categoryViewModel: CategoryViewModel = hiltViewModel()
-    //val viewModel: BarcodeScannerViewModel = hiltViewModel()
-    //val barcode by viewModel.barcode.collectAsState()
     val categoryList by categoryViewModel.getAllCategory().collectAsState(initial = emptyList())
     var code by remember { mutableStateOf("") }
     navController.currentBackStackEntry
@@ -80,8 +79,9 @@ fun EditProductScreen(navController: NavHostController){
             code = it
         }
 
-    navController.previousBackStackEntry?.savedStateHandle?.get<Product?>(PRODUCT_KEY)?.let{ product ->
-
+    navController.previousBackStackEntry
+        ?.savedStateHandle
+        ?.get<Product?>(PRODUCT_KEY)?.let{ product ->
         EditProductContent(
             modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer),
             editedProduct = product,
@@ -91,7 +91,7 @@ fun EditProductScreen(navController: NavHostController){
             onBackClick = { navController.popBackStack() },
             options = categoryList.map{ it.category},
             barCode = code,
-            allProducts = producats,
+            allProducts = products,
             onBarcodeClick = { navigateToScreen(navController, Route.BarcodeScannerScreen.route) }
         )
     }
@@ -143,16 +143,11 @@ fun EditProductContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                ),
                 navigationIcon = {
                     IconButton(onClick = {
                         onBackClick()
                     }){
                         Icon(
-                            tint = MaterialTheme.colorScheme.onPrimary,
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "ArrowBack"
                         )
@@ -184,10 +179,11 @@ fun EditProductContent(
                     .padding(4.dp)
                     .fillMaxWidth()
                     .clickable { galleryLauncher.launch("image/*") }
-                    .height(300.dp)
+                    .height(200.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(imageUri)
+                    .error(R.drawable.image)
                     .placeholder(R.drawable.image)
                     .build(),
                 contentDescription = "",
@@ -195,87 +191,141 @@ fun EditProductContent(
             )
 
             Spacer(modifier = Modifier.height(6.dp))
-
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = name,
                 onValueChange = { name = it },
-                label = stringResource(id = R.string.product_name_),
-                leadingIcon = R.drawable.shopping
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.shopping),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.product_name_))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = if(barcode == null || barcode!!.isEmpty()) editedProduct?.barcode!! else barcode!!,
-                onValueChange = {
-                    barcode = it
-                },
-                onIconClick = { onBarcodeClick() },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                label = stringResource(R.string.producat_barcode),
-                leadingIcon = R.drawable.barcode
+                onValueChange = { barcode = it },
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.barcode),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .clickable { onBarcodeClick() }
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.producat_barcode))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = description,
-                onValueChange = {
-                    description = it
+                onValueChange = { description = it },
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.description),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
                 },
-                label = stringResource(id = R.string.description),
-                leadingIcon = R.drawable.description
+                placeholder = {
+                    Text(text = stringResource(id = R.string.description))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+
+            TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = cost,
+                    onValueChange = { cost = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.money),
+                            contentDescription = null ,
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.cost_))
+                    }
+                )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = price,
+                    onValueChange = { price = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.cash),
+                            contentDescription = null ,
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.price))
+                    }
+                )
 
 
-            CustomTextFiled(
-                value = cost,
-                onValueChange = {
-                    cost = it
-                },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
-                label = stringResource(id = R.string.cost_),
-                leadingIcon = R.drawable.money
-            )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
-                value = price,
-                onValueChange = {
-                    price = it
-                },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
-                label = stringResource(id = R.string.price),
-                leadingIcon = R.drawable.money
-            )
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = stockQuantity,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    onValueChange = { stockQuantity = it },
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.quantity),
+                            contentDescription = null ,
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.stock_quantity))
+                    }
+                )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = unit,
+                    onValueChange = { unit = it },
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.balance),
+                            contentDescription = null ,
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.measurement_unit))
+                    }
+                )
 
 
-            CustomTextFiled(
-                value = stockQuantity,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                onValueChange = { stockQuantity = it },
-                label = stringResource(id = R.string.stock_quantity),
-                leadingIcon = R.drawable.quantity
-            )
+            Spacer(modifier = Modifier.height(10.dp))
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            CustomTextFiled(
-
-                value = unit,
-                onValueChange = { unit = it },
-                label = stringResource(id = R.string.measurement_unit),
-                leadingIcon = R.drawable.balance
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            CustomExposedDropdownMenu(
+            TextFiledExposedDropdownMenu(
                 options = options,
                 selectedOption = if(options.isEmpty()) "" else options[0],
                 readOnly = true,
@@ -286,27 +336,49 @@ fun EditProductContent(
                 leadingIcon = R.drawable.category
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
 
-            CustomTextFiled(
+
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = dateFormatter.format(manfDate),
                 onValueChange = { },
-                onIconClick = {showManfDatePicker = true},
-                label = stringResource(id = R.string.manf_date),
-                leadingIcon = R.drawable.calendar_month,
-                readOnly = true
+                readOnly = true,
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.calendar_month),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .clickable { showManfDatePicker = true }
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.manf_date))
+                }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextFiled(
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = dateFormatter.format(expDate),
                 onValueChange = { },
-                onIconClick = {showExpDatePicker = true},
-                label = stringResource(id = R.string.exp_date),
-                leadingIcon = R.drawable.date,
-                readOnly = true
+                readOnly = true,
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.date),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .clickable { showExpDatePicker = true }
+                            .size(20.dp)
+                    )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.exp_date))
+                }
             )
+
 
 
             if (showManfDatePicker) {

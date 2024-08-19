@@ -1,6 +1,5 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.customer
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
@@ -8,17 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,29 +35,27 @@ import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomerCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
-import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
+import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CustomerScreen(navController: NavHostController,
-                   onCustomerClick: (Customer) -> Unit){
+fun CustomerScreen(navController: NavHostController){
     val customerViewModel: CustomerViewModel = hiltViewModel()
     val customers by customerViewModel
         .getAllCustomer()
         .collectAsState(initial = emptyList())
+    var showAddCustomerDialog by remember {
+        mutableStateOf(false)
+    }
     val context = LocalContext.current
 
     CustomerContent(
         customers = customers,
         onCustomerClick = {
-            onCustomerClick(it)
+            navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, it)
+            navController.navigate(Route.CustomerFullInfoScreen.route)
         },
-        onFapClick = { navigateToScreen(
-            navController,
-            Route.AddCustomerScreen.route
-        )
-        },
+        onFapClick = { showAddCustomerDialog = true },
         onCallClick = {
             val phoneUri = Uri.fromParts("tel", it.phone, null)
             val intent = Intent(Intent.ACTION_DIAL, phoneUri)
@@ -72,11 +67,16 @@ fun CustomerScreen(navController: NavHostController,
         }
     )
 
+    if(showAddCustomerDialog){
+        AddCustomerDialog(onAddClick = {
+            customerViewModel.addNewCustomer(it)
+        }, showDialog = {showAddCustomerDialog = !showAddCustomerDialog})
+    }
+
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CustomerContent(
     modifier: Modifier = Modifier,
@@ -91,11 +91,6 @@ fun CustomerContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-
                 title = {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -110,9 +105,7 @@ fun CustomerContent(
             FloatingActionButton(
                 onClick = {
                     onFapClick()
-                },
-                containerColor = MaterialTheme.colorScheme.primary,
-                elevation = FloatingActionButtonDefaults.elevation(4.dp)
+                }
             ){
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -121,31 +114,31 @@ fun CustomerContent(
             }
 
         }
-    ) {
+    ) { paddingValue ->
         if(customers.isNotEmpty()){
             LazyColumn(
-                modifier = modifier.fillMaxSize().padding(16.dp),
+                modifier = modifier.fillMaxSize(),
             ) {
                 item {
                     ModernSearchBar(
                         searchQuery = searchQuery,
                         onSearchQueryChange = { searchQuery = it },
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                }
-                items(customers.filter {
-                    it.name.contains(searchQuery, ignoreCase = true)
-                }
-                    .size){customer ->
-                    CustomerCard(
-                        customer = customers[customer],
-                        onClick = {onCustomerClick(customers[customer])},
-                        onPhoneClick = {
-                            onCallClick(customers[customer])
-                        }
+                        modifier = Modifier.padding(bottom = 10.dp, top = paddingValue.calculateTopPadding())
                     )
                 }
 
+                items(
+                    customers.filter {
+                        it.name.contains(searchQuery, ignoreCase = true)
+                    },
+                    key = { it.customerId }
+                ){ customer ->
+                    CustomerCard(
+                        customer = customer,
+                        onClick = {onCustomerClick(customer)},
+                        onPhoneClick = { onCallClick(customer) }
+                    )
+                }
             }
         }else{
             EmptyScreen(

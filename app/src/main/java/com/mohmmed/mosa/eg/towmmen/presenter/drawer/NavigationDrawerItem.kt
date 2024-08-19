@@ -40,8 +40,12 @@ enum class NavigationItem(
     Profit(
         icon = R.drawable.cash,
         title = R.string.profit
-    ),    
-    
+    ),
+
+    Note(
+        icon = R.drawable.notes,
+        title = R.string.notes
+    ),
     Category(
         icon = R.drawable.category,
         title = R.string.category

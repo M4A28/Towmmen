@@ -32,6 +32,10 @@ class ProductViewModel @Inject constructor(
         return productUseCase.totalProductsCost()
     }
 
+    fun getProductById(id: Int): Flow<Product>{
+        return productUseCase.getProductById(id)
+    }
+
 
     fun getProductExpiredIn2Week(){
         viewModelScope.launch {

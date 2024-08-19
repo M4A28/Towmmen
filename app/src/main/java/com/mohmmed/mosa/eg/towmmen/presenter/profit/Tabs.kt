@@ -5,15 +5,15 @@ import com.mohmmed.mosa.eg.towmmen.R
 
 enum class Tabs(
     @StringRes
-    val  text: Int
+    val  text: Int,
+    val icon: Int
 ) {
-    InvoiceScreen(text = R.string.invoice),
+    InvoiceScreen(text = R.string.invoice, icon = R.drawable.description),
 
-    TopSellingScreen(text = R.string.top_selling),
+    TopSellingScreen(text = R.string.top_selling, icon = R.drawable.shopping),
 
-    ProfitScreen(text = R.string.profit),
+    ExpanseScreen(text = R.string.expanse, icon = R.drawable.payment),
 
-    StatisticScreen(text = R.string.statistic),
 
 
 }

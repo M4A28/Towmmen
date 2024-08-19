@@ -11,7 +11,6 @@ import androidx.room.Upsert
 import com.mohmmed.mosa.eg.towmmen.data.module.CategoryCount
 import com.mohmmed.mosa.eg.towmmen.data.module.MonthlyAvgPrice
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
-import com.mohmmed.mosa.eg.towmmen.data.module.ProductWithCustomers
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
@@ -76,11 +75,6 @@ interface ProductDao {
 
     @Delete
     suspend fun deleteProduct(product: Product)
-
-    @Transaction
-    @Query("SELECT * FROM products ORDER BY createdAt DESC")
-    fun getProductsWithCustomers(): Flow<List<ProductWithCustomers>>
-
 
 
 

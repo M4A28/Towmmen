@@ -1,9 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.data.repository
 
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.PurchaseDao
-import com.mohmmed.mosa.eg.towmmen.data.module.CustomerWithPurchases
 import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
-import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseWithDetails
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.PurchaseRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -15,13 +13,6 @@ class PurchaseRepositoryImp @Inject constructor(
        return purchaseDao.getAllPurchases()
     }
 
-    override fun getCustomersWithPurchases(): Flow<List<CustomerWithPurchases>> {
-        return purchaseDao.getCustomersWithPurchases()
-    }
-
-    override fun getPurchasesWithDetails(): Flow<List<PurchaseWithDetails>> {
-        return purchaseDao.getPurchasesWithDetails()
-    }
 
     override suspend fun insertPurchase(purchase: Purchase) {
         purchaseDao.insertPurchase(purchase)

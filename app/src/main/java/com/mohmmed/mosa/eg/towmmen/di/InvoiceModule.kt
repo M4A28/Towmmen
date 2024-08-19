@@ -8,6 +8,7 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.DeleteInvoiceItem
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAllInvoice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAllInvoiceProfit
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAllInvoicesWithItems
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAvgInvoicePerMonth
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceAvg
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceByCustomer
@@ -22,6 +23,7 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetMinInvoice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetTopSelling
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetTopSellingCurrentDay
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetTopSellingCurrentMonth
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetTotalInvoices
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.InsertFullInvoice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.InvoiceUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.UpsertInvoice
@@ -74,6 +76,8 @@ object InvoiceModule {
             getTopSellingCurrentMonth = GetTopSellingCurrentMonth(invoiceRepo),
             getInvoiceProfitForCurrentMonth = GetInvoiceProfitForCurrentMonth(invoiceRepo),
             getInvoiceProfitForCurrentDay = GetInvoiceProfitForCurrentDay(invoiceRepo),
+            getTotalInvoices = GetTotalInvoices(invoiceRepo),
+            getAvgInvoicePerMonth = GetAvgInvoicePerMonth(invoiceRepo),
         )
     }
 }

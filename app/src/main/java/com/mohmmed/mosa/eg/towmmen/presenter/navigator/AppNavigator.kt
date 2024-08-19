@@ -9,12 +9,10 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,11 +40,14 @@ import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerInvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.EditCustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.FullCustomerInfoScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.dealers.DealersScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.dealers.FullDealerInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.DrawerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.about.AboutScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.AddCategoryScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.SettingsScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.expanse.AddExpanseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.home.HomeScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.AddInvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
@@ -74,7 +75,7 @@ fun AppNavigator() {
         BottomNavigationItem(icon = R.drawable.home, text = R.string.home), // 0
         BottomNavigationItem(icon = R.drawable.person, text = R.string.customers), // 1
         BottomNavigationItem(icon = R.drawable.shopping_cart, text = R.string.products), // 2
-        BottomNavigationItem(icon = R.drawable.notes, text = R.string.notes), // 3
+        BottomNavigationItem(icon = R.drawable.delars, text = R.string.dealers), // 3
     )
 
     val navController = rememberNavController()
@@ -88,7 +89,7 @@ fun AppNavigator() {
             Route.HomeScreen.route -> 0
             Route.CustomerScreen.route -> 1
             Route.ProductScreen.route -> 2
-            Route.NoteScreen.route -> 3
+            Route.DealersScreen.route -> 3
             else -> -1
         }
     }
@@ -112,23 +113,20 @@ fun AppNavigator() {
                                     0 -> navigateToTab(navController, Route.HomeScreen.route)
                                     1 -> navigateToTab(navController, Route.CustomerScreen.route)
                                     2 -> navigateToTab(navController, Route.ProductScreen.route)
-                                    3 -> navigateToTab(navController, Route.NoteScreen.route)
+                                    3 -> navigateToTab(navController, Route.DealersScreen.route)
                                 }
                             }
                         )
                     }
                 },
                 topBar = {
-                    if(selectedItem == 0
-                        //selectedItem == 1 ||
-                        //selectedItem == 2 ||
-                        /*selectedItem == 3*/) {
+                    if(selectedItem == 0) {
 
                         TopAppBar(
-                            colors = TopAppBarDefaults.topAppBarColors(
+                         /*   colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                            ),
+                            ),*/
                             title = {
                                 Box(
                                     modifier = Modifier.fillMaxWidth(),
@@ -147,7 +145,7 @@ fun AppNavigator() {
                                     }
                                 }){
                                     Icon(
-                                        tint = MaterialTheme.colorScheme.onPrimary,
+                                        //tint = MaterialTheme.colorScheme.onPrimary,
                                         imageVector = Icons.Default.Menu,
                                         contentDescription = "Menu"
                                     )
@@ -158,7 +156,6 @@ fun AppNavigator() {
                                     navigateToTab(navController, Route.NotificationScreen.route)
                                 }){
                                     Icon(
-                                        tint = MaterialTheme.colorScheme.onPrimary,
                                         painter = painterResource(id = R.drawable.notifications),
                                         contentDescription = "notifications"
                                     )
@@ -178,7 +175,7 @@ fun AppNavigator() {
 
 
                     composable(route = Route.HomeScreen.route){
-                        HomeScreen(navController)
+                        HomeScreen()
                     }
 
                     composable(route = Route.NotificationScreen.route){
@@ -186,9 +183,15 @@ fun AppNavigator() {
                     }
 
                     composable(route = Route.CustomerScreen.route){
-                        CustomerScreen(navController, onCustomerClick = {
-                            navigateToCustomerDetails(navController, it)
-                        })
+                        CustomerScreen(navController)
+                    }
+
+                    composable(route = Route.DealersScreen.route){
+                        DealersScreen(navController)
+                    }
+
+                    composable(route = Route.DealerFullInfoScreen.route){
+                        FullDealerInfoScreen(navController)
                     }
 
 
@@ -208,14 +211,14 @@ fun AppNavigator() {
                         CustomerInvoiceScreen(navController)
                     }
 
+                    composable(route = Route.CustomerFullInfoScreen.route){
+                        FullCustomerInfoScreen(navController)
+                    }
 
                     composable(route = Route.EditNoteScreen.route){
                         EditNoteScreen(navController)
                     }
 
-                    composable(route = Route.CustomerFullInfoScreen.route){
-                        FullCustomerInfoScreen(navController)
-                    }
 
                     composable(route = Route.ProductScreen.route){
                         ProductsScreen(
@@ -258,8 +261,12 @@ fun AppNavigator() {
                         AboutScreen()
                     }
 
+                    composable(route = Route.AddExpanseScreen.route){
+                        AddExpanseScreen(navController)
+                    }
+
                     composable(route = Route.ProfitScreen.route){
-                        ProfitScreen()
+                        ProfitScreen(navController)
                     }
 
                     composable(route = Route.AddInvoiceScreen.route){
