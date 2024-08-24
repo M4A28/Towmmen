@@ -12,5 +12,7 @@ interface DealerRepository {
     fun getAllDealers(): Flow<List<Dealer>>
 
     fun getDealerById(dealerId: Int): Flow<Dealer>
+    suspend fun clearDealersDate()
+
 
 }

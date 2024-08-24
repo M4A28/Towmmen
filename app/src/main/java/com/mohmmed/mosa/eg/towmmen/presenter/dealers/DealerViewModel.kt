@@ -42,4 +42,12 @@ class DealerViewModel @Inject constructor(
         .stateIn(viewModelScope,
             SharingStarted.Eagerly, emptyList())
 
+
+
+    fun clearDealersDate(){
+        viewModelScope.launch(Dispatchers.IO) {
+            dealerUseCase.clearDealerData()
+        }
+    }
+
 }

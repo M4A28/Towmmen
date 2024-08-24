@@ -38,4 +38,8 @@ class ExpanseRepositoryImp @Inject constructor(
     override fun getAvgExpansePerMonth(): Flow<Double?> {
         return expanseDao.getAvgExpansePerMonth()
     }
+
+    override suspend fun clearExpanseDate() {
+        expanseDao.clearExpanseDate()
+    }
 }

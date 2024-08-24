@@ -4,4 +4,5 @@ data class CategoryUseCases(
     val upsertCategory: UpsertCategory,
     val deleteCategory: DeleteCategory,
     val getAllCategory: GetAllCategory,
+    val clearCategory: ClearCategory
 )

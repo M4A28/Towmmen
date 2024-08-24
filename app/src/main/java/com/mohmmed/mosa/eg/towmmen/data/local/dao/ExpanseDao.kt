@@ -32,6 +32,9 @@ interface ExpanseDao {
     @Query("SELECT AVG(amount) FROM expanse")
     fun getAvgExpanse(): Flow<Double?>
 
+    @Query("DELETE FROM expanse")
+    suspend fun clearExpanseDate()
+
     @Query("SELECT AVG(total) " +
             "FROM (SELECT strftime('%Y-%m', payDate/1000, 'unixepoch') as month, " +
             "SUM(amount) as total FROM expanse GROUP BY month ORDER BY month )")

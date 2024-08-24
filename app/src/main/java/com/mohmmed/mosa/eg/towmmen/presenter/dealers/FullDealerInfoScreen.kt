@@ -42,6 +42,7 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Dealer
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DetailItem
+import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.util.DEALER_KEY
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import kotlinx.coroutines.launch
@@ -65,7 +66,8 @@ fun FullDealerInfoScreen(navController: NavHostController) {
                     showEditDialog = true
                 },
                 onPurchaseClick = {
-                                  // todo make purchase screen
+                    navController.currentBackStackEntry?.savedStateHandle?.set(DEALER_KEY, it)
+                    navController.navigate(Route.DealerPurchasesScreen.route)
                 },
                 onShowInvoicesClick = {
                     // todo  make all invoice screen

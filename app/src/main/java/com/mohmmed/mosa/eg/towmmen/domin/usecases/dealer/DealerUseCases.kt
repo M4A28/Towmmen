@@ -5,5 +5,6 @@ data class DealerUseCases(
     val deleteDealer: DeleteDealer,
     val getAllDealers: GetAllDealers,
     val getDealerById: GetDealerById,
+    val clearDealerData: ClearDealerData
 ) {
 }

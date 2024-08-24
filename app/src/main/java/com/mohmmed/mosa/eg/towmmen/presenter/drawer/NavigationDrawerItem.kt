@@ -28,10 +28,7 @@ enum class NavigationItem(
     val title: Int,
     val icon: Int
 ) {
-    Home(
-        icon = R.drawable.home,
-        title = R.string.home
-    ),
+
     Settings(
         icon = R.drawable.settings,
         title = R.string.settings
@@ -42,14 +39,15 @@ enum class NavigationItem(
         title = R.string.profit
     ),
 
+    Category(
+        icon = R.drawable.category,
+        title = R.string.category
+    ),
+
     Note(
         icon = R.drawable.notes,
         title = R.string.notes
     ),
-    Category(
-        icon = R.drawable.category,
-        title = R.string.category
-    ),    
     Share(
         icon = R.drawable.share,
         title = R.string.share

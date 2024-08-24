@@ -7,4 +7,5 @@ interface CategoryRepository {
     suspend fun upsertCategory(category: Category)
     suspend fun deleteCategory(category: Category)
     fun getAllCategory(): Flow<List<Category>>
+    suspend fun clearCategoryDate()
 }

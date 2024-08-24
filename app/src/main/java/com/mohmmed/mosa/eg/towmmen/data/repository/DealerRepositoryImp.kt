@@ -25,4 +25,8 @@ class DealerRepositoryImp @Inject constructor(
         return dealerDao.getDealerById(dealerId)
     }
 
+    override suspend fun clearDealersDate() {
+        dealerDao.clearDealersDate()
+    }
+
 }

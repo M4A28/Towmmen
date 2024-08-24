@@ -30,8 +30,8 @@ import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.presenter.expanse.ExpanseViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.CustomColumnChart
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.CustomColumnChart2
+import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ExpanseColumnChart
+import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ProfitColumnChart
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.SimpleStatCard
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.StatisticItem
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.TopProductsList
@@ -101,7 +101,7 @@ fun StatisticsScreen() {
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium
             )
-            CustomColumnChart(average = avgInvoice?: 0.0 , profitByMonth = invoiceProfitByMonth.ifEmpty { emptyProfit })
+            ProfitColumnChart(average = avgInvoice?: 0.0 , profitByMonth = invoiceProfitByMonth.ifEmpty { emptyProfit })
         }
 
 
@@ -115,7 +115,7 @@ fun StatisticsScreen() {
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium
             )
-            CustomColumnChart2(average = 0.0,
+            ExpanseColumnChart(average = 0.0,
                 expanseByMonth = expansePerMonth.ifEmpty { emptyExpanse })
         }
 

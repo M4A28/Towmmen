@@ -76,7 +76,7 @@
     <string name="about_me">معلومات عني</string>
     <string name="add_new_cat">إضافة تصنيف جديد</string>
     <string name="producat_barcode_2">الباركود: %1$s</string>
-    <string name="version">1.0.0</string>
+    <string name="version">1.2.0_beta</string>
 
 
     <string name="my_name">محمد موسى</string>
@@ -86,7 +86,7 @@
     <string name="app_version">النسخة: %1$s</string>
       <string name="app_description">
         الوصف:
-        هذا التطبيق يتيح لك الآتي:
+        هذا التطبيق يتيح لك الآتي:\n
         - إضافة المنتجات والتعديل عليها\n
         - إضافة عملاء وتعديل البيانات\n
         - عرض تفصيلي لبيانات المنتجات\n
@@ -113,7 +113,7 @@
     <string name="days_until_expire_">عدد الأيام حتى انتهاء الصلاحية</string>
 
    <string name="all">الكل</string>
-    <string name="app_setting">إعدادات التطبيق</string>
+    <string name="app_setting">الإعدادات</string>
     <string name="dark_mode">الوضع الداكن</string>
     <string name="exchange_dark_light">تبديل بين الوضع الفاتح والداكن</string>
     <string name="export_to_csv">تصدير الملفات إلى CSV</string>
@@ -165,7 +165,7 @@
     <string name="invoice_date">تاريخ الفاتورة: %1$s</string>
     <string name="no_invoice_for_this_customer">لا يوجد اي فواتير لهذا العميل</string>
     <string name="no_item_added">لايوجد اي منتجات اضيفت جرب ان تبحث او تمسح الباركود</string>
-    <string name="top_selling">اعلى المنتجات مبيعاً</string>
+    <string name="top_selling">الاعلى مبيعاً</string>
     <string name="statistic">االاحصائات</string>
     <string name="top_selling_product_for_current_day">اعلى المنتجات مبيعا لهذا اليوم</string>
     <string name="top_selling_current_month">اعلى المنتجات مبيعا لهذا الشهر</string>
@@ -192,13 +192,59 @@
     <string name="light_mode">الوضع الفاتح</string>
     <string name="recent_transaction">احدث الفواتير</string>
     <string name="no_transcation_yet">لا يوجد عمليات بعد</string>
-    <string name="producte_add_success">producte has been added</string>
-    <string name="dealers">Dealers</string>
-    <string name="add_new_dealer">Add new dealer</string>
-    <string name="dealer_name">Dealer Name</string>
-    <string name="no_dealers_to_show">No Dealers to show</string>
-    <string name="add">Add</string>
-    <string name="delete_dealer">Are your sure to delete this dealer ?</string>
-
+    <string name="producte_add_success">تمت إضافة المنتج</string>
+    
+<string name="dealers">الموزعون</string>
+<string name="add_new_dealer">إضافة موزع جديد</string>
+<string name="dealer_name">اسم الموزع</string>
+<string name="no_dealers_to_show">لا يوجد موزعون لعرضهم</string>
+<string name="add">إضافة</string>
+<string name="delete_dealer">هل أنت متأكد من حذف هذا الموزع؟</string>
+<string name="display">عرض</string>
+<string name="dark_theme">الوضع الداكن</string>
+<string name="off">إيقاف</string>
+<string name="on">تشغيل</string>
+<string name="data_management">إدارة البيانات</string>
+<string name="delete_all_customers">حذف جميع العملاء</string>
+<string name="delete_all_invoices">حذف جميع الفواتير</string>
+<string name="delete_all_dealers">حذف جميع الموزعين</string>
+<string name="delete_all_products">حذف جميع المنتجات</string>
+<string name="delete_all_app_data">حذف جميع بيانات التطبيق</string>
+<string name="backup_restore">النسخ الاحتياطي والاستعادة</string>
+<string name="export_app_data_to_csv">تصدير بيانات التطبيق إلى CSV</string>
+<string name="backup_database">نسخ قاعدة البيانات احتياطيًا</string>
+<string name="restore_data_from_csv">استعادة البيانات</string>
+<string name="all_data_exported">تم تصدير جميع البيانات</string>
+<string name="product_alert">تنبيه المنتج</string>
+<string name="recycle_the_packaging_if_possible">أعد تدوير العبوة إذا أمكن.</string>
+<string name="dispose_of_the_product_safely">تخلص من المنتج بشكل آمن.</string>
+<string name="consider_disposing_if_uncertain_about_safety">فكر في التخلص إذا كنت غير متأكد من السلامة.</string>
+<string name="check_for_signs_of_spoilage_before_use">تحقق من علامات التلف قبل الاستخدام.</string>
+<string name="check_for_any_signs_of_spoilage_before_use">تحقق من أي علامات تلف قبل الاستخدام.</string>
+<string name="use_the_product_today_if_possible">استخدم المنتج اليوم إن أمكن.</string>
+<string name="plan_meals_to_include_this_product">خطط لوجبات تشمل هذا المنتج.</string>
+<string name="use_the_product_soon">استخدم المنتج قريبًا.</string>
+<string name="product_is_still_good_for_use">المنتج لا يزال صالحًا للاستخدام.</string>
+<string name="store_properly_to_maintain_freshness">احفظه بشكل صحيح للحفاظ على نضارته.</string>
+<string name="expires_in_days">تنتهي الصلاحية في %1$s أيام</string>
+<string name="expired_days_ago">انتهت الصلاحية منذ %1$s أيام</string>
+<string name="expires_today">تنتهي الصلاحية اليوم</string>
+<string name="suggestions">اقتراحات:</string>
+    <string name="delet_invoice">حذف الفواتير</string>
+    <string name="invoice_delete_warring">انت على وشك حذف هذه الفاتورة</string>
+    <string name="please_type_delete_to_confirm">الرجاء كتابة \'حذف\' لتأكيد عملية الحذف</string>
+    <string name="are_you_sure_you_want_to_delete_this_item">هل انت متأكد من حذف هذا العنصر؟</string>
+    <string name="are_you_sure_to_delete_all_app_date">هل انت متأكد من حذف جميع بيانات التطبيق؟</string>
+    <string name="are_you_sure_to_delete_all_Expanse_date">هل انت متأكد من حذف جميع بيانات المصاريف ؟</string>
+    <string name="are_you_sure_to_delete_all_Invoice_date">هل انت متأكد من حذف جميع بيانات الفواتير؟</string>
+    <string name="are_you_sure_to_delete_all_catagory_date">هل انت متأكد من حذف جميع بيانات الفائات؟</string>
+    <string name="are_you_sure_to_delete_all_dealers_date">هل انت متأكد من حذف جميع بيانات الموردين؟</string>
+    <string name="are_you_sure_to_delete_all_note_date">هل انت متأكد من حذف جميع بيانات الملاحظات؟</string>
+    <string name="are_you_sure_to_delete_all_custoer_date">هل انت متأكد من حذف جميع بيانات العملاء؟</string>
+    <string name="are_you_sure_to_delete_all_product_date">هل انت متأكد من حذف جميع بيانات المنتجات؟</string>
+    <string name="database_has_saved">تم حفظ قاعد البيانات بنجاح</string>
+    <string name="edit_expanse">تعديل المصروفات</string>
+    <string name="database_restored">تم استعادة قاعدة البيانات</string>
+    <string name="restore">استعادة</string>
 
 </resources>

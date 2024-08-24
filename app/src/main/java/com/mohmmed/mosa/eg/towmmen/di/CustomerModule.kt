@@ -4,6 +4,7 @@ import com.mohmmed.mosa.eg.towmmen.data.local.dao.CustomerDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.repository.CustomerRepositoryImp
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.AddNewCustomer
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.CleatCustomerData
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.CustomerCount
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.CustomerUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.DeleteCustomer
@@ -42,7 +43,8 @@ object CustomerModule {
             getCustomer = GetCustomer(customerRepository),
             deleteCustomer = DeleteCustomer(customerRepository),
             getCustomerCount = CustomerCount(customerRepository),
-            getCustomerById = GetCustomerById(customerRepository)
+            getCustomerById = GetCustomerById(customerRepository),
+            cleatCustomerData = CleatCustomerData(customerRepository)
         )
     }
 }

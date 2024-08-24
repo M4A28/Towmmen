@@ -7,5 +7,6 @@ data class CustomerUseCases(
     val getCustomer: GetCustomer,
     val deleteCustomer: DeleteCustomer,
     val getCustomerCount: CustomerCount,
-    val getCustomerById: GetCustomerById
+    val getCustomerById: GetCustomerById,
+    val cleatCustomerData: CleatCustomerData
 )

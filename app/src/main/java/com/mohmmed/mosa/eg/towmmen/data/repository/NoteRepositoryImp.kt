@@ -29,4 +29,8 @@ class NoteRepositoryImp @Inject constructor(
     override fun getNote(note: String): Flow<List<Note>> {
         return noteDao.getNote(note)
     }
+
+    override suspend fun clearNotesDate() {
+        noteDao.clearNotesDate()
+    }
 }

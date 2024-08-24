@@ -20,6 +20,8 @@ interface ExpanseRepository {
     fun getAvgExpanse(): Flow<Double?>
 
     fun getAvgExpansePerMonth(): Flow<Double?>
+    suspend fun clearExpanseDate()
+
 
 
 

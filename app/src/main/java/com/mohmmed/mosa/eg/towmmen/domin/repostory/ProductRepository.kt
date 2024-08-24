@@ -41,5 +41,7 @@ interface ProductRepository {
 
 
     fun getAveragePriceByMonth(): Flow<List<MonthlyAvgPrice>>
+    suspend fun clearProductsDate()
+
 
 }

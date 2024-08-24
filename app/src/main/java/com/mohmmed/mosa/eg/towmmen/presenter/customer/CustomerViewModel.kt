@@ -48,4 +48,11 @@ class CustomerViewModel @Inject constructor(
         }
     }
 
+
+    fun clearCustomerDate(){
+        viewModelScope.launch(Dispatchers.IO) {
+            customerUseCases.cleatCustomerData()
+        }
+    }
+
 }

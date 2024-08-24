@@ -84,7 +84,7 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
                     onConfirm = {
                         coroutineScope.launch {
                             customerViewModel.deleteCustomer(customer)
-                            navController.popBackStack()
+                            navController.navigateUp()
                         }
                     },
                     onDismiss = { showDeleteConfirmation = false }
@@ -138,7 +138,7 @@ fun FullCustomerInfoContent(
             }
             Button(
                 onClick = {onShowInvoicesClick(customer)},
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
             ) {
                 Spacer(Modifier.width(8.dp))
                 Text(text = stringResource(R.string.show_invoices),
@@ -218,7 +218,7 @@ fun CustomerDetails(customer: Customer) {
             DetailItem(
                 icon = R.drawable.calendar_month,
                 label = stringResource(id = R.string.reg_data_2),
-                value = dateToString(customer.registrationDate, "yyyy/MM/dd")
+                value = dateToString(customer.registrationDate, "yyyy-MM-dd")
             )
         }
     }

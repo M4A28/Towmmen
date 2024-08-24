@@ -38,4 +38,8 @@ class CustomerRepositoryImp @Inject constructor(
     override fun getCustomerById(id: Int): Flow<Customer> {
         return customerDao.getCustomerById(id)
     }
+
+    override suspend fun clearCustomersDate() {
+        customerDao.clearCustomersDate()
+    }
 }

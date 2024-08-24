@@ -389,12 +389,12 @@ fun AddNewProductContent(
                     onDismissRequest = { showExpDatePicker = false },
                     confirmButton = {
                         TextButton(onClick = { showExpDatePicker = false }) {
-                            Text("OK")
+                            Text(stringResource(id = R.string.ok))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showExpDatePicker = false }) {
-                            Text("Cancel")
+                            Text(stringResource(id = R.string.cancel))
                         }
                     }
                 ) {

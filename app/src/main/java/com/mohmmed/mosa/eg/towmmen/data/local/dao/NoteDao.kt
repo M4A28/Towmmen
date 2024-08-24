@@ -28,4 +28,7 @@ interface NoteDao {
     @Query("SELECT * FROM notes WHERE note = :note ORDER BY date DESC")
     fun getNote(note: String): Flow<List<Note>>
 
+    @Query("DELETE FROM notes")
+    suspend fun clearNotesDate()
+
 }

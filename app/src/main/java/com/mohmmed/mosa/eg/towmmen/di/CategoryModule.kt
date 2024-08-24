@@ -4,6 +4,7 @@ import com.mohmmed.mosa.eg.towmmen.data.local.dao.CategoryDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.repository.CategoryRepositoryImp
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.category.CategoryUseCases
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.category.ClearCategory
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.category.DeleteCategory
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.category.GetAllCategory
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.category.UpsertCategory
@@ -36,7 +37,8 @@ object CategoryModule {
         return CategoryUseCases(
             upsertCategory = UpsertCategory(categoryRepositoryImp),
             deleteCategory = DeleteCategory(categoryRepositoryImp),
-            getAllCategory = GetAllCategory(categoryRepositoryImp)
+            getAllCategory = GetAllCategory(categoryRepositoryImp),
+            clearCategory = ClearCategory(categoryRepositoryImp)
         )
     }
 }

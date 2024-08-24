@@ -118,4 +118,8 @@ class InvoiceRepositoryImp @Inject constructor(
         return invoiceDao.getAvgInvoicePerMonth()
     }
 
+    override suspend fun clearInvoiceDate() {
+        invoiceDao.clearInvoiceDate()
+    }
+
 }

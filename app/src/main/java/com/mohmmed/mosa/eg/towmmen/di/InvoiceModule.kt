@@ -3,6 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.di
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.InvoiceDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.repository.InvoiceRepositoryImp
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.ClearInvoiceData
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.DeleteInvoice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.DeleteInvoiceItem
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAllInvoice
@@ -78,6 +79,7 @@ object InvoiceModule {
             getInvoiceProfitForCurrentDay = GetInvoiceProfitForCurrentDay(invoiceRepo),
             getTotalInvoices = GetTotalInvoices(invoiceRepo),
             getAvgInvoicePerMonth = GetAvgInvoicePerMonth(invoiceRepo),
+            clearInvoiceData = ClearInvoiceData(invoiceRepo)
         )
     }
 }

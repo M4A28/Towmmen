@@ -1,7 +1,9 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.expanse
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -76,10 +78,17 @@ fun AddExpanseContent(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(
-            text = stringResource(R.string.expanse_explane),
-            style = MaterialTheme.typography.bodyLarge,
-        )
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .background(MaterialTheme.colorScheme.secondaryContainer),
+            contentAlignment = Alignment.Center
+        ){
+            Text(
+                text = stringResource(R.string.expanse_explane),
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 

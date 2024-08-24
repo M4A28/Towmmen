@@ -3,6 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.di
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.ExpanseDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.repository.ExpanseRepositoryImp
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.ClearExpanseData
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.DeleteExpanse
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.ExpanseUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.GetAllExpanse
@@ -46,6 +47,7 @@ object ExpanseModule {
             getExpansePerMonth =  GetExpansePerMonth(expanseRepo),
             getAvgExpanse = GetAvgExpanse(expanseRepo),
             getAvgExpansePerMonth = GetAvgExpansePerMonth(expanseRepo),
+            clearExpanseData = ClearExpanseData(expanseRepo)
         )
     }
 

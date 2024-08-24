@@ -69,7 +69,6 @@ import java.util.Locale
 @Composable
 fun EditProductScreen(navController: NavHostController){
     val productViewModel: ProductViewModel = hiltViewModel()
-    val products by productViewModel.products.collectAsState(initial = emptyList())
     val categoryViewModel: CategoryViewModel = hiltViewModel()
     val categoryList by categoryViewModel.getAllCategory().collectAsState(initial = emptyList())
     var code by remember { mutableStateOf("") }
@@ -83,7 +82,6 @@ fun EditProductScreen(navController: NavHostController){
         ?.savedStateHandle
         ?.get<Product?>(PRODUCT_KEY)?.let{ product ->
         EditProductContent(
-            modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer),
             editedProduct = product,
             onEditClick = {
                 productViewModel.updateProduct(it)
@@ -91,7 +89,6 @@ fun EditProductScreen(navController: NavHostController){
             onBackClick = { navController.popBackStack() },
             options = categoryList.map{ it.category},
             barCode = code,
-            allProducts = products,
             onBarcodeClick = { navigateToScreen(navController, Route.BarcodeScannerScreen.route) }
         )
     }
@@ -103,7 +100,6 @@ fun EditProductScreen(navController: NavHostController){
 fun EditProductContent(
     modifier: Modifier = Modifier,
     editedProduct: Product?,
-    allProducts: List<Product>,
     options: List<String>,
     barCode: String?,
     onEditClick: (Product) -> Unit,

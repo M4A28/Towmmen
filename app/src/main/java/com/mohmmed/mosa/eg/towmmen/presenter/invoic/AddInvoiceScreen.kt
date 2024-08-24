@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -46,6 +48,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.barcode.BarcodeAnalyzer
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
@@ -56,36 +62,72 @@ import com.mohmmed.mosa.eg.towmmen.presenter.barcode.ScannerOverlay
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.InvoiceItemCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
+import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 import com.mohmmed.mosa.eg.towmmen.util.generateInvoiceNumber
 import kotlinx.coroutines.delay
 import java.util.Date
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun AddInvoiceScreen(navController: NavHostController){
     val productsViewModel: ProductViewModel = hiltViewModel()
     val invoiceViewModel: InvoiceViewModel = hiltViewModel()
+    val customerViewModel: CustomerViewModel = hiltViewModel()
     val products by productsViewModel.products.collectAsState(initial = emptyList())
+    var cameraPermissionGranted by remember { mutableStateOf(false) }
+
+    val cameraPermissionState =
+        rememberPermissionState(permission = Manifest.permission.CAMERA)
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts
+            .RequestPermission()
+    ) { cameraPermissionGranted = it }
+    var customer by remember { mutableStateOf(
+        Customer(
+            customerId = -1,
+            name = "N/A",
+            email = "",
+            phone = "",
+            address = "",
+            registrationDate = Date(),
+            lastPurchaseDate = Date()
+        )
+    ) }
+
+    LaunchedEffect(cameraPermissionState) {
+        if (!cameraPermissionState.status.isGranted
+            && cameraPermissionState.status.shouldShowRationale
+        ) {
+            // todo enhance this
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+    }
 
     navController.previousBackStackEntry
         ?.savedStateHandle
-        ?.get<Customer?>(CUSTOMER_KEY)?.let { customer ->
-            AddInvoiceContent(products = products,
-                customer = customer,
-                onSaveInvoiceClick = {
-                invoice, item ->
-                invoiceViewModel.insertFullInvoice(invoice, item)
-                item.forEach{invoiceItem ->
-                    val edit = products.first { invoiceItem.productId == it.productId }
-                    edit.stockQuantity -= invoiceItem.quantity
-                    if(edit.stockQuantity >= 0) {
-                        productsViewModel.updateProduct(edit)
-                    }
-                }
-            })
-
+        ?.get<Customer?>(CUSTOMER_KEY)?.let {
+            customer = it
         }
+
+    AddInvoiceContent(products = products,
+        customer = customer,
+        onSaveInvoiceClick = {
+                invoice, item ->
+            invoiceViewModel.insertFullInvoice(invoice, item)
+            customerViewModel.updateCustomer(customer.copy(lastPurchaseDate = Date()))
+            item.forEach{invoiceItem ->
+                val edit = products.first { invoiceItem.productId == it.productId }
+                edit.stockQuantity -= invoiceItem.quantity
+                if(edit.stockQuantity >= 0) {
+                    productsViewModel.updateProduct(edit)
+                }
+            }
+        })
+
+
 }
 
 

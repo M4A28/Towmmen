@@ -1,9 +1,12 @@
 package com.mohmmed.mosa.eg.towmmen.data.module
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 import java.util.Date
 
+@Parcelize
 @Entity(tableName = "expanse")
 class Expanse(
     @PrimaryKey(autoGenerate = true)
@@ -11,4 +14,4 @@ class Expanse(
     var expanse: String,
     var payDate: Date,
     var amount: Double
-)
+): Parcelable

@@ -18,6 +18,8 @@ const val PRODUCT_KEY = "product_key"
 
 const val CUSTOMER_KEY = "customer_key"
 
+const val EXPANSE_KEY = "expanse_key"
+
 const val CUSTOMER_ID = "customer_id"
 
 const val NOTE_KEY = "note_key"
@@ -27,6 +29,7 @@ const val DEALER_KEY = "dealer_key"
 const val SCANNED_BARCODE = "scannedBarcode"
 
 const val APP_ENTRY_KEY = "app_entry"
+const val DB_NAME = "towwmen_db"
 const val INVOICE_KEY = "invoice_key"
 
 const val USER_SETTING = "USER_SETTING"

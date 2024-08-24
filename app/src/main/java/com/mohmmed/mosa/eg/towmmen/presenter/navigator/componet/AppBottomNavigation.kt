@@ -49,12 +49,6 @@ fun  AppBottomNavigation(
                         style = MaterialTheme.typography.labelSmall
                     )
                 },
-                /*colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                    indicatorColor = MaterialTheme.colorScheme.onPrimary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
-                    unselectedTextColor = MaterialTheme.colorScheme.onPrimary),*/
             )
         }
 

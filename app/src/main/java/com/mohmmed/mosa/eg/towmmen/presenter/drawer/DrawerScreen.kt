@@ -30,13 +30,15 @@ import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
 @Composable
 fun DrawerScreen(
     navController: NavController,
+    onNavigationItemClick: () -> Unit
 ){
-    var selectedNavigationItem by remember { mutableStateOf(NavigationItem.Home) }
+    var selectedNavigationItem by remember { mutableStateOf(NavigationItem.Share) }
     DrawerContent(
         navController = navController,
         selectedNavigationItem = selectedNavigationItem,
         onNavigationItemClick = {
             selectedNavigationItem = it
+            onNavigationItemClick()
         },
     )
 }
@@ -70,16 +72,16 @@ fun DrawerContent(navController: NavController,
             contentDescription = "Image"
         )
         Spacer(modifier = Modifier.height(40.dp))
-        NavigationItem.entries.toTypedArray().take(5).forEach { navigationItem ->
+        NavigationItem.entries.toTypedArray().take(4).forEach { navigationItem ->
             NavigationDrawerItem(
                 navigationItem = navigationItem,
                 selected = navigationItem == selectedNavigationItem,
                 onClick = {
                     onNavigationItemClick(navigationItem)
                     when(navigationItem){
-                        NavigationItem.Home -> {
+                       /* NavigationItem.Home -> {
                             navigateToTab(navController, Route.HomeScreen.route)
-                        }
+                        }*/
 
                         NavigationItem.Settings -> {
                             navigateToScreen(navController, Route.SettingScreen.route)
@@ -125,14 +127,4 @@ fun DrawerContent(navController: NavController,
         Spacer(modifier = Modifier.height(24.dp))
     }
 
-}
-
-private fun navigateToTab(navController: NavController, route: String){
-    navController.navigate(route = route){
-        navController.graph.startDestinationRoute?.let{
-            popUpTo(it){ saveState = true }
-            restoreState = true
-            launchSingleTop = true
-        }
-    }
 }

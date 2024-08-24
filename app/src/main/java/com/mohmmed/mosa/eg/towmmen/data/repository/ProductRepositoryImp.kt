@@ -77,6 +77,10 @@ class ProductRepositoryImp @Inject constructor(
         return productDao.getAveragePriceByMonth()
     }
 
+    override suspend fun clearProductsDate() {
+        productDao.clearProductsDate()
+    }
+
     override fun getTotalCostOfProducts(): Flow<Double?> {
         return productDao.getTotalCostOfProducts()
     }

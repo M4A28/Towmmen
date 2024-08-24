@@ -20,6 +20,7 @@ import com.patrykandpatrick.vico.compose.cartesian.decoration.rememberHorizontal
 import com.patrykandpatrick.vico.compose.cartesian.fullWidth
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
 import com.patrykandpatrick.vico.compose.common.ProvideVicoTheme
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
@@ -40,7 +41,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun CustomColumnChart(
+fun ProfitColumnChart(
     modifier: Modifier = Modifier,
     average: Double,
     profitByMonth: List<InvoiceProfitByMonth>
@@ -69,7 +70,7 @@ fun CustomColumnChart(
 
 
 @Composable
-fun CustomColumnChart2(
+fun ExpanseColumnChart(
     modifier: Modifier = Modifier,
     average: Double,
     expanseByMonth: List<ExpansePerMonth>
@@ -100,6 +101,7 @@ private fun ColumnChart(modelProducer: CartesianChartModelProducer,
                         decorations: List<Decoration>,
                         cartesianValueFormatter: CartesianValueFormatter
 ) {
+    val primeColor = MaterialTheme.colorScheme.primary
     ProvideVicoTheme(theme = rememberM3VicoTheme()) {
 
         CartesianChartHost(
@@ -108,25 +110,23 @@ private fun ColumnChart(modelProducer: CartesianChartModelProducer,
                 rememberColumnCartesianLayer(
                     ColumnCartesianLayer.ColumnProvider.series(
                         rememberLineComponent(
-                            color = MaterialTheme.colorScheme.primary,
-                            thickness = 12.dp,
+                            color = primeColor,
+                            thickness = 16.dp,
                             shape = remember { Shape.rounded(allPercent = 40) },
                         )
                     )
                 ),
                 startAxis = rememberStartAxis(),
-                bottomAxis =
-                rememberBottomAxis(
-                    //label = TextComponent(color = MaterialTheme.colorScheme.secondary.toArgb()),
+                bottomAxis = rememberBottomAxis(guideline = null,
                     valueFormatter = cartesianValueFormatter,
-                    itemPlacer =
-                    remember { HorizontalAxis.ItemPlacer.default(addExtremeLabelPadding = true) },
+                    itemPlacer = remember { HorizontalAxis.ItemPlacer.default(addExtremeLabelPadding = true) },
                 ),
                 marker = rememberMarker(),
                 horizontalLayout = HorizontalLayout.fullWidth(),
                 decorations = decorations,
             ),
             modelProducer = modelProducer,
+            zoomState = rememberVicoZoomState(zoomEnabled = true),
             modifier = modifier,
         )
     }

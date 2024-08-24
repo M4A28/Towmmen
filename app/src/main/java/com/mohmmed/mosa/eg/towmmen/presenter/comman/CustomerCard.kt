@@ -41,7 +41,7 @@ fun CustomerCard(
 
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(10.dp)
         ) {
             Text(text = customer.name,
                 style = MaterialTheme.typography.titleLarge)

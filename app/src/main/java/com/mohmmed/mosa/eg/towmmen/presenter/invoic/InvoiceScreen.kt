@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,50 +38,81 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.ConfirmationDialog
+import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
+import java.util.Locale
 
 
 @Composable
 fun InvoiceScreen(){
     val invoiceViewModel: InvoiceViewModel = hiltViewModel()
     val invoiceWithItem by invoiceViewModel.getAllInvoicesWithItems().collectAsState(initial = emptyList())
-    InvoiceContent(invoiceWithItem = invoiceWithItem)
+    val productsViewModel: ProductViewModel = hiltViewModel()
+    val allProducts by productsViewModel.products.collectAsState(initial = emptyList())
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var invoice by remember{ mutableStateOf<Invoice?>(null) }
+    var invoiceWithItems_ by remember{ mutableStateOf<InvoiceWithItems?>(null) }
+
+    InvoiceContent(
+        invoiceWithItem = invoiceWithItem,
+        onDelete = {invoiceWithItems ->
+            invoiceWithItems_ = invoiceWithItems
+            invoice = invoiceWithItems.invoice
+            showDeleteDialog = !showDeleteDialog
+                   },
+        onEdit = { // todo
+             },
+    )
+    if(showDeleteDialog){
+        ConfirmationDialog(
+            title = stringResource(R.string.delet_invoice),
+            text = stringResource(R.string.invoice_delete_warring),
+            dismissText = stringResource(id = R.string.cancel),
+            confirmText = stringResource(id = R.string.delete),
+            onConfirm = {
+                invoiceWithItems_?.let{
+                    it.items.forEach { item ->
+                        val product = allProducts.first { it.productId == item.productId }
+                        product.stockQuantity += item.quantity
+                        productsViewModel.updateProduct(product)
+                    }
+                    invoiceViewModel.deleteInvoice(it.invoice)
+
+                }
+                showDeleteDialog = !showDeleteDialog
+            },
+            onDismiss = { showDeleteDialog = !showDeleteDialog }
+    )
+}
 }
 
 @Composable
 fun InvoiceContent(
     modifier: Modifier = Modifier,
-    invoiceWithItem: List<InvoiceWithItems>
+    invoiceWithItem: List<InvoiceWithItems>,
+    onDelete:(InvoiceWithItems) -> Unit,
+    onEdit :(InvoiceWithItems) -> Unit
 ){
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
     ) {
         items(invoiceWithItem,
-            key ={
+            key = {
             it.invoice.invoiceId
-        } ){
-            InvoiceCard(
-                invoice = it.invoice,
-                invoiceItems = it.items,
-                onDeleteClick ={
-                   // todo
+        } ){ invoiceWithItems->
 
-            },
-                onEditClick = {
-                    // todo
-                })
+            InvoiceCard(
+                invoice = invoiceWithItems.invoice,
+                invoiceItems = invoiceWithItems.items,
+                onDeleteClick ={onDelete(invoiceWithItems)},
+                onEditClick = {onEdit(invoiceWithItems)})
         }
     }
 
 }
-
-
-
-
-
-
 
 @Composable
 fun InvoiceCard(invoice: Invoice,
@@ -89,13 +121,12 @@ fun InvoiceCard(invoice: Invoice,
                 onDeleteClick: (Invoice) -> Unit = {}
 ) {
 
-    val quantity by remember { mutableStateOf(5) }
     var showItems by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp, horizontal = 8.dp)
+            .padding(vertical = 8.dp, horizontal = 8.dp)
             .clickable { showItems = !showItems },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp),
@@ -107,23 +138,37 @@ fun InvoiceCard(invoice: Invoice,
                 .padding(10.dp)
         ) {
 
-            Text(
-                text = stringResource(id = R.string.invoice_number, invoice.invoiceId) ,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(id = R.string.invoice),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = invoice.invoiceId,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+            Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = stringResource(id = R.string.invoice_date, dateToString(invoice.date, "yyyy-MM-dd hh:mm")) ,
+                text = stringResource(id = R.string.invoice_date,
+                    dateToString(invoice.date,
+                        pattern = "yyyy MMMM dd",
+                        locale = Locale.getDefault())) ,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodyMedium
             )
 
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
                 text = invoice.customerName,
-                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -133,7 +178,7 @@ fun InvoiceCard(invoice: Invoice,
             Text(
                 text = stringResource(id = R.string.total, invoice.totalAmount),
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium
             )
 

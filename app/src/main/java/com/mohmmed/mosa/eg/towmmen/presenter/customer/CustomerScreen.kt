@@ -123,7 +123,11 @@ fun CustomerContent(
                     ModernSearchBar(
                         searchQuery = searchQuery,
                         onSearchQueryChange = { searchQuery = it },
-                        modifier = Modifier.padding(bottom = 10.dp, top = paddingValue.calculateTopPadding())
+                        modifier = Modifier.padding(
+                            top = paddingValue.calculateTopPadding(),
+                            bottom = 10.dp,
+                            start = 16.dp,
+                            end = 16.dp )
                     )
                 }
 

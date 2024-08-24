@@ -58,5 +58,11 @@ class ExpanseViewModel @Inject constructor(
         .getAvgExpansePerMonth()
         .stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
 
+    fun clearExpanseData(){
+        viewModelScope.launch (Dispatchers.IO){
+            expanseUseCases.clearExpanseData()
+        }
+    }
+
 
 }

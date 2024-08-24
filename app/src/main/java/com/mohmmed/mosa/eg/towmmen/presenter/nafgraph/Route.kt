@@ -24,6 +24,7 @@ sealed class Route(
 
     object AddCategoryScreen: Route(route = "addCategoryScreen")
     object AddExpanseScreen: Route(route = "addExpanseScreen")
+    object EditExpanseScreen: Route(route = "editExpanseScreen")
     object ProductFullInfoScreen: Route(route = "productFullInfoScreen")
     object EditProductScreen: Route(route = "editProductScreen")
     object EditCustomerScreen: Route(route = "editCustomerScreen")

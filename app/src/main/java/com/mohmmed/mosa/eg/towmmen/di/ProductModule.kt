@@ -4,6 +4,7 @@ import com.mohmmed.mosa.eg.towmmen.data.local.dao.ProductDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.repository.ProductRepositoryImp
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.AddNewProduct
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ClearProductData
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.DeleteProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetAllProducts
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.GetAveragePrice
@@ -65,7 +66,8 @@ object ProductModule {
             getMinPrice = GetMinPrice(productRepositoryImp),
             getMaxPrice = GetMaxPrice(productRepositoryImp),
             getAveragePriceByMonth = GetAveragePriceByMonth(productRepositoryImp),
-            getProductById = GetProductById(productRepositoryImp)
+            getProductById = GetProductById(productRepositoryImp),
+            clearProductData = ClearProductData(productRepositoryImp)
         )
     }
 }

@@ -61,6 +61,8 @@ interface InvoiceRepository {
     fun getInvoiceByCustomer(customerName: String): Flow<List<Invoice>>
 
     fun getAvgInvoicePerMonth(): Flow<Double?>
+    suspend fun clearInvoiceDate()
+
 
 
 }

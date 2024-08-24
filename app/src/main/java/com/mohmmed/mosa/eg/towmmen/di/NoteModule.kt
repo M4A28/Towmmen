@@ -3,6 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.di
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.NoteDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.repository.NoteRepositoryImp
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.note.ClearNoteDate
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.note.DeleteNote
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.note.GetAllNote
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.note.GetNote
@@ -39,7 +40,8 @@ object NoteModule {
             deleteNote = DeleteNote(noteRepository),
             updateNote = UpdateNote(noteRepository),
             getAllNote = GetAllNote(noteRepository),
-            getNote = GetNote(noteRepository)
+            getNote = GetNote(noteRepository),
+            clearNoteDate = ClearNoteDate(noteRepository)
 
         )
     }

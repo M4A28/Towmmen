@@ -38,7 +38,7 @@ class ProductViewModel @Inject constructor(
 
 
     fun getProductExpiredIn2Week(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val calendar = Calendar.getInstance()
             val today = calendar.time
             calendar.add(Calendar.DAY_OF_YEAR, 7)
@@ -56,6 +56,8 @@ class ProductViewModel @Inject constructor(
         return productUseCase.getProductsExpiringBetween(startDate, endDate)
     }
 
+
+
     fun addNewProduct(product: Product){
         viewModelScope.launch(Dispatchers.IO) {
             productUseCase.addNewProduct(product)
@@ -71,7 +73,7 @@ class ProductViewModel @Inject constructor(
     }
 
     fun updateProduct(product: Product){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             productUseCase.updateProduct(product)
         }
     }
@@ -110,6 +112,12 @@ class ProductViewModel @Inject constructor(
 
     fun getAveragePriceByMonth(): Flow<List<MonthlyAvgPrice>> {
         return productUseCase.getAveragePriceByMonth()
+    }
+
+    fun clearProducts(){
+        viewModelScope.launch(Dispatchers.IO) {
+            productUseCase.clearProductData()
+        }
     }
 
 

@@ -14,4 +14,6 @@ interface NoteRepository {
     fun getAllNote(): Flow<List<Note>>
 
     fun getNote(note: String): Flow<List<Note>>
+    suspend fun clearNotesDate()
+
 }

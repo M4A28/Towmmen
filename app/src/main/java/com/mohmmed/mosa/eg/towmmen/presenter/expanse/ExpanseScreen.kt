@@ -34,12 +34,14 @@ import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Expanse
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToTab
+import com.mohmmed.mosa.eg.towmmen.util.EXPANSE_KEY
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
+import java.util.Locale
 
-// todo enhance this
 
 @Composable
 fun ExpanseScreen(navController: NavHostController){
@@ -51,7 +53,10 @@ fun ExpanseScreen(navController: NavHostController){
     ExpanseContent(
         expanseItem = expanseItems,
         onAddFapClick = { navigateToTab(navController, Route.AddExpanseScreen.route) },
-        onEditClick = { /*todo move to edit screen*/ },
+        onEditClick = {
+            navController.currentBackStackEntry?.savedStateHandle?.set(EXPANSE_KEY, it)
+            navController.navigate(Route.EditExpanseScreen.route)
+        },
         onDeleteClick = {expanseViewModel.deleteExpanse(it)}
     )
 }
@@ -73,31 +78,37 @@ fun ExpanseContent(
             }
         }
     ) { paddingValue ->
-        LazyColumn(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = paddingValue.calculateTopPadding(), end = 8.dp, start = 8.dp)
-        ) {
-            
-            items(expanseItem, key = {it.expanseId}){ expanse ->
-                 ExpanseItemCard(
-                     expanse = expanse,
-                     onDeleteClick = {showDeleteDialog = !showDeleteDialog },
-                     onEditClick = {onEditClick(expanse)}
-                 )
-                if(showDeleteDialog){
-                    DeleteConfirmationDialog(
-                        title = stringResource(R.string.delete_expanse),
-                        massage = stringResource(R.string.warring_delete_expanse),
-                        onConfirm = {
-                            onDeleteClick(expanse)
-                            showDeleteDialog = !showDeleteDialog
-                                    },
-                        onDismiss = {showDeleteDialog = !showDeleteDialog }
+        if(expanseItem.isNotEmpty()){
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .padding(top = paddingValue.calculateTopPadding(), end = 8.dp, start = 8.dp)
+            ) {
+
+                items(expanseItem, key = {it.expanseId}){ expanse ->
+                    ExpanseItemCard(
+                        expanse = expanse,
+                        onDeleteClick = {showDeleteDialog = !showDeleteDialog },
+                        onEditClick = {onEditClick(expanse)}
                     )
+                    if(showDeleteDialog){
+                        DeleteConfirmationDialog(
+                            title = stringResource(R.string.delete_expanse),
+                            massage = stringResource(R.string.warring_delete_expanse),
+                            onConfirm = {
+                                onDeleteClick(expanse)
+                                showDeleteDialog = !showDeleteDialog
+                            },
+                            onDismiss = {showDeleteDialog = !showDeleteDialog }
+                        )
+                    }
+
                 }
-                
             }
+        } else{
+            EmptyScreen(massage = stringResource(id = R.string.no_expanse),
+                icon = R.drawable.cash, alphaAnim = 0.3f)
         }
+
     }
 }
 
@@ -126,7 +137,9 @@ fun ExpanseItemCard(
                 Text(text = formatCurrency(expanse.amount), style = MaterialTheme.typography.titleLarge)
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = dateToString(expanse.payDate, "yyyy MMMM dd"), style = MaterialTheme.typography.bodyMedium)
+            Text(text = dateToString(expanse.payDate,
+                "yyyy MMMM dd",
+                        locale = Locale.getDefault()), style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -124,6 +124,9 @@ interface InvoiceDao {
     @Delete
     suspend fun deleteInvoiceItem(item: InvoiceItem)
 
+    @Query("DELETE FROM invoices")
+    suspend fun clearInvoiceDate()
+
     @Query("DELETE FROM invoices WHERE invoiceId = :invoiceId")
     suspend fun deleteInvoiceById(invoiceId: String)
 

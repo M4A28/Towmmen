@@ -18,6 +18,8 @@ interface CustomerRepository {
     fun getCustomerCount(): Flow<Int?>
 
     fun getCustomerById(id: Int): Flow<Customer>
+    suspend fun clearCustomersDate()
+
 
 
 }

@@ -3,6 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.di
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.DealerDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.repository.DealerRepositoryImp
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.dealer.ClearDealerData
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.dealer.DealerUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.dealer.DeleteDealer
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.dealer.GetAllDealers
@@ -39,6 +40,7 @@ object DealerModule {
             deleteDealer = DeleteDealer(dealerRepositoryImp),
             getAllDealers = GetAllDealers(dealerRepositoryImp),
             getDealerById = GetDealerById(dealerRepositoryImp),
+            clearDealerData = ClearDealerData(dealerRepositoryImp)
         )
     }
 

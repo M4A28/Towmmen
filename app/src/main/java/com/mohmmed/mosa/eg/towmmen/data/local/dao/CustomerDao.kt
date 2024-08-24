@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +39,10 @@ interface CustomerDao{
 
     @Query("SELECT Count(*) FROM customers")
     fun getCustomersCount(): Flow<Int?>
+
+
+    @Query("DELETE FROM customers")
+    suspend fun clearCustomersDate()
 
 
 }

@@ -11,6 +11,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.InvoiceUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.AppEntryUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -117,6 +118,13 @@ class InvoiceViewModel @Inject constructor(
     val avgInvoicePerMonth : StateFlow<Double?> = invoiceUseCases
         .getAvgInvoicePerMonth()
         .stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
+
+
+    fun clearInvoiceData(){
+        viewModelScope.launch(Dispatchers.IO) {
+            invoiceUseCases.clearInvoiceData()
+        }
+    }
 
 
 

@@ -20,4 +20,8 @@ class CategoryRepositoryImp @Inject constructor(
     override fun getAllCategory(): Flow<List<Category>> {
         return categoryDao.getAllCategory()
     }
+
+    override suspend fun clearCategoryDate() {
+        categoryDao.clearCategoryDate()
+    }
 }

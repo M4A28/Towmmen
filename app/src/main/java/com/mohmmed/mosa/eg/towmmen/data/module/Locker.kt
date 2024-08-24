@@ -12,3 +12,13 @@ data class Locker(
     val transActionDate: Date,
     val transActionAmount: Double
 )
+
+
+enum class TransActionType{
+    ADD,
+    SUB,
+    SELL,
+    RETURN,
+    BUY,
+    EXPANSE
+}

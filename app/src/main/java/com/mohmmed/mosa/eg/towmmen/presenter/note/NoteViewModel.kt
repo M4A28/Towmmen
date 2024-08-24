@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mohmmed.mosa.eg.towmmen.data.module.Note
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.note.NoteUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,6 +37,12 @@ class NoteViewModel @Inject constructor(
     fun updateNote(note: Note){
         viewModelScope.launch {
             noteUseCases.updateNote(note)
+        }
+    }
+
+    fun clearNoteDate(){
+        viewModelScope.launch(Dispatchers.IO) {
+            noteUseCases.clearNoteDate()
         }
     }
 

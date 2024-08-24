@@ -31,13 +31,15 @@ import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.expanse.ExpanseViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.CustomColumnChart
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.CustomColumnChart2
+import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ExpanseColumnChart
+import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ProfitColumnChart
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.SimpleStatCard
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.StatisticItem
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.TopProductsList
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.TransactionItem
+import com.mohmmed.mosa.eg.towmmen.util.ONE_MONTH
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
+import java.util.Date
 
 
 @Composable
@@ -55,11 +57,13 @@ fun HomeScreen() {
     val expanseAvg by expanseViewModel.avgExpansePerMonth.collectAsState()
     val totalCustomers by customerViewModel.getCustomerCount().collectAsState(initial = 0)
     val topProduct by invoiceViewModel.getTopSellingItem().collectAsState(initial = emptyList())
+
     val expansePerMonth by expanseViewModel
         .getExpansePerMonth()
         .collectAsState(initial = listOf(ExpansePerMonth("", 0.0)))
     val latestTransaction by invoiceViewModel.getAllInvoices()
         .collectAsState(initial = emptyList())
+
 
 
     val statisticItems = listOf(
@@ -104,7 +108,7 @@ fun HomeScreen() {
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium
                 )
-                CustomColumnChart(average = avgInvoice?: 0.0 , profitByMonth = invoiceProfitByMonth.ifEmpty { emptyProfit })
+                ProfitColumnChart(average = avgInvoice?: 0.0 , profitByMonth = invoiceProfitByMonth.ifEmpty { emptyProfit })
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -113,7 +117,7 @@ fun HomeScreen() {
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium
                 )
-                CustomColumnChart2(average = expanseAvg?: 0.0,
+                ExpanseColumnChart(average = expanseAvg?: 0.0,
                     expanseByMonth = expansePerMonth.ifEmpty { emptyExpanse })
 
             }

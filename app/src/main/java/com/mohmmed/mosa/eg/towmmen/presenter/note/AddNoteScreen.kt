@@ -1,6 +1,5 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.note
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,9 +18,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Note
 
@@ -42,22 +41,23 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Note
 @Composable
 fun AddNoteScreen(
     modifier: Modifier = Modifier,
-    onAddClick: (Note) -> Unit
 ) {
+
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var titleError by remember { mutableStateOf("") }
     var contentError by remember { mutableStateOf("") }
+    val noteViewModel: NoteViewModel = hiltViewModel()
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFF2F3F3))
             .padding(4.dp)
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(6.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             shape = RoundedCornerShape(8.dp)
         ) {
             Column {
@@ -65,14 +65,12 @@ fun AddNoteScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFFAFAFA))
                         .padding(15.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.insert_note),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF16191F)
                     )
                 }
 
@@ -83,10 +81,9 @@ fun AddNoteScreen(
                     Text(
                         text = stringResource(R.string.title),
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF16191F),
                         modifier = Modifier.padding(bottom = 5.dp)
                     )
-                    OutlinedTextField(
+                    TextField(
                         value = title,
                         onValueChange = {
                             title = it
@@ -95,10 +92,6 @@ fun AddNoteScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 5.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = Color(0xFFD5DBDB),
-                        ),
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Next
                         ),
@@ -107,7 +100,7 @@ fun AddNoteScreen(
                     if (titleError.isNotEmpty()) {
                         Text(
                             text = titleError,
-                            color = Color(0xFFD13212),
+                            color =  MaterialTheme.colorScheme.error,
                             fontSize = 12.sp,
                             modifier = Modifier.padding(bottom = 10.dp)
                         )
@@ -116,10 +109,9 @@ fun AddNoteScreen(
                     Text(
                         text = stringResource(R.string.content),
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF16191F),
                         modifier = Modifier.padding(bottom = 5.dp)
                     )
-                    OutlinedTextField(
+                    TextField(
                         value = content,
                         onValueChange = {
                             content = it
@@ -129,22 +121,19 @@ fun AddNoteScreen(
                             .fillMaxWidth()
                             .height(100.dp)
                             .padding(bottom = 5.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = Color(0xFFD5DBDB),
-                        ),
                         isError = contentError.isNotEmpty()
                     )
                     Text(
                         text = "${content.length} / 1000 characters",
-                        color = if (content.length > 1000) Color(0xFFD13212) else Color(0xFF687078),
+                        color = if (content.length > 1000)  MaterialTheme.colorScheme.error
+                        else  MaterialTheme.colorScheme.primary,
                         fontSize = 12.sp,
                         modifier = Modifier.align(Alignment.End)
                     )
                     if (contentError.isNotEmpty()) {
                         Text(
                             text = contentError,
-                            color = Color(0xFFD13212),
+                            color = MaterialTheme.colorScheme.error,
                             fontSize = 12.sp,
                             modifier = Modifier.padding(bottom = 10.dp)
                         )
@@ -155,13 +144,12 @@ fun AddNoteScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFFAFAFA))
                         .padding(15.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
                     Button(
                         onClick = { /* Handle cancel logic */ },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                        colors = ButtonDefaults.buttonColors(containerColor =  MaterialTheme.colorScheme.surface),
                         border = ButtonDefaults.outlinedButtonBorder,
                     ) {
                         Text(
@@ -186,7 +174,7 @@ fun AddNoteScreen(
                                     note = content,
                                     importance = 0
                                 )
-                                onAddClick(note)
+                                noteViewModel.addtNote(note)
                                 title = ""
                                 content = ""
 

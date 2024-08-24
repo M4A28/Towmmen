@@ -18,6 +18,7 @@ data class ProductUseCases(
     val getMinPrice: GetMinPrice,
     val getMaxPrice: GetMaxPrice,
     val getAveragePriceByMonth: GetAveragePriceByMonth,
-    val getProductById: GetProductById
+    val getProductById: GetProductById,
+    val clearProductData: ClearProductData
 )
 

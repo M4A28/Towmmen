@@ -22,6 +22,8 @@ interface DealerDao {
     @Query("SELECT * FROM dealers WHERE dealerId = :dealerId")
     fun getDealerById(dealerId: Int): Flow<Dealer>
 
+    @Query("DELETE FROM dealers")
+    suspend fun clearDealersDate()
     // todo add some statist like most purchaers from dealer
 
 }
