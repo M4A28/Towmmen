@@ -31,23 +31,23 @@ fun CustomerInvoiceScreen(navController: NavHostController){
     val productsViewModel: ProductViewModel = hiltViewModel()
     val allProducts by productsViewModel.products.collectAsState(initial = emptyList())
     var invoice by remember{ mutableStateOf<Invoice?>(null) }
-    var invoiceWithItems by remember{ mutableStateOf<InvoiceWithItems?>(null) }
+    var mInvoiceWithItems by remember{ mutableStateOf<InvoiceWithItems?>(null) }
 
     navController
         .previousBackStackEntry
         ?.savedStateHandle
         ?.get<Int?>(CUSTOMER_ID)?.let {
-            val invoices by invoiceViewModel
+            val invoiceWithItem by invoiceViewModel
                 .getInvoicesWithItemsByCustomerId(it)
                 .collectAsState(initial = emptyList())
             CustomerInvoiceContent(
-                invoices = invoices,
+                invoiceWithItem = invoiceWithItem,
                 onEdit = {
                          // todo
                 },
                 onDelete = {
                         items ->
-                    invoiceWithItems = items
+                    mInvoiceWithItems = items
                     invoice = items.invoice
                     showDeleteDialog = !showDeleteDialog
                 }
@@ -60,7 +60,7 @@ fun CustomerInvoiceScreen(navController: NavHostController){
             dismissText = stringResource(id = R.string.cancel),
             confirmText = stringResource(id = R.string.delete),
             onConfirm = {
-                invoiceWithItems?.let{
+                mInvoiceWithItems?.let{
                     it.items.forEach { item ->
                         val product = allProducts.first { it.productId == item.productId }
                         product.stockQuantity += item.quantity
@@ -81,17 +81,17 @@ fun CustomerInvoiceScreen(navController: NavHostController){
 @Composable
 fun CustomerInvoiceContent(
     modifier: Modifier = Modifier,
-    invoices: List<InvoiceWithItems>,
+    invoiceWithItem: List<InvoiceWithItems>,
     onEdit: (InvoiceWithItems) -> Unit,
     onDelete: (InvoiceWithItems) -> Unit
 ){
-    if(invoices.isNotEmpty()){
+    if(invoiceWithItem.isNotEmpty()){
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
         ) {
 
-            items(invoices,
+            items(invoiceWithItem,
                 key = { it.invoice.invoiceId }
             ){ invoiceWithItems ->
                 InvoiceCard(

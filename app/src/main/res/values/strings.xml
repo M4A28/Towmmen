@@ -227,4 +227,8 @@
     <string name="edit_expanse">edit expanse</string>
     <string name="database_restored">database has restored</string>
     <string name="restore">Restore</string>
+    <string name="greeting_good_evening">Good evening &#127749;</string>
+    <string name="greeting_good_morning">Good morning &#127774;</string>
+    <string name="greeting_good_night">Good night &#127770;</string>
+    <string name="greeting_noon">Howdy &#129312;</string>
 </resources>

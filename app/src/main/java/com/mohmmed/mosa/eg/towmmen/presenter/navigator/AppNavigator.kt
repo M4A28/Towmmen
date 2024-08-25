@@ -11,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -24,7 +23,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -34,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.presenter.barcode.BarcodeScannerScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.DynamicGreetingTitle
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.AddNewCustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerInvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerScreen
@@ -147,9 +146,10 @@ fun AppNavigator() {
                                     modifier = Modifier.fillMaxWidth(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text(
+                                   /* Text(
                                         text = stringResource(id = R.string.app_name)
-                                    )
+                                    )*/
+                                    DynamicGreetingTitle()
 
                                 }
                             },

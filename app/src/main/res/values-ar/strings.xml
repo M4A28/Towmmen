@@ -246,5 +246,9 @@
     <string name="edit_expanse">تعديل المصروفات</string>
     <string name="database_restored">تم استعادة قاعدة البيانات</string>
     <string name="restore">استعادة</string>
+    <string name="greeting_good_evening">مساء الخير &#127749;</string>
+    <string name="greeting_good_morning">صباح الخير &#127774;</string>
+    <string name="greeting_good_night">يسعد مساك &#127770;</string>
+    <string name="greeting_noon">نهارك سعيد &#129312;</string>
 
 </resources>
