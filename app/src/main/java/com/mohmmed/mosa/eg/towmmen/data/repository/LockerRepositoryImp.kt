@@ -17,6 +17,10 @@ class LockerRepositoryImp @Inject constructor(
         lockerDao.deleteLockerTransaction(locker)
     }
 
+    override suspend fun clearLocker() {
+        lockerDao.clearLocker()
+    }
+
     override fun getAllLockerTransactions(): Flow<List<Locker>> {
         return lockerDao.getAllLockerTransactions()
     }

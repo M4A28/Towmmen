@@ -3,6 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.note
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,14 +30,14 @@ import com.mohmmed.mosa.eg.towmmen.presenter.comman.ConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.NoteCard
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
 import com.mohmmed.mosa.eg.towmmen.util.NOTE_KEY
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NoteScreen(
-    navController: NavHostController,
-    onFapClick:() -> Unit
+    navController: NavHostController
 ){
     val noteViewModel: NoteViewModel = hiltViewModel()
     val notes by noteViewModel
@@ -59,7 +60,7 @@ fun NoteScreen(
             note = it
         },
         onFapClick = {
-            onFapClick()
+            navigateToScreen(navController, Route.AddNoteScreen.route)
         }
     )
     if(showDeleteDialog){
@@ -118,11 +119,11 @@ fun NoteContent(
             }
 
         }
-    ) {
+    ) {innerPadding ->
 
         if(notes.isNotEmpty()){
             LazyColumn(
-                modifier = modifier
+                modifier = modifier.padding(innerPadding)
             ) {
                 items(notes.size){
 

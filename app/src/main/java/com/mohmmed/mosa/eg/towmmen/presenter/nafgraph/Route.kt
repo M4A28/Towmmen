@@ -21,6 +21,9 @@ sealed class Route(
     object DealerFullInfoScreen: Route(route = "dealerFullInfoScreen")
     object DealerPurchasesScreen: Route(route = "dealerPurchasesScreen")
     object DealerEditInfoScreen: Route(route = "dealerEditInfoScreen")
+    object EditLockerScreen: Route(route = "editLockerScreen")
+    object AddLockerScreen: Route(route = "addLockerScreen")
+    object LockerScreen: Route(route = "lockerScreen")
 
     object AddCategoryScreen: Route(route = "addCategoryScreen")
     object AddExpanseScreen: Route(route = "addExpanseScreen")

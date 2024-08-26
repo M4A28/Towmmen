@@ -49,6 +49,8 @@ import com.mohmmed.mosa.eg.towmmen.presenter.expanse.AddExpanseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.expanse.EditExpanseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.home.HomeScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.AddInvoiceScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.locker.AddLockerTransactionScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.locker.LockerTransactionsScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.componet.AppBottomNavigation
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.componet.BottomNavigationItem
@@ -228,6 +230,14 @@ fun AppNavigator() {
                         CustomerInvoiceScreen(navController)
                     }
 
+                    composable(route = Route.LockerScreen.route){
+                        LockerTransactionsScreen(navController)
+                    }
+
+                    composable(route = Route.AddLockerScreen.route){
+                        AddLockerTransactionScreen()
+                    }
+
                     composable(route = Route.CustomerFullInfoScreen.route){
                         FullCustomerInfoScreen(navController)
                     }
@@ -238,12 +248,7 @@ fun AppNavigator() {
 
 
                     composable(route = Route.ProductScreen.route){
-                        ProductsScreen(
-                            onProductClick = { product -> navigateToProductDetails(navController, product) },
-                            onFapClick = {
-                                navigateToScreen(navController, Route.AddProductScreen.route)
-                            }
-                        )
+                        ProductsScreen(navController)
                     }
                     composable(route = Route.AddProductScreen.route){
                         AddNewProductScreen(navController)
@@ -261,13 +266,7 @@ fun AppNavigator() {
                     }
 
                     composable(route = Route.NoteScreen.route){
-                        NoteScreen(
-                            navController = navController,
-                            onFapClick = {
-                                navigateToScreen(navController, Route.AddNoteScreen.route)
-                            }
-
-                        )
+                        NoteScreen(navController = navController)
                     }
 
 

@@ -57,7 +57,9 @@ import com.mohmmed.mosa.eg.towmmen.data.barcode.BarcodeAnalyzer
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
+import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.data.module.TransactionType
 import com.mohmmed.mosa.eg.towmmen.presenter.barcode.ScannerOverlay
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.InvoiceItemCard
@@ -72,9 +74,11 @@ import java.util.Date
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun AddInvoiceScreen(navController: NavHostController){
+    // todo refactor this
     val productsViewModel: ProductViewModel = hiltViewModel()
     val invoiceViewModel: InvoiceViewModel = hiltViewModel()
     val customerViewModel: CustomerViewModel = hiltViewModel()
+    val canSaveSell  by invoiceViewModel.canSaveSellToDb.collectAsState()
     val products by productsViewModel.products.collectAsState(initial = emptyList())
     var cameraPermissionGranted by remember { mutableStateOf(false) }
 
@@ -116,14 +120,24 @@ fun AddInvoiceScreen(navController: NavHostController){
         customer = customer,
         onSaveInvoiceClick = {
                 invoice, item ->
+            val purchaseDate = Date()
             invoiceViewModel.insertFullInvoice(invoice, item)
-            customerViewModel.updateCustomer(customer.copy(lastPurchaseDate = Date()))
+            customerViewModel.updateCustomer(customer.copy(lastPurchaseDate = purchaseDate))
             item.forEach{invoiceItem ->
                 val edit = products.first { invoiceItem.productId == it.productId }
                 edit.stockQuantity -= invoiceItem.quantity
                 if(edit.stockQuantity >= 0) {
                     productsViewModel.updateProduct(edit)
                 }
+            }
+            if(canSaveSell){
+                invoiceViewModel.upsertLockerTransaction(Locker(
+                    transActonId = 0,
+                    transActionType = TransactionType.SELL.name,
+                    transActionDate = purchaseDate,
+                    transActionAmount = invoice.totalAmount,
+                    transActionNote = invoice.invoiceId
+                ))
             }
         })
 
@@ -147,7 +161,8 @@ fun AddInvoiceContent(
     val context = LocalContext.current
     var invoiceId = generateInvoiceNumber()
     var invoiceDate = Date()
-    val mediaPlayer = remember { MediaPlayer.create(context, R.raw.scanner_beep) }
+    val scannerSound = remember { MediaPlayer.create(context, R.raw.scanner_beep) }
+    val cashierSound = remember { MediaPlayer.create(context, R.raw.cashier_chingquot) }
 
     Scaffold (
         topBar = {
@@ -171,14 +186,14 @@ fun AddInvoiceContent(
                         // Clean up MediaPlayer when leaving the composition
                         DisposableEffect(Unit) {
                             onDispose {
-                                mediaPlayer.release()
+                                scannerSound.release()
                             }
                         }
 
                         LaunchedEffect(barcodeValue) {
                             if(barcodeValue.isNotEmpty()){
                                 try{
-                                    mediaPlayer.start()
+                                    scannerSound.start()
                                     delay(500L)
                                     barcodeValue = ""
                                 }catch (e: Exception){
@@ -300,6 +315,11 @@ fun AddInvoiceContent(
                     showInvoiceDialog = !showInvoiceDialog
                     onSaveInvoiceClick(finalInvoice!!, invoiceItem.toList())
                     invoiceItem = mutableSetOf()
+                    try{
+                        cashierSound.start()
+                    }catch (e: Exception){
+                        e.printStackTrace()
+                    }
                 })
         }
     }

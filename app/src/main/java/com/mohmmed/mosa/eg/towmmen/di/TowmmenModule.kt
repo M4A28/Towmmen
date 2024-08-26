@@ -7,6 +7,7 @@ import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_5_6
 import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_6_7
 import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_7_8
+import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_8_9
 import com.mohmmed.mosa.eg.towmmen.util.DB_NAME
 
 import dagger.Module
@@ -30,7 +31,10 @@ object TowmmenModule {
             klass = TowmmenDatabase::class.java,
             name = DB_NAME)
             .addTypeConverter(DateTypeConverter())
-            .addMigrations(migration_5_6, migration_6_7, migration_7_8)
+            .addMigrations(migration_5_6,
+                migration_6_7,
+                migration_7_8,
+                migration_8_9)
             .fallbackToDestructiveMigration()
             .build()
     }

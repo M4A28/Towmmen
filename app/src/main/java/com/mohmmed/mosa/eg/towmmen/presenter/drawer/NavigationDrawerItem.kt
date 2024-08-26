@@ -39,6 +39,11 @@ enum class NavigationItem(
         title = R.string.profit
     ),
 
+    Locker(
+        icon = R.drawable.locker,
+        title = R.string.locker
+    ),
+
     Category(
         icon = R.drawable.category,
         title = R.string.category

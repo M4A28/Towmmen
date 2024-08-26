@@ -5,5 +5,6 @@ data class LockerUseCases(
     val deleteLocker: DeleteLocker,
     val getAllLocker: GetAllLocker,
     val getSubLocker: GetSubLocker,
-    val getAddLocker: GetAddLocker
+    val getAddLocker: GetAddLocker,
+    val clearLocker: ClearLocker,
 )

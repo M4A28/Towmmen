@@ -10,15 +10,15 @@ data class Locker(
     val transActonId: Int,
     val transActionType: String,
     val transActionDate: Date,
-    val transActionAmount: Double
+    val transActionAmount: Double,
+    val transActionNote: String = ""
 )
 
 
-enum class TransActionType{
+enum class TransactionType{
     ADD,
-    SUB,
+    DISCOUNT,
     SELL,
-    RETURN,
     BUY,
-    EXPANSE
+    UNDEFINED
 }

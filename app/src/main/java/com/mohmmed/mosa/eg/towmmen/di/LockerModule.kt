@@ -3,6 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.di
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.LockerDao
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.repository.LockerRepositoryImp
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.ClearLocker
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.DeleteLocker
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.GetAddLocker
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.GetAllLocker
@@ -39,7 +40,8 @@ object LockerModule {
             deleteLocker = DeleteLocker(lockerRepository),
             getAllLocker = GetAllLocker(lockerRepository),
             getSubLocker = GetSubLocker(lockerRepository),
-            getAddLocker = GetAddLocker(lockerRepository)
+            getAddLocker = GetAddLocker(lockerRepository),
+           clearLocker = ClearLocker(lockerRepository),
         )
     }
 

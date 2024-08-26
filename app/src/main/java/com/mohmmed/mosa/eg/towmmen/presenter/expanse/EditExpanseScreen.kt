@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -31,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -84,11 +86,12 @@ fun EditExpanseContent(
 
     Column(modifier = modifier
         .fillMaxSize()
-        .padding(4.dp)) {
-
+        .clip(RoundedCornerShape(8.dp))
+       ) {
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
+            modifier = Modifier.padding(8.dp),
             text = stringResource(R.string.expanse_explane),
             style = MaterialTheme.typography.bodyLarge,
         )

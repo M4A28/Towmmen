@@ -72,16 +72,16 @@ fun DrawerContent(navController: NavController,
             contentDescription = "Image"
         )
         Spacer(modifier = Modifier.height(40.dp))
-        NavigationItem.entries.toTypedArray().take(4).forEach { navigationItem ->
+        NavigationItem.entries.toTypedArray().take(5).forEach { navigationItem ->
             NavigationDrawerItem(
                 navigationItem = navigationItem,
                 selected = navigationItem == selectedNavigationItem,
                 onClick = {
                     onNavigationItemClick(navigationItem)
                     when(navigationItem){
-                       /* NavigationItem.Home -> {
-                            navigateToTab(navController, Route.HomeScreen.route)
-                        }*/
+                        NavigationItem.Locker -> {
+                            navigateToScreen(navController, Route.LockerScreen.route)
+                        }
 
                         NavigationItem.Settings -> {
                             navigateToScreen(navController, Route.SettingScreen.route)

@@ -8,6 +8,7 @@ interface LockerRepository {
     suspend fun upsertLockerTransaction(locker: Locker)
     suspend fun deleteLockerTransaction(locker: Locker)
 
+    suspend fun clearLocker()
     fun getAllLockerTransactions(): Flow<List<Locker>>
 
     fun getSubLockerTransactions(): Flow<List<Locker>>

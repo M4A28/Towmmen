@@ -153,6 +153,7 @@
     <string name="save_invoice">حفظ الفاتورة</string>
     <string name="close">غلق</string>
     <string name="total">الاجمالي: %1$s</string>
+    <string name="total_">الاجمالي</string>
     <string name="invoice_number">فاتورة #%1$s</string>
     <string name="clear">مسح</string>
     <string name="confirm">تأكيد</string>
@@ -250,5 +251,24 @@
     <string name="greeting_good_morning">صباح الخير &#127774;</string>
     <string name="greeting_good_night">يسعد مساك &#127770;</string>
     <string name="greeting_noon">نهارك سعيد &#129312;</string>
+    <string name="discount">خصم</string>
+    <string name="buy">شراء</string>
+    <string name="sell">بيع</string>
+    <string name="undefined">غير معرف</string>
+    <string name="locker">الخزنة</string>
+    <string name="no_transaction_yet">لا توجد اي عمليات</string>
+    <string name="enter_transaction">ادخل العملية</string>
+    <string name="transaction_amount">قيمة العملية</string>
+    <string name="transaction_date">تاريخ العملية</string>
+    <string name="submit_transaction">تأكيد العملية</string>
+    <string name="transaction_type">نوع العملية</string>
+    <string name="delete_all_locker_item">حذف جميع محتويات الخزنة</string>
+    <string name="locker_setting">إعدادت الخزنة</string>
+    <string name="add_sell_invoice_to_locker">اضافة فواتير البيع للخزنة</string>
+    <string name="add_buy_invoice_to_locker">اضافة فوتير الشراء للخزنة</string>
+    <string name="add_expanse_to_locker">اضافة المصروفات للخزنة</string>
+    <string name="are_you_sure_to_delete_all_locker_date">هل انت متأكد من حذف جمع بيانات الحزنة ?</string>
+    <string name="total_product_profit">اجمال مكاسب المنتجات</string>
+    <string name="other_product">بقية المنتجات</string>
 
 </resources>

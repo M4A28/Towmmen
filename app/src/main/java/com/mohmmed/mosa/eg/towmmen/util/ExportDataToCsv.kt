@@ -6,6 +6,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Dealer
 import com.mohmmed.mosa.eg.towmmen.data.module.Expanse
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
+import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.data.module.Note
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import java.io.File
@@ -300,6 +301,46 @@ fun exportNotes(notes: List<Note>){
     fileWriter.flush()
     fileWriter.close()
 }
+fun exportLockers(lockers: List<Locker>){
+    val createDate = Date()
+    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
+    if(!parentDir.exists()){
+        parentDir.mkdirs()
+    }
+    if(!currentDayDir.exists()){
+        currentDayDir.mkdir()
+    }
+
+    val csvFile = File(currentDayDir, "locker_data_${dateToString(createDate,"HH:mm")}.csv")
+    val fileWriter = FileWriter(csvFile)
+
+    // Write CSV header
+    fileWriter.append("transActonId,"
+            + "transActionType,"
+            + "transActionDate,"
+            + "transActionAmount,"
+            + "transActionNote"
+            + "\n")
+
+    // Write data
+    if(lockers.isNotEmpty()){
+
+        for (locker in lockers) {
+            fileWriter.append(buildString {
+                append("${locker.transActonId},")
+                append("${locker.transActionType},")
+                append("${locker.transActionDate},")
+                append("${locker.transActionAmount},")
+                append("${locker.transActionNote}")
+                append("\n")
+            })
+        }
+    }
+
+    fileWriter.flush()
+    fileWriter.close()
+}
 
 
 fun exportAllDate(categorys: List<Category>,
@@ -308,7 +349,8 @@ fun exportAllDate(categorys: List<Category>,
                   invoices: List<Invoice>,
                   notes: List<Note>,
                   products: List<Product>,
-                  expanses: List<Expanse>
+                  expanses: List<Expanse>,
+                  lockers: List<Locker>
 ){
 
     exportCategoryToCsv(categorys)
@@ -318,6 +360,7 @@ fun exportAllDate(categorys: List<Category>,
     exportInvoice(invoices)
     exportNotes(notes)
     exportProductsToCsv(products)
+    exportLockers(lockers)
 
 }
 

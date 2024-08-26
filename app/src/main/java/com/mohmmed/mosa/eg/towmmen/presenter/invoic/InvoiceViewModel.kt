@@ -7,9 +7,11 @@ import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
+import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.InvoiceUseCases
-import com.mohmmed.mosa.eg.towmmen.domin.usecases.localuser.AppEntryUseCases
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.LockerUseCases
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker_setting.LockerSettingUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class InvoiceViewModel @Inject constructor(
     private val invoiceUseCases: InvoiceUseCases,
-    private val localMangerUseCases: AppEntryUseCases
+    private val lockerSetting: LockerSettingUseCases,
+    private val lockerUseCases: LockerUseCases
 ): ViewModel() {
 
     suspend fun upsertInvoice(invoice: Invoice){
@@ -31,6 +34,18 @@ class InvoiceViewModel @Inject constructor(
             invoiceUseCases.upsertInvoice(invoice)
         }
     }
+
+    val canSaveSellToDb: StateFlow<Boolean> = lockerSetting.getCanAddSellToDb()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+
+    fun upsertLockerTransaction(locker: Locker){
+        viewModelScope.launch(Dispatchers.IO) {
+            lockerUseCases.upsertLocker(locker)
+        }
+
+    }
+
+
 
 
     fun getTotalInvoices():Flow<Double?>{

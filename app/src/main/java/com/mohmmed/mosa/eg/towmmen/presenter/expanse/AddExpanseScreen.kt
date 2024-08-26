@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -27,12 +28,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,6 +46,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Expanse
+import com.mohmmed.mosa.eg.towmmen.data.module.Locker
+import com.mohmmed.mosa.eg.towmmen.data.module.TransactionType
 import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import java.util.Date
@@ -51,9 +56,20 @@ import java.util.Date
 @Composable
 fun AddExpanseScreen(nacController: NavHostController){
     val expanseViewModel: ExpanseViewModel = hiltViewModel()
+    val canSaveExpanse  by expanseViewModel.canSaveExpanseToDb.collectAsState()
+
     AddExpanseContent( nacController = nacController,
         onAddClick = {
             expanseViewModel.upsertExpanse(it)
+            if(canSaveExpanse){
+                expanseViewModel.upsertLockerTransaction(Locker(
+                    transActonId = 0,
+                    transActionType = TransactionType.DISCOUNT.name,
+                    transActionDate = it.payDate,
+                    transActionAmount = it.amount * -1,
+                    transActionNote = it.expanse
+                ))
+            }
         })
 
 }
@@ -80,11 +96,12 @@ fun AddExpanseContent(
 
         Box(
             modifier = Modifier
-                .padding(8.dp)
+                .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.secondaryContainer),
             contentAlignment = Alignment.Center
         ){
             Text(
+                modifier = Modifier.padding(8.dp),
                 text = stringResource(R.string.expanse_explane),
                 style = MaterialTheme.typography.bodyLarge,
             )
@@ -183,7 +200,6 @@ fun AddExpanseContent(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-
 
         }
 

@@ -36,19 +36,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ProductCard2
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryViewModel
+import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToProductDetails
+import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProductsScreen(
-    onProductClick: (Product) -> Unit,
-    onFapClick: () -> Unit
+    navController: NavHostController
 ){
     val productViewModel: ProductViewModel = hiltViewModel()
     val products by productViewModel
@@ -60,8 +63,8 @@ fun ProductsScreen(
 
     ProductsContent(
         products = products,
-        onProductClick = {onProductClick(it)},
-        onFapClick = {onFapClick() },
+        onProductClick = { product -> navigateToProductDetails(navController, product) },
+        onFapClick = { navigateToScreen(navController, Route.AddProductScreen.route) },
         categories = categoryList.map{ it.category}
     )
 }
@@ -78,7 +81,7 @@ fun ProductsContent(
     onFapClick: () -> Unit = {}
 ) {
     var searchQuery by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("All") }
+    var selectedCategory by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
                   TopAppBar(

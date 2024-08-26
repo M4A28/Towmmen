@@ -18,7 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,56 +30,49 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
-import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.expanse.ExpanseViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
+import com.mohmmed.mosa.eg.towmmen.presenter.home.comman.TopProductExplainedCard
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ExpanseColumnChart
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ProfitColumnChart
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.SimpleStatCard
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.StatisticItem
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.TopProductsList
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.TransactionItem
-import com.mohmmed.mosa.eg.towmmen.util.ONE_MONTH
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
-import java.util.Date
 
 
 @Composable
 fun HomeScreen() {
-    val productsViewModel: ProductViewModel = hiltViewModel()
-    val invoiceViewModel: InvoiceViewModel = hiltViewModel()
-    val customerViewModel: CustomerViewModel = hiltViewModel()
-    val expanseViewModel: ExpanseViewModel = hiltViewModel()
-    val totalInvoice by invoiceViewModel.getTotalInvoices().collectAsState(initial = 0.0)
-    val avgInvoice by invoiceViewModel.avgInvoicePerMonth.collectAsState()
-    val invoiceProfitByMonth by invoiceViewModel.getInvoiceProfitByMonth()
-        .collectAsState(initial = listOf(InvoiceProfitByMonth("", 1.0)))
-    val totalProducts by productsViewModel.getProductsCount().collectAsState(initial = 0)
-    val productsCost by productsViewModel.getAllProductCost().collectAsState(initial = 0.0)
-    val expanseAvg by expanseViewModel.avgExpansePerMonth.collectAsState()
-    val totalCustomers by customerViewModel.getCustomerCount().collectAsState(initial = 0)
-    val topProduct by invoiceViewModel.getTopSellingItem().collectAsState(initial = emptyList())
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
-    val expansePerMonth by expanseViewModel
-        .getExpansePerMonth()
-        .collectAsState(initial = listOf(ExpansePerMonth("", 0.0)))
-    val latestTransaction by invoiceViewModel.getAllInvoices()
-        .collectAsState(initial = emptyList())
+    val totalInvoice by homeViewModel.totalInvoices.collectAsState()
+    val avgInvoice by homeViewModel.avgInvoicePerMonth.collectAsState()
+    val invoiceProfitByMonth by homeViewModel.invoicePerMonth.collectAsState()
+    val totalProducts by homeViewModel.productCount.collectAsState()
+    val productsCost by homeViewModel.productsCost.collectAsState()
+    val expanseAvg by homeViewModel.avgExpansePerMonth.collectAsState()
+    val totalCustomers by homeViewModel.customerCount.collectAsState()
+    val topProduct by homeViewModel.mostTopSellingProduct.collectAsState()
+    val expansePerMonth by homeViewModel.expansePerMonthItems.collectAsState()
+    val latestTransaction by homeViewModel.invoices.collectAsState()
+    val last4Transaction by remember {
+        mutableStateOf(latestTransaction.take(4))
+    }
+    val context = LocalContext.current
 
+    val statisticItems by remember {
+        mutableStateOf(listOf(
+            StatisticItem(title = context.getString(R.string.total_product),
+                value = totalProducts.toString() ),
 
+            StatisticItem(title = context.getString(R.string.total_customer),
+                value = "${totalCustomers?: 0}"),
 
-    val statisticItems = listOf(
-        StatisticItem(title = stringResource(id = R.string.total_product),
-            value = totalProducts.toString() ),
-        StatisticItem(title = stringResource(R.string.total_customer),
-            value = "${totalCustomers?: 0}"),
+            StatisticItem(title = context.getString(R.string.total_invoice_Value),
+                value = formatCurrency(totalInvoice?: 0.0)),
 
-        StatisticItem(title = stringResource(R.string.total_invoice_Value),
-            value = formatCurrency(totalInvoice?: 0.0)),
-        StatisticItem(title = stringResource(R.string.produts_cost),
-            value = formatCurrency(productsCost?: 0.0)),
-    )
+            StatisticItem(title = context.getString(R.string.produts_cost),
+                value = formatCurrency(productsCost?: 0.0)),
+        ))
+    }
 
     LazyVerticalGrid(
         modifier = Modifier
@@ -123,17 +119,17 @@ fun HomeScreen() {
             }
         }
 
-
-
         item(span = {
             GridItemSpan(2)
         }) {
 
-            TopProductsList(
+            TopProductExplainedCard(top = topProduct, total = totalInvoice?: 0.0)
+
+      /*      TopProductsList(
                 modifier = Modifier.padding(10.dp),
                 title = stringResource(id = R.string.top_products),
                 topProductList = topProduct
-            )
+            )*/
 
         }
 
@@ -159,7 +155,7 @@ fun HomeScreen() {
                     )
                     if(latestTransaction.isNotEmpty()){
 
-                        latestTransaction.take(4).fastForEach {
+                        last4Transaction.fastForEach {
                             TransactionItem(invoice = it)
                             Spacer(modifier = Modifier.height(6.dp))
 

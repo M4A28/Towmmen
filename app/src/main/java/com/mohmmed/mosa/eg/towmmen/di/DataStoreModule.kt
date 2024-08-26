@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.mohmmed.mosa.eg.towmmen.data.localusermanger.ThemeRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,9 +24,4 @@ object DataStoreModule {
         return context.dataStore
     }
 
-    @Provides
-    @Singleton
-    fun provideAppThemeRepository(dataStore: DataStore<Preferences>): ThemeRepositoryImp {
-        return ThemeRepositoryImp(dataStore = dataStore)
-    }
 }

@@ -10,6 +10,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
+import com.mohmmed.mosa.eg.towmmen.data.module.MostTopProduct
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
@@ -117,6 +118,15 @@ interface InvoiceDao {
             " as month, SUM(totalAmount) as profit " +
             " FROM invoices GROUP BY month ORDER BY month)")
     fun getAvgInvoicePerMonth(): Flow<Double?>
+
+    @Query("SELECT productName, sum(quantity) AS frequency," +
+            " SUM(unitPrice * quantity) AS total, " +
+            " (SUM(unitPrice * quantity) / (SELECT SUM(unitPrice * quantity) FROM invoice_items)) * 100 AS percentage " +
+            " FROM invoice_items " +
+            " GROUP BY productName" +
+            " ORDER BY percentage DESC " +
+            " LIMIT 5")
+    fun getMostTopProduct(): Flow<List<MostTopProduct>>
 
     @Delete
     suspend fun deleteInvoice(invoice: Invoice)

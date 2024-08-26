@@ -16,7 +16,10 @@ interface LockerDao {
     @Delete
     suspend fun deleteLockerTransaction(locker: Locker)
 
-    @Query("SELECT * FROM locker")
+    @Query("DELETE FROM locker")
+    suspend fun clearLocker()
+
+    @Query("SELECT * FROM locker ORDER BY transActionDate DESC ")
     fun getAllLockerTransactions(): Flow<List<Locker>>
 
     @Query("SELECT * FROM locker WHERE transActionType = 'SUB' ")

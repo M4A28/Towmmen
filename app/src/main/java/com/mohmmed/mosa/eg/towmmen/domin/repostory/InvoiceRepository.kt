@@ -5,6 +5,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
+import com.mohmmed.mosa.eg.towmmen.data.module.MostTopProduct
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import kotlinx.coroutines.flow.Flow
 
@@ -62,6 +63,9 @@ interface InvoiceRepository {
 
     fun getAvgInvoicePerMonth(): Flow<Double?>
     suspend fun clearInvoiceDate()
+
+    fun getMostTopProduct(): Flow<List<MostTopProduct>>
+
 
 
 

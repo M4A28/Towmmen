@@ -36,16 +36,9 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.dealers.DealerViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.componet.AdvancedAlertDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.componet.CategoryHeader
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.componet.SettingItem
-import com.mohmmed.mosa.eg.towmmen.presenter.expanse.ExpanseViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.note.NoteViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 import com.mohmmed.mosa.eg.towmmen.util.backupDatabase
 import com.mohmmed.mosa.eg.towmmen.util.exportAllDate
 import com.mohmmed.mosa.eg.towmmen.util.restoreDatabase
@@ -56,14 +49,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen() {
 
-    val productViewModel: ProductViewModel = hiltViewModel()
-    val customerViewModel: CustomerViewModel = hiltViewModel()
-    val appThemeViewModel: AppThemeViewModel = hiltViewModel()
-    val noteViewModel: NoteViewModel = hiltViewModel()
-    val dealersViewModel: DealerViewModel = hiltViewModel()
-    val categoryViewModel: CategoryViewModel = hiltViewModel()
-    val invoiceViewModel: InvoiceViewModel = hiltViewModel()
-    val expanseViewModel: ExpanseViewModel = hiltViewModel()
+    val settingViewModel: SettingViewModel = hiltViewModel()
+
 
     var selectedUri by remember { mutableStateOf<Uri?>(null) }
     var filePath by remember { mutableStateOf("") }
@@ -76,7 +63,14 @@ fun SettingsScreen() {
         }
     }
     val scope = rememberCoroutineScope()
-    val currTheme by appThemeViewModel.theme.collectAsState()
+    val currTheme by settingViewModel.theme.collectAsState()
+    val canSaveSell  by settingViewModel.canSaveSellToDb.collectAsState()
+    val canSaveBuy  by settingViewModel.canSaveBuyToDb.collectAsState()
+    val canSaveExpanse  by settingViewModel.canSaveExpanseToDb.collectAsState()
+
+    var saveSell by remember { mutableStateOf(canSaveSell)}
+    var saveBuy by remember { mutableStateOf(canSaveBuy)}
+    var saveExpanse by remember { mutableStateOf(canSaveExpanse)}
 
     var darkMode by remember { mutableStateOf(currTheme == AppTheme.DARK) }
     var storagePermissionGranted by remember { mutableStateOf(false) }
@@ -87,14 +81,15 @@ fun SettingsScreen() {
             .RequestPermission()
     ) { storagePermissionGranted = it }
     val context = LocalContext.current
-    val products by productViewModel.products.collectAsState(initial = emptyList())
-    val customers by customerViewModel.getAllCustomer().collectAsState(initial = emptyList())
-    val invoices by invoiceViewModel.getAllInvoices().collectAsState(initial = emptyList())
-    val category by categoryViewModel.getAllCategory().collectAsState(initial = emptyList())
-    val dealers by dealersViewModel.allDealers.collectAsState(initial = emptyList())
-    val notes by noteViewModel.getAllNote().collectAsState(initial = emptyList())
-    val expanse by expanseViewModel.getAllExpanse().collectAsState(initial = emptyList())
-    val snackbarHostState = remember { SnackbarHostState() }
+    val products by settingViewModel.products.collectAsState()
+    val customers by settingViewModel.customers.collectAsState()
+    val invoices by settingViewModel.invoices.collectAsState()
+    val category by settingViewModel.categorys.collectAsState()
+    val dealers by settingViewModel.dealers.collectAsState()
+    val notes by settingViewModel.notes.collectAsState()
+    val lockers by settingViewModel.lockers.collectAsState()
+    val expanse by settingViewModel.expanses.collectAsState(initial = emptyList())
+    val snackBarHostState = remember { SnackbarHostState() }
 
     var showDeleteDataDialog by remember { mutableStateOf(false) }
     var showDeleteProductDialog by remember { mutableStateOf(false) }
@@ -104,19 +99,21 @@ fun SettingsScreen() {
     var showDeleteCategoryDialog by remember { mutableStateOf(false) }
     var showDeleteInvoiceDialog by remember { mutableStateOf(false) }
     var showDeleteExpanseDialog by remember { mutableStateOf(false) }
+    var showDeleteLockerDialog by remember { mutableStateOf(false) }
 
     if(showDeleteDataDialog){
         AdvancedAlertDialog(
             title = stringResource(R.string.are_you_sure_to_delete_all_app_date),
             onDismiss = { showDeleteDataDialog = false },
             onConfirm = {
-                productViewModel.clearProducts()
-                customerViewModel.clearCustomerDate()
-                noteViewModel.clearNoteDate()
-                dealersViewModel.clearDealersDate()
-                categoryViewModel.clearCategoryDate()
-                invoiceViewModel.clearInvoiceData()
-                expanseViewModel.clearExpanseData()
+                settingViewModel.clearProducts()
+                settingViewModel.clearCustomer()
+                settingViewModel.clearNotes()
+                settingViewModel.clearDealers()
+                settingViewModel.clearCategorys()
+                settingViewModel.clearLocker()
+                settingViewModel.clearInvoice()
+                settingViewModel.clearExpanses()
                 showDeleteDataDialog = false
             }
         )
@@ -127,8 +124,19 @@ fun SettingsScreen() {
             title = stringResource(R.string.are_you_sure_to_delete_all_Expanse_date),
             onDismiss = { showDeleteExpanseDialog = false },
             onConfirm = {
-                expanseViewModel.clearExpanseData()
+                settingViewModel.clearExpanses()
                 showDeleteExpanseDialog = false
+            }
+        )
+    }
+
+    if(showDeleteLockerDialog){
+        AdvancedAlertDialog(
+            title = stringResource(R.string.are_you_sure_to_delete_all_locker_date),
+            onDismiss = { showDeleteLockerDialog = false },
+            onConfirm = {
+                settingViewModel.clearLocker()
+                showDeleteLockerDialog = false
             }
         )
     }
@@ -138,7 +146,7 @@ fun SettingsScreen() {
             title = stringResource(R.string.are_you_sure_to_delete_all_Invoice_date),
             onDismiss = { showDeleteInvoiceDialog = false },
             onConfirm = {
-                invoiceViewModel.clearInvoiceData()
+                settingViewModel.clearInvoice()
                 showDeleteInvoiceDialog = false
             }
         )
@@ -149,7 +157,7 @@ fun SettingsScreen() {
             title = stringResource(R.string.are_you_sure_to_delete_all_catagory_date),
             onDismiss = { showDeleteCategoryDialog = false },
             onConfirm = {
-                categoryViewModel.clearCategoryDate()
+                settingViewModel.clearCategorys()
                 showDeleteCategoryDialog = false
             }
         )
@@ -160,7 +168,7 @@ fun SettingsScreen() {
             title = stringResource(R.string.are_you_sure_to_delete_all_dealers_date),
             onDismiss = { showDeleteDealersDialog = false },
             onConfirm = {
-                dealersViewModel.clearDealersDate()
+                settingViewModel.clearDealers()
                 showDeleteDealersDialog = false
             }
         )
@@ -172,7 +180,7 @@ fun SettingsScreen() {
 
             onDismiss = { showDeleteNoteDialog = false },
             onConfirm = {
-                noteViewModel.clearNoteDate()
+                settingViewModel.clearNotes()
                 showDeleteNoteDialog = false
             }
         )
@@ -183,7 +191,7 @@ fun SettingsScreen() {
             title = stringResource(R.string.are_you_sure_to_delete_all_custoer_date),
             onDismiss = { showDeleteCustomerDialog = false },
             onConfirm = {
-                customerViewModel.clearCustomerDate()
+                settingViewModel.clearCustomer()
                 showDeleteCustomerDialog = false
             }
         )
@@ -195,7 +203,7 @@ fun SettingsScreen() {
 
             onDismiss = { showDeleteProductDialog = false },
             onConfirm = {
-                productViewModel.clearProducts()
+                settingViewModel.clearProducts()
                 showDeleteProductDialog = false
             }
         )
@@ -227,7 +235,7 @@ fun SettingsScreen() {
 
             })
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { paddingValues ->
 
         LazyColumn(
@@ -252,7 +260,62 @@ fun SettingsScreen() {
                             checked = darkMode,
                             onCheckedChange = {
                                 darkMode = it
-                                appThemeViewModel.setTheme(currTheme.revers())
+                                settingViewModel.setTheme(currTheme.revers())
+                            }
+                        )
+                    }
+                )
+            }
+            // todo enhanc this
+            item {
+                CategoryHeader(stringResource(R.string.locker_setting))
+            }
+            item {
+                SettingItem(
+                    icon = R.drawable.invoice_paper,
+                    title = stringResource(R.string.add_sell_invoice_to_locker),
+                    onClick = { },
+                    trailing = {
+                        Switch(
+                            checked = saveSell,
+                            onCheckedChange = {
+                                saveSell = it
+                                settingViewModel.setCanSaveSellToDb(it)
+                            }
+                        )
+                    }
+                )
+            }
+
+            item {
+                SettingItem(
+                    icon = R.drawable.box,
+                    title = stringResource(R.string.add_buy_invoice_to_locker),
+                    onClick = { },
+                    trailing = {
+                        Switch(
+                            checked = saveBuy,
+                            onCheckedChange = {
+                                saveBuy = it
+                                settingViewModel.setCanSaveBuyToDb(it)
+
+                            }
+                        )
+                    }
+                )
+            }
+
+            item {
+                SettingItem(
+                    icon = R.drawable.cash,
+                    title = stringResource(R.string.add_expanse_to_locker),
+                    onClick = { },
+                    trailing = {
+                        Switch(
+                            checked = saveExpanse,
+                            onCheckedChange = {
+                                saveExpanse = it
+                                settingViewModel.setCanSaveExpanseToDb(it)
                             }
                         )
                     }
@@ -291,6 +354,14 @@ fun SettingsScreen() {
                     onClick = { showDeleteProductDialog = true }
                 )
             }
+
+            item {
+                SettingItem(
+                    icon = R.drawable.locker,
+                    title = stringResource(R.string.delete_all_locker_item),
+                    onClick = { showDeleteLockerDialog = true}
+                )
+            }
             item {
                 SettingItem(
                     icon = R.drawable.delete,
@@ -315,9 +386,10 @@ fun SettingsScreen() {
                                 invoices = invoices,
                                 notes = notes,
                                 products = products,
-                                expanses = expanse
+                                expanses = expanse,
+                                lockers = lockers
                             )
-                            snackbarHostState.showSnackbar(message = context.getString(R.string.all_data_exported))
+                            snackBarHostState.showSnackbar(message = context.getString(R.string.all_data_exported))
                         }
 
                     }
@@ -330,12 +402,12 @@ fun SettingsScreen() {
                     onClick = { try{
                         scope.launch {
                             backupDatabase(context)
-                            snackbarHostState.showSnackbar(context.getString(R.string.database_has_saved))
+                            snackBarHostState.showSnackbar(context.getString(R.string.database_has_saved))
                         }
 
                     }catch (e: Exception){
                         scope.launch {
-                            snackbarHostState.showSnackbar(e.toString())
+                            snackBarHostState.showSnackbar(e.toString())
                         }
                     } }
                 )
@@ -360,7 +432,7 @@ fun SettingsScreen() {
                                     if(filePath.isNotEmpty()){
                                         restoreDatabase(context, filePath)
                                         Log.d("PATH", filePath)
-                                        snackbarHostState.showSnackbar(context.getString(R.string.database_restored))
+                                        snackBarHostState.showSnackbar(context.getString(R.string.database_restored))
                                         filePath = ""
                                     }
                                 }

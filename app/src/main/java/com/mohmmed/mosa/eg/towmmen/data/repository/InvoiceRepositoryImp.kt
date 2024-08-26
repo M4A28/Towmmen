@@ -6,6 +6,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
+import com.mohmmed.mosa.eg.towmmen.data.module.MostTopProduct
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.InvoiceRepository
 import kotlinx.coroutines.flow.Flow
@@ -120,6 +121,10 @@ class InvoiceRepositoryImp @Inject constructor(
 
     override suspend fun clearInvoiceDate() {
         invoiceDao.clearInvoiceDate()
+    }
+
+    override fun getMostTopProduct(): Flow<List<MostTopProduct>> {
+        return invoiceDao.getMostTopProduct()
     }
 
 }

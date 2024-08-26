@@ -134,7 +134,8 @@
     <string name="cost_">Cost</string>
     <string name="save_invoice">Save Invoice</string>
     <string name="close">close</string>
-    <string name="total">Toatal: %1$s</string>
+    <string name="total">Total: %1$s</string>
+    <string name="total_">Total</string>
     <string name="invoice_number">Invoice #%1$s</string>
     <string name="clear">Clear</string>
     <string name="confirm">confirm</string>
@@ -231,4 +232,23 @@
     <string name="greeting_good_morning">Good morning &#127774;</string>
     <string name="greeting_good_night">Good night &#127770;</string>
     <string name="greeting_noon">Howdy &#129312;</string>
+    <string name="discount">discount</string>
+    <string name="buy">buy</string>
+    <string name="sell">sell</string>
+    <string name="undefined">undefined</string>
+    <string name="locker">Locker</string>
+    <string name="no_transaction_yet">no transaction yet</string>
+    <string name="enter_transaction">Enter Transaction</string>
+    <string name="transaction_amount">Transaction Amount</string>
+    <string name="transaction_date">Transaction Date</string>
+    <string name="submit_transaction">Submit Transaction</string>
+    <string name="transaction_type">Transaction Type</string>
+    <string name="delete_all_locker_item">Delete all locker item</string>
+    <string name="locker_setting">Locker Setting</string>
+    <string name="add_sell_invoice_to_locker">Add sell invoice to locker</string>
+    <string name="add_buy_invoice_to_locker">Add buy invoice to locker</string>
+    <string name="add_expanse_to_locker">Add expanse to locker</string>
+    <string name="are_you_sure_to_delete_all_locker_date">Are you sure to delete all locker data ?</string>
+    <string name="total_product_profit">Total Product Profit</string>
+    <string name="other_product">Other Products</string>
 </resources>

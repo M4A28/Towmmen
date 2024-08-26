@@ -47,9 +47,11 @@ import java.util.Locale
 
 @Composable
 fun InvoiceScreen(){
+    // todo refactor this
     val invoiceViewModel: InvoiceViewModel = hiltViewModel()
-    val invoiceWithItem by invoiceViewModel.getAllInvoicesWithItems().collectAsState(initial = emptyList())
     val productsViewModel: ProductViewModel = hiltViewModel()
+    val invoiceWithItem by invoiceViewModel.getAllInvoicesWithItems().collectAsState(initial = emptyList())
+
     val allProducts by productsViewModel.products.collectAsState(initial = emptyList())
     var showDeleteDialog by remember { mutableStateOf(false) }
     var invoice by remember{ mutableStateOf<Invoice?>(null) }

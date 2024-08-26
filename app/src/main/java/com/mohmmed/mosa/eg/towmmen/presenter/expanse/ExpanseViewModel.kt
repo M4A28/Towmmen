@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohmmed.mosa.eg.towmmen.data.module.Expanse
 import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.ExpanseUseCases
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.LockerUseCases
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker_setting.LockerSettingUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -18,10 +21,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExpanseViewModel @Inject constructor(
-    private val expanseUseCases: ExpanseUseCases
+    private val expanseUseCases: ExpanseUseCases,
+    private val lockerSetting: LockerSettingUseCases,
+    private val lockerUseCases: LockerUseCases
 ): ViewModel(){
 
 
+    val canSaveExpanseToDb: StateFlow<Boolean> = lockerSetting.getCanSaveExpanseToDb()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+
+    fun upsertLockerTransaction(locker: Locker){
+        viewModelScope.launch(Dispatchers.IO) {
+            lockerUseCases.upsertLocker(locker)
+        }
+
+    }
 
 
     fun upsertExpanse(expanse: Expanse){
