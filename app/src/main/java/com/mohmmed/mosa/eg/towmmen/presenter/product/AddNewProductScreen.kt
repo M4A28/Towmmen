@@ -25,6 +25,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -60,6 +61,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.comman.TextFiledExposedDropdownMenu
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
+import com.mohmmed.mosa.eg.towmmen.util.ONE_YEAR
 import com.mohmmed.mosa.eg.towmmen.util.SCANNED_BARCODE
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -121,7 +123,7 @@ fun AddNewProductContent(
     val manfDateState = rememberDatePickerState()
     var manfDate by rememberSaveable { mutableStateOf(Date()) }
     val expDateState = rememberDatePickerState()
-    var expDate by rememberSaveable { mutableStateOf(Date()) }
+    var expDate by rememberSaveable { mutableStateOf(Date(System.currentTimeMillis()+ ONE_YEAR)) }
     var showManfDatePicker by remember { mutableStateOf(false) }
     var showExpDatePicker by remember { mutableStateOf(false) }
     val dateFormatter =  SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -190,6 +192,16 @@ fun AddNewProductContent(
                             .size(20.dp)
                     )
                 },
+                isError = name.isEmpty(),
+                supportingText = {
+                    if (name.isEmpty()) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.fild_req),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
                 placeholder = {
                     Text(text = stringResource(id = R.string.product_name_))
                 }
@@ -210,6 +222,16 @@ fun AddNewProductContent(
                             .size(20.dp)
                     )
                 },
+                isError = barcode.isEmpty(),
+                supportingText = {
+                    if (barcode.isEmpty()) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.fild_req),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
                 placeholder = {
                     Text(text = stringResource(id = R.string.producat_barcode))
                 }
@@ -228,6 +250,7 @@ fun AddNewProductContent(
                             .size(20.dp)
                     )
                 },
+                supportingText = {},
                 placeholder = {
                     Text(text = stringResource(id = R.string.description))
                 }
@@ -247,6 +270,16 @@ fun AddNewProductContent(
                             .size(20.dp)
                     )
                 },
+                isError = cost.isEmpty(),
+                supportingText = {
+                    if (cost.isEmpty()) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.fild_req),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
                 placeholder = {
                     Text(text = stringResource(id = R.string.cost_))
                 }
@@ -263,6 +296,16 @@ fun AddNewProductContent(
                         modifier = Modifier
                             .size(20.dp)
                     )
+                },
+                isError = price.isEmpty() ||(cost.toDoubleOrNull() ?: 0.0) >= (price.toDoubleOrNull() ?: 0.0) ,
+                supportingText = {
+                    if ((cost.toDoubleOrNull() ?: 0.0) >= (price.toDoubleOrNull() ?: 0.0)) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.price_err),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 },
                 placeholder = {
                     Text(text = stringResource(id = R.string.price))
@@ -285,6 +328,16 @@ fun AddNewProductContent(
                                 .size(20.dp)
                         )
                     },
+                    isError = stockQuantity.isEmpty(),
+                    supportingText = {
+                        if (stockQuantity.isEmpty()) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(id = R.string.fild_req),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
                     placeholder = {
                         Text(text = stringResource(id = R.string.stock_quantity))
                     }
@@ -302,6 +355,16 @@ fun AddNewProductContent(
                             modifier = Modifier
                                 .size(20.dp)
                         )
+                    },
+                    isError = unit.isEmpty(),
+                    supportingText = {
+                        if (unit.isEmpty()) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(id = R.string.fild_req),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
                     },
                     placeholder = {
                         Text(text = stringResource(id = R.string.measurement_unit))
@@ -330,6 +393,7 @@ fun AddNewProductContent(
                 value = dateFormatter.format(manfDate),
                 onValueChange = { },
                 readOnly = true,
+                label = { Text(text = stringResource(id = R.string.manf_date)) },
                 leadingIcon = {
                     Icon(painter = painterResource(id = R.drawable.calendar_month),
                         contentDescription = null ,
@@ -338,6 +402,7 @@ fun AddNewProductContent(
                             .size(20.dp)
                     )
                 },
+                supportingText = {},
                 placeholder = {
                     Text(text = stringResource(id = R.string.manf_date))
                 }
@@ -349,6 +414,7 @@ fun AddNewProductContent(
                 modifier = Modifier.fillMaxWidth(),
                 value = dateFormatter.format(expDate),
                 onValueChange = { },
+                label = { Text(text = stringResource(id = R.string.exp_date)) },
                 readOnly = true,
                 leadingIcon = {
                     Icon(painter = painterResource(id = R.drawable.date),
@@ -358,6 +424,7 @@ fun AddNewProductContent(
                             .size(20.dp)
                     )
                 },
+                supportingText = {},
                 placeholder = {
                     Text(text = stringResource(id = R.string.exp_date))
                 }

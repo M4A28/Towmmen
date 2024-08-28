@@ -4,7 +4,6 @@ package com.mohmmed.mosa.eg.towmmen.presenter.product
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -187,6 +186,7 @@ fun EditProductContent(
             )
 
             Spacer(modifier = Modifier.height(6.dp))
+
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = name,
@@ -197,6 +197,16 @@ fun EditProductContent(
                         modifier = Modifier
                             .size(20.dp)
                     )
+                },
+                isError = name.isEmpty(),
+                supportingText = {
+                    if (name.isEmpty()) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.fild_req),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 },
                 placeholder = {
                     Text(text = stringResource(id = R.string.product_name_))
@@ -218,6 +228,16 @@ fun EditProductContent(
                             .size(20.dp)
                     )
                 },
+                isError = barcode?.isEmpty() == true,
+                supportingText = {
+                    if (barcode?.isEmpty() == true) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.fild_req),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
                 placeholder = {
                     Text(text = stringResource(id = R.string.producat_barcode))
                 }
@@ -236,6 +256,7 @@ fun EditProductContent(
                             .size(20.dp)
                     )
                 },
+                supportingText = {},
                 placeholder = {
                     Text(text = stringResource(id = R.string.description))
                 }
@@ -244,81 +265,118 @@ fun EditProductContent(
             Spacer(modifier = Modifier.height(10.dp))
 
             TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = cost,
-                    onValueChange = { cost = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.money),
-                            contentDescription = null ,
-                            modifier = Modifier
-                                .size(20.dp)
+                modifier = Modifier.fillMaxWidth(),
+                value = cost,
+                onValueChange = { cost = it },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.money),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                isError = cost.isEmpty(),
+                supportingText = {
+                    if (cost.isEmpty()) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.fild_req),
+                            color = MaterialTheme.colorScheme.error
                         )
-                    },
-                    placeholder = {
-                        Text(text = stringResource(id = R.string.cost_))
                     }
-                )
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.cost_))
+                }
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = price,
+                onValueChange = { price = it },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.cash),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                isError = price.isEmpty() ||(cost.toDoubleOrNull() ?: 0.0) >= (price.toDoubleOrNull() ?: 0.0) ,
+                supportingText = {
+                    if ((cost.toDoubleOrNull() ?: 0.0) >= (price.toDoubleOrNull() ?: 0.0)) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.price_err),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.price))
+                }
+            )
+
 
             Spacer(modifier = Modifier.height(10.dp))
 
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = price,
-                    onValueChange = { price = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.cash),
-                            contentDescription = null ,
-                            modifier = Modifier
-                                .size(20.dp)
+
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = stockQuantity,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                onValueChange = { stockQuantity = it },
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.quantity),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                isError = stockQuantity.isEmpty(),
+                supportingText = {
+                    if (stockQuantity.isEmpty()) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.fild_req),
+                            color = MaterialTheme.colorScheme.error
                         )
-                    },
-                    placeholder = {
-                        Text(text = stringResource(id = R.string.price))
                     }
-                )
-
-
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.stock_quantity))
+                }
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
 
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = stockQuantity,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    onValueChange = { stockQuantity = it },
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.quantity),
-                            contentDescription = null ,
-                            modifier = Modifier
-                                .size(20.dp)
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = unit,
+                onValueChange = { unit = it },
+                leadingIcon = {
+                    Icon(painter = painterResource(id = R.drawable.balance),
+                        contentDescription = null ,
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                },
+                isError = unit.isEmpty(),
+                supportingText = {
+                    if (unit.isEmpty()) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.fild_req),
+                            color = MaterialTheme.colorScheme.error
                         )
-                    },
-                    placeholder = {
-                        Text(text = stringResource(id = R.string.stock_quantity))
                     }
-                )
+                },
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = unit,
-                    onValueChange = { unit = it },
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.balance),
-                            contentDescription = null ,
-                            modifier = Modifier
-                                .size(20.dp)
-                        )
-                    },
-                    placeholder = {
-                        Text(text = stringResource(id = R.string.measurement_unit))
-                    }
-                )
-
-
+                placeholder = {
+                    Text(text = stringResource(id = R.string.measurement_unit))
+                }
+            )
             Spacer(modifier = Modifier.height(10.dp))
 
             TextFiledExposedDropdownMenu(
@@ -342,6 +400,7 @@ fun EditProductContent(
                 value = dateFormatter.format(manfDate),
                 onValueChange = { },
                 readOnly = true,
+                label = { Text(text = stringResource(id = R.string.manf_date)) },
                 leadingIcon = {
                     Icon(painter = painterResource(id = R.drawable.calendar_month),
                         contentDescription = null ,
@@ -350,6 +409,7 @@ fun EditProductContent(
                             .size(20.dp)
                     )
                 },
+                supportingText = {},
                 placeholder = {
                     Text(text = stringResource(id = R.string.manf_date))
                 }
@@ -361,6 +421,7 @@ fun EditProductContent(
                 modifier = Modifier.fillMaxWidth(),
                 value = dateFormatter.format(expDate),
                 onValueChange = { },
+                label = { Text(text = stringResource(id = R.string.exp_date)) },
                 readOnly = true,
                 leadingIcon = {
                     Icon(painter = painterResource(id = R.drawable.date),
@@ -370,12 +431,11 @@ fun EditProductContent(
                             .size(20.dp)
                     )
                 },
+                supportingText = {},
                 placeholder = {
                     Text(text = stringResource(id = R.string.exp_date))
                 }
             )
-
-
 
             if (showManfDatePicker) {
                 DatePickerDialog(

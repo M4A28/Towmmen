@@ -26,10 +26,14 @@ const val NOTE_KEY = "note_key"
 
 const val DEALER_KEY = "dealer_key"
 
+const val DEALER_ID = "dealer_id"
+
 const val SCANNED_BARCODE = "scannedBarcode"
 
 const val APP_ENTRY_KEY = "app_entry"
+
 const val DB_NAME = "towwmen_db"
+
 const val INVOICE_KEY = "invoice_key"
 
 const val USER_SETTING = "USER_SETTING"

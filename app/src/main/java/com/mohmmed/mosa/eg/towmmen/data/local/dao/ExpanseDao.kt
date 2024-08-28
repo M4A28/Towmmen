@@ -19,7 +19,7 @@ interface ExpanseDao {
     suspend fun deleteExpanse(expanse:Expanse)
 
 
-    @Query("SELECT * FROM expanse")
+    @Query("SELECT * FROM expanse ORDER BY payDate DESC")
     fun getAllExpanse(): Flow<List<Expanse>>
 
     @Query("SELECT * FROM expanse WHERE payDate BETWEEN :start AND :end")

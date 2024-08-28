@@ -164,6 +164,7 @@
     <string name="inventory_value">Inventory Value: %1$s</string>
     <string name="total_invoice_Value">اجمالي الفواتير</string>
     <string name="invoice_date">تاريخ الفاتورة: %1$s</string>
+    <string name="purchase_date">تاريخ الشراء: %1$s</string>
     <string name="no_invoice_for_this_customer">لا يوجد اي فواتير لهذا العميل</string>
     <string name="no_item_added">لايوجد اي منتجات اضيفت جرب ان تبحث او تمسح الباركود</string>
     <string name="top_selling">الاعلى مبيعاً</string>
@@ -195,12 +196,12 @@
     <string name="no_transcation_yet">لا يوجد عمليات بعد</string>
     <string name="producte_add_success">تمت إضافة المنتج</string>
     
-<string name="dealers">الموزعون</string>
-<string name="add_new_dealer">إضافة موزع جديد</string>
-<string name="dealer_name">اسم الموزع</string>
-<string name="no_dealers_to_show">لا يوجد موزعون لعرضهم</string>
+<string name="dealers">التجار</string>
+<string name="add_new_dealer">إضافة تاجر جديد</string>
+<string name="dealer_name">اسم التاجر</string>
+<string name="no_dealers_to_show">لا يوجد تجار لعرضهم</string>
 <string name="add">إضافة</string>
-<string name="delete_dealer">هل أنت متأكد من حذف هذا الموزع؟</string>
+<string name="delete_dealer">هل أنت متأكد من حذف هذا التاجر؟</string>
 <string name="display">عرض</string>
 <string name="dark_theme">الوضع الداكن</string>
 <string name="off">إيقاف</string>
@@ -208,7 +209,7 @@
 <string name="data_management">إدارة البيانات</string>
 <string name="delete_all_customers">حذف جميع العملاء</string>
 <string name="delete_all_invoices">حذف جميع الفواتير</string>
-<string name="delete_all_dealers">حذف جميع الموزعين</string>
+<string name="delete_all_dealers">حذف جميع التجار</string>
 <string name="delete_all_products">حذف جميع المنتجات</string>
 <string name="delete_all_app_data">حذف جميع بيانات التطبيق</string>
 <string name="backup_restore">النسخ الاحتياطي والاستعادة</string>
@@ -249,7 +250,7 @@
     <string name="restore">استعادة</string>
     <string name="greeting_good_evening">مساء الخير &#127749;</string>
     <string name="greeting_good_morning">صباح الخير &#127774;</string>
-    <string name="greeting_good_night">يسعد مساك &#127770;</string>
+    <string name="greeting_good_night">اسعد الله مساك &#127770;</string>
     <string name="greeting_noon">نهارك سعيد &#129312;</string>
     <string name="discount">خصم</string>
     <string name="buy">شراء</string>
@@ -270,5 +271,21 @@
     <string name="are_you_sure_to_delete_all_locker_date">هل انت متأكد من حذف جمع بيانات الحزنة ?</string>
     <string name="total_product_profit">اجمال مكاسب المنتجات</string>
     <string name="other_product">بقية المنتجات</string>
+    <string name="out_of_stock">غير متوفر</string>
+    <string name="edit">تعديل</string>
+    <string name="locker_item_delete">تم حذف العنصر</string>
+    <string name="fild_req">هذا الحقل مطلوب</string>
+    <string name="price_err">سعر البيع يجب ان يكون اكبر من التكلفة</string>
+    <string name="save_purchase">حفظ عملية الشراء</string>
+    <string name="purchase">شراء</string>
+    <string name="no_purchase_for_this_dealer">لا يوجد عمليات شراء من هذا التاجر</string>
+    <string name="delet_purchase">حذف عمليات الشراء</string>
+    <string name="purchase_delete_warring">انت على وشك حذف هذه العملية</string>
+    <string name="delete_all_purchase">حذف جميع عمليات الشراء</string>
+    <string name="are_you_sure_to_delete_all_purchase_date">هل انت متأكد من حذف جميع عمليات الشراء</string>
+    <string name="purchace_delete">تم حذف عملية الشراء</string>
+    <string name="note_delete">تم حذف الملاحظة</string>
+    <string name="invoice_deleted">تم حذف الفاتورة</string>
+    <string name="expanse_deleted">تم حذف المصروف</string>
 
 </resources>

@@ -146,6 +146,7 @@
     <string name="inventory_value">Inventory Value: %1$s</string>
     <string name="total_invoice_Value">Total Invoice value</string>
     <string name="invoice_date">Invoice Date: %1$s</string>
+    <string name="purchase_date">Purchase Date: %1$s</string>
     <string name="no_invoice_for_this_customer">No invoice for this customer</string>
     <string name="no_item_added">No Item added yet add one by scan barcode or search it</string>
     <string name="top_selling">Top Selling</string>
@@ -189,6 +190,7 @@
     <string name="data_management">Data Management</string>
     <string name="delete_all_customers">Delete all customers</string>
     <string name="delete_all_invoices">Delete all invoices</string>
+    <string name="delete_all_purchase">Delete all purchases</string>
     <string name="delete_all_dealers">Delete all dealers</string>
     <string name="delete_all_products">Delete all products</string>
     <string name="delete_all_app_data">Delete all app data</string>
@@ -251,4 +253,19 @@
     <string name="are_you_sure_to_delete_all_locker_date">Are you sure to delete all locker data ?</string>
     <string name="total_product_profit">Total Product Profit</string>
     <string name="other_product">Other Products</string>
+    <string name="out_of_stock">Out of Stock</string>
+    <string name="edit">Edit</string>
+    <string name="locker_item_delete">Locker item deleted</string>
+    <string name="fild_req">This Filed Require</string>
+    <string name="price_err">Price most be greater than cost</string>
+    <string name="save_purchase">Save Purchase</string>
+    <string name="purchase">purchase</string>
+    <string name="no_purchase_for_this_dealer">no purchase for this dealer</string>
+    <string name="delet_purchase">Delete Purchase</string>
+    <string name="purchase_delete_warring">You about to delete this purchase</string>
+    <string name="are_you_sure_to_delete_all_purchase_date">Are you sure to delete all purchase date</string>
+    <string name="purchace_delete">purchace delete</string>
+    <string name="note_delete">Note Delete</string>
+    <string name="invoice_deleted">invoice deleted</string>
+    <string name="expanse_deleted">expanse deleted</string>
 </resources>

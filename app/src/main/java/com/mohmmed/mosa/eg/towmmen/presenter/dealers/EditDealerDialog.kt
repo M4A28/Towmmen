@@ -91,6 +91,16 @@ fun EditDealerDialog(
                                     .size(15.dp)
                             )
                         },
+                        isError = dealerName.isEmpty(),
+                        supportingText = {
+                            if (dealerName.isEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = stringResource(id = R.string.fild_req),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        },
                         placeholder = {
                             Text(text = stringResource(id = R.string.customer_name_))
                         }
@@ -107,6 +117,16 @@ fun EditDealerDialog(
                                 modifier = Modifier
                                     .size(20.dp)
                             )
+                        },
+                        isError = dealerPhone.isEmpty(),
+                        supportingText = {
+                            if (dealerPhone.isEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = stringResource(id = R.string.fild_req),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
                         placeholder = {
@@ -126,6 +146,16 @@ fun EditDealerDialog(
                                 modifier = Modifier
                                     .size(20.dp)
                             )
+                        },
+                        isError = dealerAddress.isEmpty(),
+                        supportingText = {
+                            if (dealerAddress.isEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = stringResource(id = R.string.fild_req),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         },
                         placeholder = {
                             Text(text = stringResource(id = R.string.address))

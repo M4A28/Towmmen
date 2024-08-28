@@ -98,6 +98,7 @@ fun SettingsScreen() {
     var showDeleteDealersDialog by remember { mutableStateOf(false) }
     var showDeleteCategoryDialog by remember { mutableStateOf(false) }
     var showDeleteInvoiceDialog by remember { mutableStateOf(false) }
+    var showDeletePurchaseDialog by remember { mutableStateOf(false) }
     var showDeleteExpanseDialog by remember { mutableStateOf(false) }
     var showDeleteLockerDialog by remember { mutableStateOf(false) }
 
@@ -126,6 +127,17 @@ fun SettingsScreen() {
             onConfirm = {
                 settingViewModel.clearExpanses()
                 showDeleteExpanseDialog = false
+            }
+        )
+    }
+
+    if(showDeletePurchaseDialog){
+        AdvancedAlertDialog(
+            title = stringResource(R.string.are_you_sure_to_delete_all_purchase_date),
+            onDismiss = { showDeletePurchaseDialog = false },
+            onConfirm = {
+                settingViewModel.clearPurchase()
+                showDeletePurchaseDialog = false
             }
         )
     }
@@ -330,6 +342,14 @@ fun SettingsScreen() {
                     icon = R.drawable.invoice_paper,
                     title = stringResource(R.string.delete_all_invoices),
                     onClick = { showDeleteInvoiceDialog = true }
+                )
+            }
+
+            item {
+                SettingItem(
+                    icon = R.drawable.bag,
+                    title = stringResource(R.string.delete_all_purchase),
+                    onClick = { showDeletePurchaseDialog = true }
                 )
             }
             item {

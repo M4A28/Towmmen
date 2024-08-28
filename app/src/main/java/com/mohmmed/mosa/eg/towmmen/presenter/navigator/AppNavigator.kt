@@ -38,6 +38,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerInvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.EditCustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.FullCustomerInfoScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.dealers.DealerPurchaseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.dealers.DealersScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.dealers.FullDealerInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.DrawerScreen
@@ -65,7 +66,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.product.FullProductInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductsScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.ProfitScreen
-import com.mohmmed.mosa.eg.towmmen.presenter.purchase.PurchaseScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.purchase.AddPurchaseScreen
 import com.mohmmed.mosa.eg.towmmen.util.ONE_MONTH
 import com.mohmmed.mosa.eg.towmmen.util.PRODUCT_KEY
 import kotlinx.coroutines.launch
@@ -206,7 +207,11 @@ fun AppNavigator() {
                     }
 
                     composable(route = Route.DealerPurchasesScreen.route){
-                        PurchaseScreen(navController)
+                        DealerPurchaseScreen(navController)
+                    }
+
+                    composable(route = Route.AddPurchasesScreen.route){
+                        AddPurchaseScreen(navController)
                     }
 
                     composable(route = Route.DealerFullInfoScreen.route){

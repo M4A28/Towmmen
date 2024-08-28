@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
-import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 
 @Composable
@@ -70,15 +70,12 @@ fun ProductCard2(modifier: Modifier = Modifier,
 
             Text(
                 text = product.name,
-                fontFamily = CairoFont,
-
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyLarge
             )
 
             Text(
                 text = product.description,
-                fontFamily = CairoFont,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodySmall
@@ -90,7 +87,6 @@ fun ProductCard2(modifier: Modifier = Modifier,
             ) {
                 Text(
                     text = formatCurrency(product.price),
-                    fontFamily = CairoFont,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
@@ -98,13 +94,13 @@ fun ProductCard2(modifier: Modifier = Modifier,
             }
 
             Text(
-                text = "${product.stockQuantity}  ${product.unit}",
-                fontFamily = CairoFont,
+                text = if(product.stockQuantity <= 0) stringResource(id = R.string.out_of_stock) else "${product.stockQuantity}  ${product.unit}",
                 style = MaterialTheme.typography.labelSmall
             )
         }
     }
 }
+// todo remove this or fix it  iamge not load after relaunch
 @Composable
 fun persistUriPermission(context: Context, uri: Uri): Uri {
   /*  val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION

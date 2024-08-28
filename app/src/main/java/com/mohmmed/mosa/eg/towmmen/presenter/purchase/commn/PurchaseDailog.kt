@@ -1,4 +1,4 @@
-package com.mohmmed.mosa.eg.towmmen.presenter.invoic
+package com.mohmmed.mosa.eg.towmmen.presenter.purchase.commn
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -22,16 +22,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
-import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
+import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
+import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseItem
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 
 @Composable
-fun InvoiceDialog(invoice: Invoice,
-                  invoiceItems: List<InvoiceItem>,
-                  onDismiss: () -> Unit,
-                  onConform: () -> Unit) {
+fun PurchaseDialog(purchase: Purchase,
+                   purchaseItems: List<PurchaseItem>,
+                   onDismiss: () -> Unit,
+                   onConform: () -> Unit) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -40,8 +39,7 @@ fun InvoiceDialog(invoice: Invoice,
             LazyColumn(modifier = Modifier.padding(24.dp)) {
                 item{
                     Text(
-                        text = stringResource(R.string.invoice_number, invoice.invoiceId),
-                        fontFamily = CairoFont,
+                        text = stringResource(R.string.invoice_number, purchase.purchaseId),
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall
                     )
@@ -49,24 +47,23 @@ fun InvoiceDialog(invoice: Invoice,
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = stringResource(R.string.name, invoice.customerName),
-                        fontFamily = CairoFont,
+                        text = stringResource(R.string.name, purchase.dealerName),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = stringResource(id = R.string.total, formatCurrency(invoice.totalAmount) ),
+                        text = stringResource(id = R.string.total, formatCurrency(purchase.totalCost) ),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                 }
-                items(invoiceItems){item ->
+                items(purchaseItems){ item ->
                     ListItem(
                         headlineContent = { Text(item.productName) },
                         supportingContent = { Text(stringResource(id = R.string.quantity, item.quantity)) },
-                        trailingContent = { Text(stringResource(id =R.string.price_, item.unitPrice )) }
+                        trailingContent = { Text(stringResource(id = R.string.price_, item.unitPrice )) }
                     )
                     HorizontalDivider()
 
@@ -85,25 +82,6 @@ fun InvoiceDialog(invoice: Invoice,
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun InvoiceItemsList(items: List<InvoiceItem>) {
-    Text(
-        "Items",
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.padding(vertical = 8.dp)
-    )
-    LazyColumn {
-        items(items.size) { item ->
-            ListItem(
-                headlineContent = { Text(items[item].productName) },
-                supportingContent = { Text(stringResource(id = R.string.quantity, items[item].quantity)) },
-                trailingContent = { Text(stringResource(id =R.string.price_, items[item].unitPrice )) }
-            )
-            HorizontalDivider()
         }
     }
 }

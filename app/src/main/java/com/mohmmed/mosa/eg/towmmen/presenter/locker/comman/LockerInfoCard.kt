@@ -26,13 +26,14 @@ fun LockerInfoCard(
     containerColor: Color
 ) {
     ElevatedCard(
-        modifier = Modifier.size(160.dp),
+        modifier = Modifier.size(160.dp)
+            .padding(16.dp),
         colors = CardDefaults.elevatedCardColors(containerColor = containerColor)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(8.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -44,7 +45,7 @@ fun LockerInfoCard(
             )
             Text(
                 text = value,
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
         }

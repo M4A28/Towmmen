@@ -1,9 +1,12 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.locker.comman
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,12 +21,17 @@ import androidx.compose.ui.unit.dp
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.data.module.TransactionType
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.SaveEditDropDownMenu
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 
 
 @Composable
-fun LockerItem(lockerItem: Locker) {
+fun LockerItem(
+    lockerItem: Locker,
+    onEdit: (Locker) -> Unit = {},
+    onDelete: (Locker) -> Unit = {},
+) {
 
     Card(
         modifier = Modifier
@@ -31,18 +39,32 @@ fun LockerItem(lockerItem: Locker) {
             .padding(horizontal = 16.dp, vertical = 8.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = dateToString(lockerItem.transActionDate, "yyyy-MM-dd"),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.width(50.dp))
+            SaveEditDropDownMenu(
+
+                onEdit = { onEdit(lockerItem) },
+                onDelete = { onDelete(lockerItem) },
+                deleteMessage = stringResource(id = R.string.locker_item_delete),
+                editMessage = ""
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(top = 4.dp, end = 16.dp, start = 16.dp, bottom = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = dateToString(lockerItem.transActionDate, "yyyy-MM-dd"),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+
                 Text(
                     text = transActionTypeName(lockerItem.transActionType) ,
                     style = MaterialTheme.typography.titleMedium,
@@ -82,4 +104,5 @@ fun transActionTypeName(transaction: String): String {
         else -> stringResource(id = R.string.undefined)
     }
 }
+
 

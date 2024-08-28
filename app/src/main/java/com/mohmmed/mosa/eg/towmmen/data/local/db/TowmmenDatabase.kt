@@ -25,6 +25,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.data.module.Note
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
+import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseItem
 
 @Database(entities = [
     Product::class,
@@ -36,9 +37,10 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
     Invoice::class,
     Expanse::class,
     InvoiceItem::class ,
+    PurchaseItem::class,
     Locker::class ,
     Dealer::class],
-    version = 9,
+    version = 10,
     exportSchema = true)
 
 @TypeConverters(DateTypeConverter::class)

@@ -210,8 +210,8 @@ fun EditCustomerContent(
                     }
                 }
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Customer")
-                Text(stringResource(id = R.string.add_new_customer),
+                Icon(Icons.Filled.Add, contentDescription = "edit Customer")
+                Text(stringResource(id = R.string.edit_customer),
                     modifier = Modifier.padding(start = 8.dp))
             }
         }

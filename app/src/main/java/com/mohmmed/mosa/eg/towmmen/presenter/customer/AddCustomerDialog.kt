@@ -90,6 +90,16 @@ fun AddCustomerDialog(onAddClick:(Customer)-> Unit,
                                     .size(15.dp)
                             )
                         },
+                        isError = customerName.isEmpty(),
+                        supportingText = {
+                            if (customerName.isEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = stringResource(id = R.string.fild_req),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        },
                         placeholder = {
                             Text(text = stringResource(id = R.string.customer_name_))
                         }
@@ -106,6 +116,16 @@ fun AddCustomerDialog(onAddClick:(Customer)-> Unit,
                                 modifier = Modifier
                                     .size(20.dp)
                             )
+                        },
+                        isError = customerPhone.isEmpty(),
+                        supportingText = {
+                            if (customerPhone.isEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = stringResource(id = R.string.fild_req),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
                         placeholder = {
@@ -125,6 +145,7 @@ fun AddCustomerDialog(onAddClick:(Customer)-> Unit,
                                     .size(20.dp)
                             )
                         },
+                        supportingText = {},
                         placeholder = {
                             Text(text = stringResource(id = R.string.email))
                         }
@@ -141,6 +162,16 @@ fun AddCustomerDialog(onAddClick:(Customer)-> Unit,
                                 modifier = Modifier
                                     .size(20.dp)
                             )
+                        },
+                        isError = customerAddress.isEmpty(),
+                        supportingText = {
+                            if (customerAddress.isEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = stringResource(id = R.string.fild_req),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         },
                         placeholder = {
                             Text(text = stringResource(id = R.string.address))

@@ -20,6 +20,7 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.LockerUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker_setting.LockerSettingUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.note.NoteUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductUseCases
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.purchase.PurchaseUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,6 +41,7 @@ class SettingViewModel @Inject constructor(
     private val categoryUseCases: CategoryUseCases,
     private val lockerUseCases: LockerUseCases,
     private val lockerSettingUseCases: LockerSettingUseCases,
+    private val purchaseUseCases: PurchaseUseCases
     ): ViewModel(){
 
 
@@ -121,6 +123,11 @@ class SettingViewModel @Inject constructor(
     fun clearInvoice(){
         viewModelScope.launch(Dispatchers.IO) {
             invoiceUseCases.clearInvoiceData()
+        }
+    }
+    fun clearPurchase(){
+        viewModelScope.launch(Dispatchers.IO) {
+            purchaseUseCases.clearPurchasesDate()
         }
     }
 

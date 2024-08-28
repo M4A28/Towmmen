@@ -46,6 +46,12 @@ fun LockerTransactionsScreen(navHostController: NavHostController){
         lockersTransaction = lockerTransactions,
         onFapClick = {
             navigateToScreen(navHostController, Route.AddLockerScreen.route)
+        },
+        onDelete = {
+            lockerViewModel.deleteLockerTransaction(it)
+        },
+        onEdit = {
+            // todo
         }
     )
 }
@@ -54,7 +60,9 @@ fun LockerTransactionsScreen(navHostController: NavHostController){
 @Composable
 fun LockerTransactionsContent(
     lockersTransaction: List<Locker>,
-    onFapClick:() -> Unit
+    onFapClick:() -> Unit,
+    onEdit:(Locker) -> Unit,
+    onDelete:(Locker) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -100,7 +108,7 @@ fun LockerTransactionsContent(
                     ){
 
                         LockerInfoCard(
-                            title = stringResource(id = R.string.total),
+                            title = stringResource(id = R.string.total_),
                             value = formatCurrency(lockersTransaction.sumOf { it.transActionAmount }),
                             icon = { Icon(painter = painterResource(id = R.drawable.cash), contentDescription = "Total", tint = MaterialTheme.colorScheme.onSurfaceVariant) },
                             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -150,7 +158,10 @@ fun LockerTransactionsContent(
                     key = {it.transActonId}
                 ) {
                         transaction ->
-                    LockerItem(transaction)
+                    LockerItem(transaction,
+                        onEdit = {onEdit(it)},
+                        onDelete = {onDelete(it)}
+                    )
                 }
             }
         } else{

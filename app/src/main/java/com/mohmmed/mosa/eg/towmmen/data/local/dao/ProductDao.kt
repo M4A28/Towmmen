@@ -16,7 +16,7 @@ import java.util.Date
 @Dao
 interface ProductDao {
 
-    @Query("SELECT * FROM products ORDER BY createdAt DESC")
+    @Query("SELECT * FROM products ORDER BY updatedAt DESC")
     fun getAllProducts(): Flow<List<Product>>
 
     @Upsert

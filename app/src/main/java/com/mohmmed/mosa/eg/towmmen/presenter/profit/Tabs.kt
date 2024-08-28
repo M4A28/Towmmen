@@ -10,7 +10,9 @@ enum class Tabs(
 ) {
     InvoiceScreen(text = R.string.invoice, icon = R.drawable.description),
 
-    TopSellingScreen(text = R.string.top_selling, icon = R.drawable.shopping),
+    PurchaseScreen(text = R.string.purchase, icon = R.drawable.bag),
+
+    TopSellingScreen(text = R.string.top_selling, icon = R.drawable.shopping_cart),
 
     ExpanseScreen(text = R.string.expanse, icon = R.drawable.payment),
 

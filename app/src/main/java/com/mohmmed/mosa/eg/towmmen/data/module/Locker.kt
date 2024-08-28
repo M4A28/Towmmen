@@ -7,7 +7,7 @@ import java.util.Date
 @Entity(tableName = "locker")
 data class Locker(
     @PrimaryKey(autoGenerate = true)
-    val transActonId: Int,
+    val transActonId: Int = 0,
     val transActionType: String,
     val transActionDate: Date,
     val transActionAmount: Double,

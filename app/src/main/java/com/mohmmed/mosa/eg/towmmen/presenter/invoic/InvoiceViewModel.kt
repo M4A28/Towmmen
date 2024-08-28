@@ -2,16 +2,20 @@ package com.mohmmed.mosa.eg.towmmen.presenter.invoic
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
 import com.mohmmed.mosa.eg.towmmen.data.module.Locker
+import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.CustomerUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.InvoiceUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.LockerUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker_setting.LockerSettingUseCases
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.product.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,12 +30,26 @@ import javax.inject.Inject
 class InvoiceViewModel @Inject constructor(
     private val invoiceUseCases: InvoiceUseCases,
     private val lockerSetting: LockerSettingUseCases,
-    private val lockerUseCases: LockerUseCases
+    private val lockerUseCases: LockerUseCases,
+    private val productUseCase: ProductUseCases,
+    private val customerUseCases: CustomerUseCases
 ): ViewModel() {
 
-    suspend fun upsertInvoice(invoice: Invoice){
+    val products = productUseCase.getALlProducts()
+    fun updateProduct(product: Product){
+        viewModelScope.launch(Dispatchers.IO) {
+            productUseCase.updateProduct(product)
+        }
+    }
+    fun upsertInvoice(invoice: Invoice){
         viewModelScope.launch {
             invoiceUseCases.upsertInvoice(invoice)
+        }
+    }
+
+    fun updateCustomer(customer: Customer){
+        viewModelScope.launch(Dispatchers.IO){
+            customerUseCases.updateCustomer(customer)
         }
     }
 

@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -140,7 +141,7 @@ fun FullProductInfoContent(
             ){
                 FilledIconButton(
                     colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surface
+                        containerColor = Color.Unspecified
                     ),
                     onClick = { onClickEditClick(product) }) {
                     Icon(
@@ -155,7 +156,7 @@ fun FullProductInfoContent(
                 // delete
                 FilledIconButton(
                     colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surface
+                        containerColor = Color.Unspecified
                     ),
                     onClick = { onClickDeleteClick(product) }) {
                     Icon(

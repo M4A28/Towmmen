@@ -1,16 +1,9 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.invoic
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -25,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -40,12 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -53,19 +42,16 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.data.barcode.BarcodeAnalyzer
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.data.module.TransactionType
-import com.mohmmed.mosa.eg.towmmen.presenter.barcode.ScannerOverlay
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.BarcodeReader
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.InvoiceItemCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
-import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerViewModel
-import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
+import com.mohmmed.mosa.eg.towmmen.presenter.invoic.comman.InvoiceDialog
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 import com.mohmmed.mosa.eg.towmmen.util.generateInvoiceNumber
 import kotlinx.coroutines.delay
@@ -75,11 +61,9 @@ import java.util.Date
 @Composable
 fun AddInvoiceScreen(navController: NavHostController){
     // todo refactor this
-    val productsViewModel: ProductViewModel = hiltViewModel()
     val invoiceViewModel: InvoiceViewModel = hiltViewModel()
-    val customerViewModel: CustomerViewModel = hiltViewModel()
     val canSaveSell  by invoiceViewModel.canSaveSellToDb.collectAsState()
-    val products by productsViewModel.products.collectAsState(initial = emptyList())
+    val products by invoiceViewModel.products.collectAsState(initial = emptyList())
     var cameraPermissionGranted by remember { mutableStateOf(false) }
 
     val cameraPermissionState =
@@ -122,12 +106,12 @@ fun AddInvoiceScreen(navController: NavHostController){
                 invoice, item ->
             val purchaseDate = Date()
             invoiceViewModel.insertFullInvoice(invoice, item)
-            customerViewModel.updateCustomer(customer.copy(lastPurchaseDate = purchaseDate))
+            invoiceViewModel.updateCustomer(customer.copy(lastPurchaseDate = purchaseDate))
             item.forEach{invoiceItem ->
                 val edit = products.first { invoiceItem.productId == it.productId }
                 edit.stockQuantity -= invoiceItem.quantity
                 if(edit.stockQuantity >= 0) {
-                    productsViewModel.updateProduct(edit)
+                    invoiceViewModel.updateProduct(edit)
                 }
             }
             if(canSaveSell){
@@ -154,7 +138,7 @@ fun AddInvoiceContent(
 ) {
     var barcodeValue by remember { mutableStateOf("") }
     var searchQuery by remember { mutableStateOf(barcodeValue.ifEmpty { "" }) }
-    var invoiceItem by remember { mutableStateOf(mutableSetOf<InvoiceItem>()) }
+    val invoiceItem by remember { mutableStateOf(mutableListOf<InvoiceItem>()) }
     var finalInvoice by remember{ mutableStateOf<Invoice?>(null) }
     var showBarcodeScan by remember { mutableStateOf(false) }
     var showInvoiceDialog by remember { mutableStateOf(false) }
@@ -187,6 +171,8 @@ fun AddInvoiceContent(
                         DisposableEffect(Unit) {
                             onDispose {
                                 scannerSound.release()
+                                cashierSound.release()
+
                             }
                         }
 
@@ -205,7 +191,6 @@ fun AddInvoiceContent(
                             .fillMaxWidth()
                             .height(80.dp)){
                             BarcodeReader(onBarcodeDetected = {
-                                //searchQuery = it
                                 barcodeValue = it
                             })
                         }
@@ -228,45 +213,42 @@ fun AddInvoiceContent(
                     }
                 }
 
-                val p = products.filter { it.barcode == searchQuery ||
+                val selectedProduct = products.firstOrNull {
+                    it.barcode == searchQuery ||
+                            it.barcode == barcodeValue ||
+                            it.name == searchQuery
+                }
+
+            /*.filter { it.barcode == searchQuery ||
                         it.barcode == barcodeValue ||
                         it.name == searchQuery
+                }*/
+
+            if (selectedProduct != null) {
+                if(invoiceItem.none { it.productId == selectedProduct.productId }){
+                    invoiceItem.add(InvoiceItem(
+                        invoiceId = invoiceId,
+                        productId = selectedProduct.productId,
+                        productName = selectedProduct.name,
+                        quantity = 1,
+                        purchaseDate = invoiceDate,
+                        unitPrice = selectedProduct.price
+                    ))
                 }
-                p.forEach{ product ->
-                    invoiceItem.add(
-                        InvoiceItem(
-                            invoiceId = invoiceId,
-                            productId = product.productId,
-                            productName = product.name,
-                            quantity = 1,
-                            purchaseDate = invoiceDate,
-                            unitPrice = product.price
-                        )
+            }
+                items(invoiceItem){ item ->
+                    InvoiceItemCard(
+                        itemName = item.productName ,
+                        price = item.unitPrice,
+                        initialQuantity = 1,
+                        onQuantityChange = {
+                            item.quantity = it
+                        },
+                        onCloseClick = {
+                            invoiceItem.remove(item)
+                            searchQuery = ""
+                        }
                     )
-                }
-
-                items(invoiceItem.toList()){ item ->
-                    if(invoiceItem.isNotEmpty()){
-                        InvoiceItemCard(
-                            itemName = item.productName ,
-                            price = item.unitPrice,
-                            initialQuantity = 1,
-                            onQuantityChange = {
-                                item.quantity = it
-                            },
-                            onCloseClick = {
-                                invoiceItem = invoiceItem
-                                    .toMutableSet().apply { remove(item) }
-                            }
-                        )
-                    }else{
-                        EmptyScreen(
-                            massage = stringResource(R.string.no_item_added),
-                            icon = R.drawable.box,
-                            alphaAnim = 0.3f
-                        )
-                    }
-
                 }
 
                 if(invoiceItem.isNotEmpty()){
@@ -296,7 +278,8 @@ fun AddInvoiceContent(
 
                             Button(
                                 onClick = {
-                                    invoiceItem = mutableSetOf()
+                                    invoiceItem.clear()
+                                    searchQuery = ""
                                     invoiceId = generateInvoiceNumber()
                                 }
                             ) { Text(stringResource(R.string.clear)) }
@@ -314,7 +297,7 @@ fun AddInvoiceContent(
                 onConform = {
                     showInvoiceDialog = !showInvoiceDialog
                     onSaveInvoiceClick(finalInvoice!!, invoiceItem.toList())
-                    invoiceItem = mutableSetOf()
+                    invoiceItem.clear()
                     try{
                         cashierSound.start()
                     }catch (e: Exception){
@@ -326,76 +309,3 @@ fun AddInvoiceContent(
 
 }
 
-@Composable
-fun BarcodeReader(onBarcodeDetected: (String) -> Unit) {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    var cameraPermissionGranted by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        cameraPermissionGranted = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    if (cameraPermissionGranted) {
-        val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
-        AndroidView(
-            factory = { ctx ->
-                val previewView = PreviewView(ctx).apply {
-                    this.scaleType = PreviewView.ScaleType.FILL_CENTER
-                }
-                val executor = ContextCompat.getMainExecutor(ctx)
-                cameraProviderFuture.addListener({
-                    val cameraProvider = cameraProviderFuture.get()
-                    val preview = Preview.Builder().build().also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
-                    }
-                    val imageAnalyzer = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .also {
-                            it.setAnalyzer(executor, BarcodeAnalyzer(onBarcodeDetected))
-                        }
-                    try {
-                        cameraProvider.unbindAll()
-                        cameraProvider.bindToLifecycle(
-                            lifecycleOwner,
-                            CameraSelector.DEFAULT_BACK_CAMERA,
-                            preview,
-                            imageAnalyzer
-                        )
-                    } catch (exc: Exception) {
-                        Log.e("BarcodeScanner", "Use case binding failed", exc)
-                    }
-                }, executor)
-                previewView
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-        )
-        ScannerOverlay()
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                stringResource(R.string.camera_permission),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.error
-            )
-        }
-
-        LaunchedEffect(Unit) {
-            cameraPermissionGranted = ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        }
-    }
-}

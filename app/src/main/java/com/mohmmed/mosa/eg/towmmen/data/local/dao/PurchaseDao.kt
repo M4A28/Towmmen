@@ -4,7 +4,11 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Upsert
 import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
+import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseItem
+import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseWithItems
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,5 +31,31 @@ interface PurchaseDao {
     fun getTotalPurchasesByCustomer(dealerId: Int): Flow<Int>
 
 
+    @Upsert
+    suspend fun upsertPurchaseWithItems(items: List<PurchaseItem>)
+
+    @Transaction
+    @Query("SELECT * FROM purchases ORDER BY date DESC ")
+    fun getPurchaseWithItems(): Flow<List<PurchaseWithItems>>
+
+    @Transaction
+    @Query("SELECT * FROM purchases WHERE purchaseId = :purchaseId")
+    fun getPurchaseWithItems(purchaseId: String): Flow<PurchaseWithItems?>
+
+    @Transaction
+    @Query("SELECT * FROM purchases WHERE dealerId = :dealerId ORDER BY date DESC ")
+    fun getPurchaseWithItemsByDealerId(dealerId: Int): Flow<List<PurchaseWithItems>>
+
+    @Transaction
+    suspend fun insertFullPurchase(purchase: Purchase, items: List<PurchaseItem>) {
+        insertPurchase(purchase)
+        val purchaseId  = purchase.purchaseId
+        items.forEach { item ->
+            upsertPurchaseWithItems(listOf(item.copy(purchaseId = purchaseId)))
+        }
+    }
+
+    @Query("DELETE FROM purchases")
+    suspend fun clearPurchasesDate()
 
 }

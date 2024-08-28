@@ -30,7 +30,7 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.presenter.expanse.ExpanseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.TopSellingItemScreen
-import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
+import com.mohmmed.mosa.eg.towmmen.presenter.purchase.PurchaseScreen
 import kotlinx.coroutines.launch
 
 
@@ -52,7 +52,6 @@ fun ProfitScreen(navController: NavHostController){
                         contentAlignment = Alignment.Center
                     ) { Text(
                         text = stringResource(id = R.string.profit),
-                        fontFamily = CairoFont
                     ) }
                 }
             )
@@ -79,7 +78,6 @@ fun ProfitScreen(navController: NavHostController){
                         text = {
                             Text(
                                 text = stringResource(id = currentTab.text),
-                                fontFamily = CairoFont,
                                 fontWeight = FontWeight.Bold
                             )
                         },
@@ -98,8 +96,9 @@ fun ProfitScreen(navController: NavHostController){
                 state = pagerState) {
                 when(selectedTabIndex){
                     0 -> InvoiceScreen()
-                    1 -> TopSellingItemScreen()
-                    2 -> ExpanseScreen(navController = navController)
+                    1 -> PurchaseScreen()
+                    2 -> TopSellingItemScreen()
+                    3 -> ExpanseScreen(navController = navController) // todo refactor
                 }
             }
         }

@@ -6,6 +6,12 @@ data class PurchaseUseCases(
     val getPurchasesByCustomerId: GetPurchasesByCustomerId,
     val getTotalPurchases: GetTotalPurchases,
     val insertPurchase: InsertPurchase,
-    val deletePurchase: DeletePurchase
+    val deletePurchase: DeletePurchase,
+
+    val clearPurchasesDate: ClearPurchasesDate,
+    val getPurchaseWithItems: GetPurchaseWithItems,
+    val getPurchaseWithItemsByDealerId: GetPurchaseWithItemsByDealerId,
+    val insertFullPurchase: InsertFullPurchase,
+    val upsertPurchaseWithItems: UpsertPurchaseWithItems,
 ) {
 }

@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,6 +44,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Dealer
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DetailItem
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.util.DEALER_ID
 import com.mohmmed.mosa.eg.towmmen.util.DEALER_KEY
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import kotlinx.coroutines.launch
@@ -67,10 +69,11 @@ fun FullDealerInfoScreen(navController: NavHostController) {
                 },
                 onPurchaseClick = {
                     navController.currentBackStackEntry?.savedStateHandle?.set(DEALER_KEY, it)
-                    navController.navigate(Route.DealerPurchasesScreen.route)
+                    navController.navigate(Route.AddPurchasesScreen.route)
                 },
                 onShowInvoicesClick = {
-                    // todo  make all invoice screen
+                    navController.currentBackStackEntry?.savedStateHandle?.set(DEALER_ID, it.dealerId)
+                    navController.navigate(Route.DealerPurchasesScreen.route)
 
                 }
             )
@@ -135,8 +138,8 @@ fun FullDealerInfoContent(
         ){
             Button(
                 onClick = { onPurchaseClick(dealer) },
-                colors = ButtonDefaults
-                    .buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+
             ) {
                 Spacer(Modifier.width(8.dp))
                 Text(
@@ -146,7 +149,7 @@ fun FullDealerInfoContent(
             }
             Button(
                 onClick = {onShowInvoicesClick(dealer)},
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
             ) {
                 Spacer(Modifier.width(8.dp))
                 Text(text = stringResource(R.string.show_invoices),
@@ -187,7 +190,7 @@ fun DealerHeader(
 
             FilledIconButton(
                 colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = Color.Transparent
                 ),
                 onClick = { onEditClick(dealer) }) {
                 Icon(
@@ -201,7 +204,7 @@ fun DealerHeader(
 
             FilledIconButton(
                 colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = Color.Unspecified
                 ),
                 onClick = { onDeleteClick(dealer) }) {
                 Icon(
