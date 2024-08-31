@@ -287,5 +287,19 @@
     <string name="note_delete">تم حذف الملاحظة</string>
     <string name="invoice_deleted">تم حذف الفاتورة</string>
     <string name="expanse_deleted">تم حذف المصروف</string>
+    <string name="increase_decrees_price">زيادة/تقليل الاسعار</string>
+    <string name="import_product_from_csv_file">استيراد منتجات من ملف CSV</string>
+    <string name="increase">زيادة (+)</string>
+    <string name="decrees">تقليل (-)</string>
+    <string name="dismiss">الغاء</string>
+    <string name="grant_permission">اعطاء الاذن </string>
+    <string name="profit_">المكسب: %1$s</string>
+    <string name="without_customer">بدون عميل</string>
+    <string name="accounting">الحسابات</string>
+    <string name="day">يوم</string>
+    <string name="week">اسبوع</string>
+    <string name="month">شهر</string>
+    <string name="total_expanse_per">اجمالي المصروفات لكل</string>
+    <string name="total_invoice_per">اجمالي الفواتير لكل</string>
 
 </resources>

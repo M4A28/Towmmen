@@ -86,7 +86,6 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     //Splash Api
     implementation(libs.androidx.core.splashscreen)
-    //implementation("com.google.accompanist:accompanist-permissions:0.31.0")
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
@@ -98,7 +97,7 @@ dependencies {
 
     // work manger
     implementation(libs.androidx.work.runtime.ktx)
-    implementation (libs.androidx.work.multiprocess)
+    //implementation (libs.androidx.work.multiprocess)
     implementation(libs.androidx.hilt.work)
     // coil
     implementation(libs.coil.compose)
@@ -113,8 +112,8 @@ dependencies {
     // Accompanist
     implementation(libs.accompanist.systemuicontroller)
     // Paging 3
-    implementation (libs.androidx.paging.runtime)
-    implementation (libs.androidx.paging.compose)
+    //implementation (libs.androidx.paging.runtime)
+    //implementation (libs.androidx.paging.compose)
     //Room
     implementation (libs.androidx.room.runtime)
     kapt (libs.androidx.room.compiler)
@@ -126,7 +125,7 @@ dependencies {
     // pretty time
     implementation(libs.prettytime)
     // to show fake data eg: name, emil
-    implementation(libs.javafaker)
+    //implementation(libs.javafaker)
     // chart vice
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)

@@ -7,15 +7,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -36,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,7 +49,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
 import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseItem
 import com.mohmmed.mosa.eg.towmmen.data.module.TransactionType
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.BarcodeReader
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBarWithBarcode
 import com.mohmmed.mosa.eg.towmmen.presenter.purchase.commn.PurchaseDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.purchase.commn.PurchaseItemCard
 import com.mohmmed.mosa.eg.towmmen.util.DEALER_KEY
@@ -79,9 +75,9 @@ fun AddPurchaseScreen(navController: NavHostController) {
         if (!cameraPermissionState.status.isGranted
             && cameraPermissionState.status.shouldShowRationale
         ) {
-            // todo enhance this
+
         } else {
-            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
     navController.previousBackStackEntry
@@ -196,22 +192,13 @@ fun AddPurchaseContent(
                         })
                     }
                 }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Button(
-                        onClick = { showBarcodeScan = !showBarcodeScan },
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.barcode),
-                            contentDescription = null
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(4.dp))
-                    ModernSearchBar(
-                        searchQuery = searchQuery,
-                        onSearchQueryChange = { searchQuery = it }
+                ModernSearchBarWithBarcode(
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = { searchQuery = it },
+                    suggestions = products.map{it.name}.filter{ it.contains(searchQuery, ignoreCase = true) },
+                    onSuggestionSelected = {searchQuery = it },
+                    onBarcodeButtonClick = { showBarcodeScan = !showBarcodeScan }
                     )
-                }
             }
             val selectedProduct = products.firstOrNull() {
                 it.barcode == searchQuery ||
@@ -233,7 +220,9 @@ fun AddPurchaseContent(
                         onQuantityChang = {item.stockQuantity = it},
                         onCloseClick = {
                             searchQuery =""
-                            purchaseProduct.remove(item)
+                            if(purchaseProduct.isNotEmpty()){
+                                purchaseProduct.remove(item)
+                            }
                         }
                     )
                 }
@@ -293,8 +282,8 @@ fun AddPurchaseContent(
                 try{
                     onSaveInvoiceClick(purchase, purchaseItems, purchaseProduct )
                     purchasesId = generatePurchaseNumber()
-                    purchaseProduct.clear()
                     cashierSound.start()
+                    purchaseProduct.clear()
                     searchQuery =""
                     showPurchaseDialog = false
                 }catch (e: Exception){

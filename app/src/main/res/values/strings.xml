@@ -264,8 +264,22 @@
     <string name="delet_purchase">Delete Purchase</string>
     <string name="purchase_delete_warring">You about to delete this purchase</string>
     <string name="are_you_sure_to_delete_all_purchase_date">Are you sure to delete all purchase date</string>
-    <string name="purchace_delete">purchace delete</string>
+    <string name="purchace_delete">purchase delete</string>
     <string name="note_delete">Note Delete</string>
     <string name="invoice_deleted">invoice deleted</string>
     <string name="expanse_deleted">expanse deleted</string>
+    <string name="increase_decrees_price">Increase/Decrees Price</string>
+    <string name="import_product_from_csv_file">Import Product From CSV File</string>
+    <string name="increase">Increase (+)</string>
+    <string name="decrees">Decrees (-)</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="grant_permission">Grant Permissions Request</string>
+    <string name="profit_">Profit: %1$s</string>
+    <string name="without_customer">without customer</string>
+    <string name="accounting">Accounting</string>
+    <string name="day">Day</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="total_expanse_per">total expanse per</string>
+    <string name="total_invoice_per">total invoice per</string>
 </resources>

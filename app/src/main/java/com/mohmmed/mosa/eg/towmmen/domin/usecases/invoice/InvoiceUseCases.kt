@@ -27,4 +27,7 @@ data class InvoiceUseCases(
     val getAvgInvoicePerMonth: GetAvgInvoicePerMonth,
     val clearInvoiceData: ClearInvoiceData,
     val getMostTopProduct: GetMostTopProduct,
+    val getInvoiceProfitByDay: GetInvoiceProfitByDay,
+    val getInvoiceProfitByWeek: GetInvoiceProfitByWeek,
+
 )

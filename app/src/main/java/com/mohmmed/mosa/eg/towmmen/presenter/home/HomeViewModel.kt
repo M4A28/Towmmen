@@ -2,9 +2,9 @@ package com.mohmmed.mosa.eg.towmmen.presenter.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.MostTopProduct
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.customer.CustomerUseCases
@@ -35,9 +35,17 @@ class HomeViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
 
 
-    val invoicePerMonth: StateFlow<List<InvoiceProfitByMonth>> =
+    val invoicePerMonth: StateFlow<List<InvoiceProfitByPeriod>> =
         invoiceUseCases.getInvoiceProfitByMonth()
-            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf(InvoiceProfitByMonth("", 0.0)))
+            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf(InvoiceProfitByPeriod("", 0.0)))
+
+    val invoicePerDay: StateFlow<List<InvoiceProfitByPeriod>> =
+        invoiceUseCases.getInvoiceProfitByDay()
+            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf(InvoiceProfitByPeriod("", 0.0)))
+
+    val invoicePerWeek: StateFlow<List<InvoiceProfitByPeriod>> =
+        invoiceUseCases.getInvoiceProfitByWeek()
+            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf(InvoiceProfitByPeriod("", 0.0)))
 
     val productCount:  StateFlow<Int?> =
         productUseCases
@@ -67,9 +75,18 @@ class HomeViewModel @Inject constructor(
         invoiceUseCases.getMostTopProduct()
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val expansePerMonthItems: StateFlow<List<ExpansePerMonth>> =
+    val expansePerMonth: StateFlow<List<ExpansePerPeriod>> =
         expanseUseCases.getExpansePerMonth()
-            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf(ExpansePerMonth("", 0.0)))
+            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf(ExpansePerPeriod("", 0.0)))
+
+    val expansePerDay: StateFlow<List<ExpansePerPeriod>> =
+        expanseUseCases.getExpansePerDay()
+            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf(ExpansePerPeriod("", 0.0)))
+
+    val expansePerWeek: StateFlow<List<ExpansePerPeriod>> =
+        expanseUseCases.getExpansePerWeek()
+            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf(ExpansePerPeriod("", 0.0)))
+
 
     val invoices: StateFlow<List<Invoice>> =
         invoiceUseCases.getAllInvoice()

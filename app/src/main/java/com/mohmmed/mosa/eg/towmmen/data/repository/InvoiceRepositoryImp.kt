@@ -2,9 +2,9 @@ package com.mohmmed.mosa.eg.towmmen.data.repository
 
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.InvoiceDao
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
 import com.mohmmed.mosa.eg.towmmen.data.module.MostTopProduct
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
@@ -99,7 +99,7 @@ class InvoiceRepositoryImp @Inject constructor(
         return invoiceDao.getInvoiceProfitForCurrentDay()
     }
 
-    override fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByMonth>> {
+    override fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByPeriod>> {
         return invoiceDao.getInvoiceProfitByMonth()
     }
 
@@ -107,7 +107,7 @@ class InvoiceRepositoryImp @Inject constructor(
         return invoiceDao.getMaxInvoice()
     }
 
-    override fun getInvoiceCountByMonth(): Flow<List<InvoiceByMonth>> {
+    override fun getInvoiceCountByMonth(): Flow<List<InvoiceByPeriod>> {
         return invoiceDao.getInvoiceCountByMonth()
     }
 
@@ -125,6 +125,14 @@ class InvoiceRepositoryImp @Inject constructor(
 
     override fun getMostTopProduct(): Flow<List<MostTopProduct>> {
         return invoiceDao.getMostTopProduct()
+    }
+
+    override fun getInvoiceProfitByDay(): Flow<List<InvoiceProfitByPeriod>> {
+        return invoiceDao.getInvoiceProfitByDay()
+    }
+
+    override fun getInvoiceProfitByWeek(): Flow<List<InvoiceProfitByPeriod>> {
+        return invoiceDao.getInvoiceProfitByWeek()
     }
 
 }

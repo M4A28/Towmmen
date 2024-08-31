@@ -15,7 +15,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -37,11 +37,13 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Expanse
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.SaveEditDropDownMenu
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToTab
 import com.mohmmed.mosa.eg.towmmen.util.EXPANSE_KEY
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
+import java.util.Date
 import java.util.Locale
 
 
@@ -130,7 +132,7 @@ fun ExpanseItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -143,33 +145,28 @@ fun ExpanseItemCard(
             ) {
                 Text(text = expanse.expanse, style = MaterialTheme.typography.titleMedium)
                 Text(text = formatCurrency(expanse.amount), style = MaterialTheme.typography.titleLarge)
+                SaveEditDropDownMenu(deleteMessage = stringResource(id = R.string.expanse_deleted),
+                    onDelete = {onDeleteClick(expanse)},
+                    onEdit = {onEditClick(expanse)})
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = dateToString(expanse.payDate,
                 "yyyy MMMM dd",
                         locale = Locale.getDefault()), style = MaterialTheme.typography.bodyMedium)
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                IconButton(onClick = { onEditClick(expanse) }) {
-                    Icon(
-                        painter = painterResource(R.drawable.edit),
-                        contentDescription = "Edit",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-                IconButton(onClick = { onDeleteClick(expanse) }) {
-                    Icon(
-                        painter = painterResource(R.drawable.delete),
-                        contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun ExpansePreview(){
+    ExpanseItemCard(expanse = Expanse(
+        expanseId = 0,
+        expanse = "Eele",
+        payDate = Date(),
+        amount = 120.0
+    ), onDeleteClick = {}, onEditClick = {})
 }
 
 

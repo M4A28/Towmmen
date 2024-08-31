@@ -237,12 +237,12 @@ fun DealerDetails(dealer: Dealer) {
         Column(modifier = Modifier.padding(16.dp)) {
             DetailItem(icon = R.drawable.phone, label = stringResource(id = R.string.phone), value = dealer.dealerPhoneNumber)
             DetailItem(icon = R.drawable.location_pin, label = stringResource(id = R.string.address), value = dealer.dealerAddress)
-            DetailItem(icon = R.drawable.notes, label = stringResource(id = R.string.notes), value = dealer.dealerNote)
             DetailItem(
                 icon = R.drawable.calendar_month,
                 label = stringResource(id = R.string.reg_data_2),
                 value = dateToString(dealer.createDate, "yyyy-MM-dd")
             )
+            DetailItem(icon = R.drawable.notes, label = stringResource(id = R.string.notes), value = dealer.dealerNote)
         }
     }
 }

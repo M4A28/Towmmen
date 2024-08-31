@@ -34,9 +34,9 @@ enum class NavigationItem(
         title = R.string.settings
     ),
 
-    Profit(
+    Accounting(
         icon = R.drawable.cash,
-        title = R.string.profit
+        title = R.string.accounting
     ),
 
     Locker(

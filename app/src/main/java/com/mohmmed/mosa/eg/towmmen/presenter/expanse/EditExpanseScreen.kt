@@ -170,8 +170,7 @@ fun EditExpanseContent(
                     stringResource(id = R.string.edit_expanse),
                     modifier = Modifier.padding(start = 8.dp),
                     style = MaterialTheme.typography.
-                    labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                    fontFamily = CairoFont,)
+                    labelMedium.copy(fontWeight = FontWeight.SemiBold))
             }
 
             Button(
@@ -187,8 +186,6 @@ fun EditExpanseContent(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-
-
         }
 
     }

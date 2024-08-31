@@ -24,7 +24,6 @@ import androidx.compose.ui.window.Dialog
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
-import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 
 @Composable
@@ -41,7 +40,6 @@ fun InvoiceDialog(invoice: Invoice,
                 item{
                     Text(
                         text = stringResource(R.string.invoice_number, invoice.invoiceId),
-                        fontFamily = CairoFont,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall
                     )
@@ -50,13 +48,17 @@ fun InvoiceDialog(invoice: Invoice,
 
                     Text(
                         text = stringResource(R.string.name, invoice.customerName),
-                        fontFamily = CairoFont,
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
                         text = stringResource(id = R.string.total, formatCurrency(invoice.totalAmount) ),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    ) 
+                    Text(
+                        text = stringResource(id = R.string.profit_, formatCurrency(invoice.profit) ),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold
                     )

@@ -8,5 +8,7 @@ data class ExpanseUseCases(
     val getExpansePerMonth: GetExpansePerMonth,
     val getAvgExpanse: GetAvgExpanse,
     val getAvgExpansePerMonth: GetAvgExpansePerMonth,
-    val clearExpanseData: ClearExpanseData
+    val clearExpanseData: ClearExpanseData,
+    val getExpansePerWeek: GetExpansePerWeek,
+    val getExpansePerDay: GetExpansePerDay
 )

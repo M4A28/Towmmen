@@ -87,7 +87,7 @@ fun DrawerContent(navController: NavController,
                             navigateToScreen(navController, Route.SettingScreen.route)
                         }
 
-                        NavigationItem.Profit ->
+                        NavigationItem.Accounting ->
                             navigateToScreen(navController, Route.ProfitScreen.route)
 
                         NavigationItem.Category ->

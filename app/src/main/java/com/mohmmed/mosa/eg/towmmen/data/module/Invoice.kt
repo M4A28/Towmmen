@@ -3,17 +3,19 @@ package com.mohmmed.mosa.eg.towmmen.data.module
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.util.Date
 
 @Entity(tableName = "invoices")
-class Invoice(
+data class Invoice(
     @PrimaryKey(autoGenerate = false)
     val invoiceId: String,
     val customerId: Int,
     val customerName: String,
     val date: Date = Date(),
+    val profit: Double,
     val totalAmount: Double
 )
 
@@ -25,7 +27,8 @@ class Invoice(
         parentColumns = ["invoiceId"],
         childColumns = ["invoiceId"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index("invoiceId")]
 )
 data class InvoiceItem(
     @PrimaryKey(autoGenerate = true)
@@ -35,6 +38,7 @@ data class InvoiceItem(
     val productName: String,
     var quantity: Int,
     val unitPrice: Double,
+    val unitCost: Double,
     val purchaseDate: Date
 )
 
@@ -49,6 +53,6 @@ data class InvoiceWithItems(
 
 
 
-data class InvoiceByMonth(val month: String, val count: Int)
-data class InvoiceProfitByMonth(val month: String, val profit: Double)
+data class InvoiceByPeriod(val period: String, val count: Int)
+data class InvoiceProfitByPeriod(val period: String, val profit: Double)
 

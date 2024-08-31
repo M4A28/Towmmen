@@ -39,8 +39,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomDropDownMenu
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBarWithSuggestions
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ProductCard2
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
@@ -82,6 +83,12 @@ fun ProductsContent(
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("") }
+    var showEditPriceDialog by remember { mutableStateOf(false) }
+    if(showEditPriceDialog){
+        ModifyProductPriceDialog(
+            onDismissRequest = {},
+            onConfirm = {a,b,c ->})
+    }
     Scaffold(
         topBar = {
                   TopAppBar(
@@ -94,6 +101,19 @@ fun ProductsContent(
 
                           }
 
+                      },
+                      actions = {
+                          CustomDropDownMenu(
+                              actionOne = stringResource(R.string.increase_decrees_price),
+                              actionTwo = stringResource(R.string.import_product_from_csv_file),
+                              onActionOne = {
+                                            showEditPriceDialog = true
+
+                              },
+                              onActionTwo = {
+                                  // todo
+                              }
+                          )
                       })
          },
         floatingActionButton = {
@@ -119,19 +139,19 @@ fun ProductsContent(
             ) {
 
                 item(span = StaggeredGridItemSpan.FullLine ){
-                    Column(modifier = Modifier
-                        .padding(top =topPadding)
-                      ) {
-                        ModernSearchBar(
+                    Column(modifier = Modifier.padding(top =topPadding)) {
+
+                        ModernSearchBarWithSuggestions(
                             searchQuery = searchQuery,
                             onSearchQueryChange = { searchQuery = it },
+                            suggestions = products.map { it.name }.filter{ it.contains(searchQuery, ignoreCase = true) },
+                            onSuggestionSelected = {searchQuery = it },
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                         // Filter Chips
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .horizontalScroll(rememberScrollState())
+                                .fillMaxWidth().horizontalScroll(rememberScrollState())
                                 .padding(bottom = 4.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
@@ -148,7 +168,8 @@ fun ProductsContent(
                 }
                 items(
                     products.filter{it.category == selectedCategory ||
-                            it.name.contains(searchQuery, true)},
+                            it.name.contains(searchQuery, true) ||
+                                   it.barcode == searchQuery},
                     key = { it.productId }
                 ){ product ->
                     ProductCard2(

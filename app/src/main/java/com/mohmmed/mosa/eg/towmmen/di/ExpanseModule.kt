@@ -10,7 +10,9 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.GetAllExpanse
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.GetAvgExpanse
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.GetAvgExpansePerMonth
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.GetExpanseInRange
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.GetExpansePerDay
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.GetExpansePerMonth
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.GetExpansePerWeek
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.UpsertExpanse
 import dagger.Module
 import dagger.Provides
@@ -47,14 +49,9 @@ object ExpanseModule {
             getExpansePerMonth =  GetExpansePerMonth(expanseRepo),
             getAvgExpanse = GetAvgExpanse(expanseRepo),
             getAvgExpansePerMonth = GetAvgExpansePerMonth(expanseRepo),
-            clearExpanseData = ClearExpanseData(expanseRepo)
+            clearExpanseData = ClearExpanseData(expanseRepo),
+            getExpansePerWeek = GetExpansePerWeek(expanseRepo),
+            getExpansePerDay = GetExpansePerDay(expanseRepo),
         )
     }
-
-
-
-
-
-
-
 }

@@ -2,7 +2,7 @@ package com.mohmmed.mosa.eg.towmmen.data.repository
 
 import com.mohmmed.mosa.eg.towmmen.data.local.dao.ExpanseDao
 import com.mohmmed.mosa.eg.towmmen.data.module.Expanse
-import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerPeriod
 import com.mohmmed.mosa.eg.towmmen.domin.repostory.ExpanseRepository
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
@@ -27,7 +27,7 @@ class ExpanseRepositoryImp @Inject constructor(
         return expanseDao.getExpanseInRange(start, end)
     }
 
-    override fun getExpansePerMonth(): Flow<List<ExpansePerMonth>> {
+    override fun getExpansePerMonth(): Flow<List<ExpansePerPeriod>> {
         return expanseDao.getExpansePerMonth()
     }
 
@@ -41,5 +41,13 @@ class ExpanseRepositoryImp @Inject constructor(
 
     override suspend fun clearExpanseDate() {
         expanseDao.clearExpanseDate()
+    }
+
+    override fun getExpansePerDay(): Flow<List<ExpansePerPeriod>> {
+        return expanseDao.getExpansePerDay()
+    }
+
+    override fun getExpansePerWeek(): Flow<List<ExpansePerPeriod>> {
+        return expanseDao.getExpansePerWeek()
     }
 }

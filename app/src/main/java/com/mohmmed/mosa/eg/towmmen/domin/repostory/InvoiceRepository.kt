@@ -1,9 +1,9 @@
 package com.mohmmed.mosa.eg.towmmen.domin.repostory
 
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
 import com.mohmmed.mosa.eg.towmmen.data.module.MostTopProduct
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
@@ -53,11 +53,11 @@ interface InvoiceRepository {
 
     fun getInvoiceProfitForCurrentDay(): Flow<Double?>
 
-    fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByMonth>>
+    fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByPeriod>>
 
     fun getMinInvoice(): Flow<Invoice>
 
-    fun getInvoiceCountByMonth(): Flow<List<InvoiceByMonth>>
+    fun getInvoiceCountByMonth(): Flow<List<InvoiceByPeriod>>
 
     fun getInvoiceByCustomer(customerName: String): Flow<List<Invoice>>
 
@@ -66,7 +66,9 @@ interface InvoiceRepository {
 
     fun getMostTopProduct(): Flow<List<MostTopProduct>>
 
+    fun getInvoiceProfitByDay(): Flow<List<InvoiceProfitByPeriod>>
 
+    fun getInvoiceProfitByWeek(): Flow<List<InvoiceProfitByPeriod>>
 
 
 }

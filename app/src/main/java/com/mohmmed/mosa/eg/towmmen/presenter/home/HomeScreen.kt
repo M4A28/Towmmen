@@ -10,9 +10,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerPeriod
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
 import com.mohmmed.mosa.eg.towmmen.presenter.home.comman.TopProductExplainedCard
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ExpanseColumnChart
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ProfitColumnChart
@@ -46,17 +45,51 @@ fun HomeScreen() {
     val totalInvoice by homeViewModel.totalInvoices.collectAsState()
     val avgInvoice by homeViewModel.avgInvoicePerMonth.collectAsState()
     val invoiceProfitByMonth by homeViewModel.invoicePerMonth.collectAsState()
+    val invoiceProfitByDay by homeViewModel.invoicePerDay.collectAsState()
+    val invoiceProfitByWeek by homeViewModel.invoicePerWeek.collectAsState()
+/*    val invoicePeriod by remember {
+        mutableStateOf(listOf(
+            invoiceProfitByDay,
+            invoiceProfitByWeek,
+            invoiceProfitByMonth
+        ))
+    }*/
+
     val totalProducts by homeViewModel.productCount.collectAsState()
     val productsCost by homeViewModel.productsCost.collectAsState()
     val expanseAvg by homeViewModel.avgExpansePerMonth.collectAsState()
     val totalCustomers by homeViewModel.customerCount.collectAsState()
     val topProduct by homeViewModel.mostTopSellingProduct.collectAsState()
-    val expansePerMonth by homeViewModel.expansePerMonthItems.collectAsState()
+    val expansePerMonth by homeViewModel.expansePerMonth.collectAsState()
+    val expansePerDay by homeViewModel.expansePerDay.collectAsState()
+    val expansePerWeek by homeViewModel.expansePerWeek.collectAsState()
+/*    val expansePeriod by remember {
+        mutableStateOf(listOf(
+            expansePerDay,
+            expansePerWeek,
+            expansePerMonth
+        ))
+    }*/
     val latestTransaction by homeViewModel.invoices.collectAsState()
+    val context = LocalContext.current
+
     val last4Transaction by remember {
         mutableStateOf(latestTransaction.take(4))
     }
-    val context = LocalContext.current
+    val options by remember { mutableStateOf(listOf(
+        context.getString(R.string.day),
+        context.getString(R.string.week),
+        context.getString(R.string.month)
+    )) }
+
+    val optionsMap = mapOf(
+        context.getString(R.string.day) to 0,
+        context.getString(R.string.week) to 1,
+        context.getString(R.string.month) to 2
+    )
+    var selectedExpansePeriod by remember { mutableStateOf(context.getString(R.string.day))}
+
+    var selectedInvoicePeriod by remember { mutableStateOf(context.getString(R.string.day))}
 
     val statisticItems by remember {
         mutableStateOf(listOf(
@@ -96,20 +129,22 @@ fun HomeScreen() {
             GridItemSpan(2)
         }) {
             Column(modifier = Modifier.padding(10.dp)) {
-                val emptyProfit = listOf(InvoiceProfitByMonth("", 0.0))
-                val emptyExpanse = listOf(ExpansePerMonth("", 0.0))
+                val emptyProfit = listOf(InvoiceProfitByPeriod("", 0.0))
+                val emptyExpanse = listOf(ExpansePerPeriod("", 0.0))
 
                 Text(
-                    text = stringResource(R.string.total_profit_by_month),
+                    text = stringResource(R.string.total_invoice_per),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium
                 )
-                ProfitColumnChart(average = avgInvoice?: 0.0 , profitByMonth = invoiceProfitByMonth.ifEmpty { emptyProfit })
+                ProfitColumnChart(average = avgInvoice?: 0.0 ,
+
+                    profitByMonth = invoiceProfitByMonth.ifEmpty { emptyProfit })
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = stringResource(R.string.total_expanse_per_month),
+                    text = stringResource(R.string.total_expanse_per),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -125,12 +160,6 @@ fun HomeScreen() {
 
             TopProductExplainedCard(top = topProduct, total = totalInvoice?: 0.0)
 
-      /*      TopProductsList(
-                modifier = Modifier.padding(10.dp),
-                title = stringResource(id = R.string.top_products),
-                topProductList = topProduct
-            )*/
-
         }
 
         item(span = {
@@ -138,12 +167,9 @@ fun HomeScreen() {
         }) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            Card(modifier = Modifier
+            ElevatedCard(modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(6.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ){
                 Column(
                     modifier = Modifier.padding(10.dp)
@@ -152,6 +178,7 @@ fun HomeScreen() {
                     Text(
                         text = stringResource(R.string.recent_transaction),
                         fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium
                     )
                     if(latestTransaction.isNotEmpty()){
 

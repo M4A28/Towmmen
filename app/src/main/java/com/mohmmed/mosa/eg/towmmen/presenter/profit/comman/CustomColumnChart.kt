@@ -9,8 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerPeriod
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
 import com.mohmmed.mosa.eg.towmmen.presenter.profit.rememberMarker
 import com.mohmmed.mosa.eg.towmmen.ui.theme.Green40
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 fun ProfitColumnChart(
     modifier: Modifier = Modifier,
     average: Double,
-    profitByMonth: List<InvoiceProfitByMonth>
+    profitByMonth: List<InvoiceProfitByPeriod>
 
 ) {
     val modelProducer = remember { CartesianChartModelProducer() }
@@ -64,7 +64,7 @@ fun ProfitColumnChart(
             rememberComposeHorizontalLine(average, Green40, stringResource(R.string.avg))
         )
     ) { x, _, _ ->
-        profitByMonth[x.toInt()].month
+        profitByMonth[x.toInt()].period
     }
 }
 
@@ -73,7 +73,7 @@ fun ProfitColumnChart(
 fun ExpanseColumnChart(
     modifier: Modifier = Modifier,
     average: Double,
-    expanseByMonth: List<ExpansePerMonth>
+    expanseByMonth: List<ExpansePerPeriod>
 
 ) {
     val modelProducer = remember { CartesianChartModelProducer() }
@@ -92,7 +92,7 @@ fun ExpanseColumnChart(
             rememberComposeHorizontalLine(average, Green40, stringResource(R.string.avg))
         )
     ) { x, _, _ ->
-        expanseByMonth[x.toInt()].month
+        expanseByMonth[x.toInt()].period
     }
 }
 @Composable

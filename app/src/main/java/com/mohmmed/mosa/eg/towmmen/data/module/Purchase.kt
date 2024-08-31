@@ -3,6 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.data.module
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.util.Date
@@ -24,7 +25,8 @@ data class Purchase(
         parentColumns = ["purchaseId"],
         childColumns = ["purchaseId"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index("purchaseId")]
 )
 data class PurchaseItem(
     @PrimaryKey(autoGenerate = true)

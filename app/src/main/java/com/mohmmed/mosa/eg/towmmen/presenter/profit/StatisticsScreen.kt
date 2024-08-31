@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
-import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerPeriod
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
 import com.mohmmed.mosa.eg.towmmen.presenter.expanse.ExpanseViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.InvoiceViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
@@ -49,17 +49,17 @@ fun StatisticsScreen() {
     val minInvoice by invoiceViewModel.getMinInvoice().collectAsState(initial = null)
     val maxInvoice by invoiceViewModel.getMaxInvoice().collectAsState(initial = null)
     val avgInvoice by invoiceViewModel.getInvoiceAvg().collectAsState(initial = 0.0)
-    val invoiceProfitByMonth by invoiceViewModel.getInvoiceProfitByMonth()
-        .collectAsState(initial = listOf(InvoiceProfitByMonth("", 1.0)))
+    val invoiceProfitByPeriod by invoiceViewModel.getInvoiceProfitByMonth()
+        .collectAsState(initial = listOf(InvoiceProfitByPeriod("", 1.0)))
     val totalProducts by productsViewModel.getProductsCount().collectAsState(initial = 0)
     val productsCost by productsViewModel.getAllProductCost().collectAsState(initial = 0.0)
     val averagePrice by productsViewModel.getAveragePrice().collectAsState(initial = 0.0)
     val totalStock by productsViewModel.getTotalStock().collectAsState(initial = 0)
     val inventory by productsViewModel.getAllProductCost().collectAsState(initial = 0.0)
     val topProduct by invoiceViewModel.getTopSellingItem().collectAsState(initial = emptyList())
-    val expansePerMonth by expanseViewModel
+    val expansePerPeriod by expanseViewModel
         .getExpansePerMonth()
-        .collectAsState(initial = listOf(ExpansePerMonth("", 0.0)))
+        .collectAsState(initial = listOf(ExpansePerPeriod("", 0.0)))
     val latestTransaction by invoiceViewModel.getAllInvoices().collectAsState(initial = emptyList())
 
     val statisticItems = listOf(
@@ -95,13 +95,13 @@ fun StatisticsScreen() {
         item(span = {
             GridItemSpan(2)
         }) {
-            val emptyProfit = listOf(InvoiceProfitByMonth("", 0.0))
+            val emptyProfit = listOf(InvoiceProfitByPeriod("", 0.0))
             Text(
                 text = stringResource(R.string.total_profit_by_month),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium
             )
-            ProfitColumnChart(average = avgInvoice?: 0.0 , profitByMonth = invoiceProfitByMonth.ifEmpty { emptyProfit })
+            ProfitColumnChart(average = avgInvoice?: 0.0 , profitByMonth = invoiceProfitByPeriod.ifEmpty { emptyProfit })
         }
 
 
@@ -109,14 +109,14 @@ fun StatisticsScreen() {
         item(span = {
             GridItemSpan(2)
         }) {
-            val emptyExpanse = listOf(ExpansePerMonth("", 0.0))
+            val emptyExpanse = listOf(ExpansePerPeriod("", 0.0))
             Text(
                 text = stringResource(R.string.total_expanse_per_month),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium
             )
             ExpanseColumnChart(average = 0.0,
-                expanseByMonth = expansePerMonth.ifEmpty { emptyExpanse })
+                expanseByMonth = expansePerPeriod.ifEmpty { emptyExpanse })
         }
 
         item(span = {

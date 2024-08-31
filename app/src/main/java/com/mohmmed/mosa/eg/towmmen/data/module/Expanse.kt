@@ -15,3 +15,4 @@ class Expanse(
     var payDate: Date,
     var amount: Double
 ): Parcelable
+

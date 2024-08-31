@@ -3,7 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.expanse
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohmmed.mosa.eg.towmmen.data.module.Expanse
-import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.expanse.ExpanseUseCases
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.locker.LockerUseCases
@@ -64,7 +64,7 @@ class ExpanseViewModel @Inject constructor(
     }
 
 
-    fun getExpansePerMonth(): Flow<List<ExpansePerMonth>>{
+    fun getExpansePerMonth(): Flow<List<ExpansePerPeriod>>{
         return expanseUseCases.getExpansePerMonth()
     }
 

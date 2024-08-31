@@ -32,7 +32,7 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Dealer
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DealerCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBarWithSuggestions
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.util.DEALER_KEY
 
@@ -105,13 +105,16 @@ fun DealersContent(
         
         LazyColumn(modifier = Modifier.padding(top = paddingValue.calculateTopPadding())) {
             
-            item(){
+            item{
                 // search bar
-                ModernSearchBar(
+                ModernSearchBarWithSuggestions(
                     searchQuery = searchQuery,
                     onSearchQueryChange = { searchQuery = it },
+                    suggestions = dealers.map { it.dealerName }.filter{ it.contains(searchQuery, ignoreCase = true) },
+                    onSuggestionSelected = {searchQuery = it },
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                 )
+
             }
             items(dealers.filter {
                 it.dealerName.contains(searchQuery, ignoreCase = true)

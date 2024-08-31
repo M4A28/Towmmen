@@ -7,9 +7,9 @@ import java.util.Date
 
 
 fun backupDatabase(context: Context) {
-    val createDate = Date()
+    val createDate = dateToString(Date(),"yyyy-MM-dd")
     val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
-    val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
+    val currentDayDir = File(parentDir.path + "/${createDate}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
     }
@@ -17,7 +17,7 @@ fun backupDatabase(context: Context) {
         currentDayDir.mkdir()
     }
     val dbFile = context.getDatabasePath(DB_NAME)
-    val backupFile = File(currentDayDir, "$DB_NAME.db")
+    val backupFile = File(currentDayDir, "$DB_NAME $createDate.db")
 
     dbFile.inputStream().use { input ->
         backupFile.outputStream().use { output ->

@@ -33,7 +33,7 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomerCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.EmptyScreen
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBar
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBarWithSuggestions
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 
@@ -120,9 +120,11 @@ fun CustomerContent(
                 modifier = modifier.fillMaxSize(),
             ) {
                 item {
-                    ModernSearchBar(
+                    ModernSearchBarWithSuggestions(
                         searchQuery = searchQuery,
                         onSearchQueryChange = { searchQuery = it },
+                        suggestions = customers.map { it.name }.filter{ it.contains(searchQuery, ignoreCase = true) },
+                        onSuggestionSelected = {searchQuery = it },
                         modifier = Modifier.padding(
                             top = paddingValue.calculateTopPadding(),
                             bottom = 10.dp,

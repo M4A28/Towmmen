@@ -1,6 +1,5 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.customer
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +15,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,10 +39,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
-import com.mohmmed.mosa.eg.towmmen.presenter.comman.ActionButton
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DetailItem
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToTab
 import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_ID
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
@@ -67,7 +69,8 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
                 },
                 onPurchaseClick = {
                     navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
-                    navController.navigate(Route.AddInvoiceScreen.route)
+                    navigateToTab(navController, Route.AddInvoiceScreen.route)
+                    //navController.navigate(Route.AddInvoiceScreen.route)
 
                 },
                 onShowInvoicesClick = {
@@ -163,32 +166,43 @@ fun CustomerHeader(
             .height(250.dp)
             .clip(RoundedCornerShape(16.dp))
     ) {
-        Image(
+        Icon(
             painter = painterResource(id = R.drawable.person),
             contentDescription = "Customer Image",
-            alpha = 0.4f,
+            //alpha = 0.4f,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            tint = MaterialTheme.colorScheme.secondary
         )
 
         Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(8.dp)
+                .padding(8.dp) //
         ) {
-            ActionButton(
-                icon = R.drawable.edit,
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                onClick = { onEditClick(customer) }
-            )
+            FilledIconButton(
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = Color.Unspecified
+                ),
+                onClick = { onEditClick(customer) }) {
+                Icon(
+                    tint = MaterialTheme.colorScheme.primary,
+                    painter = painterResource(id = R.drawable.edit ),
+                    contentDescription = null
+                )
+            }
 
             Spacer(Modifier.width(32.dp))
-
-            ActionButton(
-                icon = R.drawable.delete,
-                backgroundColor = MaterialTheme.colorScheme.error,
-                onClick = { onDeleteClick(customer) }
-            )
+            FilledIconButton(
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = Color.Unspecified
+                ),
+                onClick = { onDeleteClick(customer) }) {
+                Icon(
+                    tint = MaterialTheme.colorScheme.error,
+                    painter = painterResource(id = R.drawable.delete ),
+                    contentDescription = null
+                )
+            }
         }
 
         Text(

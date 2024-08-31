@@ -43,18 +43,16 @@ fun LockerItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ){
             Text(
-                modifier = Modifier.padding(4.dp),
+                modifier = Modifier.padding(8.dp),
                 text = dateToString(lockerItem.transActionDate, "yyyy-MM-dd"),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.width(50.dp))
             SaveEditDropDownMenu(
-
                 onEdit = { onEdit(lockerItem) },
                 onDelete = { onDelete(lockerItem) },
                 deleteMessage = stringResource(id = R.string.locker_item_delete),
-                editMessage = ""
             )
         }
         Row(

@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
 import com.mohmmed.mosa.eg.towmmen.data.module.Locker
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
@@ -77,7 +77,7 @@ class InvoiceViewModel @Inject constructor(
         return invoiceUseCases.getMaxInvoice()
     }
 
-    fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByMonth>> {
+    fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByPeriod>> {
         return invoiceUseCases.getInvoiceProfitByMonth()
     }
 
@@ -85,7 +85,7 @@ class InvoiceViewModel @Inject constructor(
         return invoiceUseCases.getInvoiceAvg()
     }
 
-    fun getInvoiceCountByMonth(): Flow<List<InvoiceByMonth>> {
+    fun getInvoiceCountByMonth(): Flow<List<InvoiceByPeriod>> {
         return invoiceUseCases.getInvoiceCountByMonth()
     }
 

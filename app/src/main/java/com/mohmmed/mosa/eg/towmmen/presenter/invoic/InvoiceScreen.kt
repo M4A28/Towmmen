@@ -19,17 +19,15 @@ import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.comman.InvoiceCard
-import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 
 
 @Composable
 fun InvoiceScreen(){
     // todo refactor this
     val invoiceViewModel: InvoiceViewModel = hiltViewModel()
-    val productsViewModel: ProductViewModel = hiltViewModel()
     val invoiceWithItem by invoiceViewModel.getAllInvoicesWithItems().collectAsState(initial = emptyList())
     val context = LocalContext.current
-    val allProducts by productsViewModel.products.collectAsState(initial = emptyList())
+    val allProducts by invoiceViewModel.products.collectAsState(initial = emptyList())
     var showDeleteDialog by remember { mutableStateOf(false) }
     var invoice by remember{ mutableStateOf<Invoice?>(null) }
     var invoiceWithItems_ by remember{ mutableStateOf<InvoiceWithItems?>(null) }
@@ -53,9 +51,12 @@ fun InvoiceScreen(){
             onConfirm = {
                 invoiceWithItems_?.let{
                     it.items.forEach { item ->
-                        val product = allProducts.first { it.productId == item.productId }
-                        product.stockQuantity += item.quantity
-                        productsViewModel.updateProduct(product)
+                        val product = allProducts.firstOrNull { it.productId == item.productId }
+                        if(product != null){
+                            product.stockQuantity += item.quantity
+                            invoiceViewModel.updateProduct(product)
+
+                        }
                     }
                     invoiceViewModel.deleteInvoice(it.invoice)
 

@@ -1,6 +1,5 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.comman
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
@@ -8,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,11 +22,10 @@ import androidx.compose.ui.res.stringResource
 import com.mohmmed.mosa.eg.towmmen.R
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SaveEditDropDownMenu(
+    modifier: Modifier = Modifier,
     deleteMessage: String,
-    editMessage: String,
     onEdit: () -> Unit = {},
     onDelete: () -> Unit = {},
 ) {
@@ -37,7 +34,7 @@ fun SaveEditDropDownMenu(
 
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentSize(Alignment.TopEnd)
     ) {
@@ -54,24 +51,58 @@ fun SaveEditDropDownMenu(
         ) {
             DropdownMenuItem(
                 text = { Text(stringResource(id = R.string.edit)) },
-
-                onClick = {
-                    onEdit()
-                    Toast.makeText(context,
-                        editMessage,
-                        Toast.LENGTH_SHORT).show() }
+                onClick = { onEdit() }
             )
             DropdownMenuItem(
                 text = { Text(stringResource(id = R.string.delete)) },
                 onClick = {
                     onDelete()
-                    Toast.makeText(context,
-                        deleteMessage,
-                        Toast.LENGTH_SHORT).show()
                 }
             )
         }
     }
 }
+
+
+
+@Composable
+fun CustomDropDownMenu(
+    actionOne: String,
+    actionTwo: String,
+    onActionOne: () -> Unit = {},
+    onActionTwo: () -> Unit = {},
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+
+    Box{
+        IconButton(onClick = { expanded = !expanded }) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = "More"
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text(actionOne) },
+
+                onClick = {
+                    onActionOne()
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(actionTwo) },
+                onClick = {
+                    onActionTwo()
+                }
+            )
+        }
+    }
+}
+
 
 

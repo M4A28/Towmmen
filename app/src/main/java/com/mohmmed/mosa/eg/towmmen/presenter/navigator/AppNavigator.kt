@@ -33,7 +33,6 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
 import com.mohmmed.mosa.eg.towmmen.presenter.barcode.BarcodeScannerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DynamicGreetingTitle
-import com.mohmmed.mosa.eg.towmmen.presenter.customer.AddNewCustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerInvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.EditCustomerScreen
@@ -43,7 +42,6 @@ import com.mohmmed.mosa.eg.towmmen.presenter.dealers.DealersScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.dealers.FullDealerInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.DrawerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.about.AboutScreen
-import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.AddCategoryScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.SettingsScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.expanse.AddExpanseScreen
@@ -65,7 +63,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.product.EditProductScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.FullProductInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductsScreen
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.ProfitScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.profit.AccountingScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.purchase.AddPurchaseScreen
 import com.mohmmed.mosa.eg.towmmen.util.ONE_MONTH
 import com.mohmmed.mosa.eg.towmmen.util.PRODUCT_KEY
@@ -251,7 +249,6 @@ fun AppNavigator() {
                         EditNoteScreen(navController)
                     }
 
-
                     composable(route = Route.ProductScreen.route){
                         ProductsScreen(navController)
                     }
@@ -262,9 +259,9 @@ fun AppNavigator() {
                         BarcodeScannerScreen(navController)
                     }
 
-                    composable(route = Route.AddCustomerScreen.route){
+                    /*composable(route = Route.AddCustomerScreen.route){
                         AddNewCustomerScreen()
-                    }
+                    }*/
 
                     composable(route = Route.AddNoteScreen.route){
                         AddNoteScreen()
@@ -288,7 +285,7 @@ fun AppNavigator() {
                     }
 
                     composable(route = Route.ProfitScreen.route){
-                        ProfitScreen(navController)
+                        AccountingScreen(navController)
                     }
 
                     composable(route = Route.AddInvoiceScreen.route){
@@ -298,9 +295,9 @@ fun AppNavigator() {
                     composable(route = Route.CategoryScreen.route){
                         CategoryScreen(navController)
                     }
-                    composable(route = Route.AddCategoryScreen.route){
+                   /* composable(route = Route.AddCategoryScreen.route){
                         AddCategoryScreen(navController)
-                    }
+                    }*/
 
                     composable(route = Route.SettingScreen.route){
                         SettingsScreen()

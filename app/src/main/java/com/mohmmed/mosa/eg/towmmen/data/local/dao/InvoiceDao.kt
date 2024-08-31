@@ -6,9 +6,9 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
-import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
 import com.mohmmed.mosa.eg.towmmen.data.module.MostTopProduct
 import com.mohmmed.mosa.eg.towmmen.data.module.TopProduct
@@ -54,16 +54,26 @@ interface InvoiceDao {
 
 
 
-    @Query("SELECT strftime('%Y-%m', date/1000, 'unixepoch') as month, COUNT(*) as count" +
-            " FROM invoices GROUP BY month ORDER BY month")
-    fun getInvoiceCountByMonth(): Flow<List<InvoiceByMonth>>
+    @Query("SELECT strftime('%Y-%m', date/1000, 'unixepoch') as period, COUNT(*) as count" +
+            " FROM invoices GROUP BY period ORDER BY period")
+    fun getInvoiceCountByMonth(): Flow<List<InvoiceByPeriod>>
 
-    @Query("SELECT strftime('%Y-%m', date/1000, 'unixepoch') as month, SUM(totalAmount) as profit" +
-            " FROM invoices GROUP BY month ORDER BY month")
-    fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByMonth>>
+    @Query("SELECT strftime('%Y-%m', date/1000, 'unixepoch') as period, SUM(totalAmount) as profit" +
+            " FROM invoices GROUP BY period ORDER BY period")
+    fun getInvoiceProfitByMonth(): Flow<List<InvoiceProfitByPeriod>>
 
 
+// todo getInvoiceProfitByDay
+// SELECT strftime('%Y-%m-%d', date/1000, 'unixepoch') as period, SUM(totalAmount) as profit
+ //FROM invoices GROUP BY period ORDER BY period
 
+    @Query("SELECT strftime('%Y-%m-%d', date/1000, 'unixepoch') as period, SUM(totalAmount) as profit" +
+            " FROM invoices GROUP BY period ORDER BY period")
+    fun getInvoiceProfitByDay(): Flow<List<InvoiceProfitByPeriod>>
+
+    @Query("SELECT strftime('%Y-%m-%d', date/1000, 'unixepoch') as period, SUM(totalAmount) as profit" +
+            " FROM invoices GROUP BY strftime('%Y-%m-%W', date/1000, 'unixepoch') ORDER BY period")
+    fun getInvoiceProfitByWeek(): Flow<List<InvoiceProfitByPeriod>>
 
     @Query("SELECT * FROM invoices WHERE customerName = :customerName ")
     fun getInvoiceByCustomer(customerName: String): Flow<List<Invoice>>
@@ -104,7 +114,7 @@ interface InvoiceDao {
             "ORDER BY productQuantity DESC LIMIT 5")
     fun getTopSellingCurrentDay(): Flow<List<TopProduct>>
 
-    // todo make viewmodel, repository, usecase
+
     @Query("SELECT productId, productName, SUM(quantity) AS productQuantity " +
             " FROM invoice_items " +
             " WHERE  purchaseDate BETWEEN strftime('%Y-%m-%d', :start/1000, 'unixepoch') " +
@@ -115,8 +125,8 @@ interface InvoiceDao {
 
     @Query("SELECT AVG(profit) FROM" +
             " (SELECT strftime('%Y-%m', date/1000, 'unixepoch') " +
-            " as month, SUM(totalAmount) as profit " +
-            " FROM invoices GROUP BY month ORDER BY month)")
+            " as period, SUM(totalAmount) as profit " +
+            " FROM invoices GROUP BY period ORDER BY period)")
     fun getAvgInvoicePerMonth(): Flow<Double?>
 
     @Query("SELECT productName, sum(quantity) AS frequency," +

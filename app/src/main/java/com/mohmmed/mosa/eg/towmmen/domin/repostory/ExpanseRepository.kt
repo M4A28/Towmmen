@@ -1,7 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.domin.repostory
 
 import com.mohmmed.mosa.eg.towmmen.data.module.Expanse
-import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerMonth
+import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerPeriod
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
@@ -15,12 +15,18 @@ interface ExpanseRepository {
 
     fun getExpanseInRange(start: Date, end: Date): Flow<List<Expanse>>
 
-    fun getExpansePerMonth():Flow<List<ExpansePerMonth>>
+    fun getExpansePerMonth():Flow<List<ExpansePerPeriod>>
 
     fun getAvgExpanse(): Flow<Double?>
 
     fun getAvgExpansePerMonth(): Flow<Double?>
     suspend fun clearExpanseDate()
+
+    fun getExpansePerDay():Flow<List<ExpansePerPeriod>>
+
+    fun getExpansePerWeek():Flow<List<ExpansePerPeriod>>
+
+
 
 
 

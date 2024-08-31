@@ -15,7 +15,9 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceAvg
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceByCustomer
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceCountByMonth
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceItems
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceProfitByDay
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceProfitByMonth
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceProfitByWeek
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceProfitForCurrentDay
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceProfitForCurrentMonth
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoicesWithItemsByCustomerId
@@ -82,6 +84,8 @@ object InvoiceModule {
             getAvgInvoicePerMonth = GetAvgInvoicePerMonth(invoiceRepo),
             clearInvoiceData = ClearInvoiceData(invoiceRepo),
             getMostTopProduct = GetMostTopProduct(invoiceRepo),
+            getInvoiceProfitByDay = GetInvoiceProfitByDay(invoiceRepo),
+            getInvoiceProfitByWeek = GetInvoiceProfitByWeek(invoiceRepo),
         )
     }
 }
