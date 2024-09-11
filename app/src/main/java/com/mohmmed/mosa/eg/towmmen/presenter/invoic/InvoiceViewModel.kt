@@ -70,6 +70,10 @@ class InvoiceViewModel @Inject constructor(
         return invoiceUseCases.getTotalInvoices()
     }
 
+    fun getInvoiceById(invoiceId: String): Flow<Invoice> {
+        return invoiceUseCases.getInvoiceById(invoiceId)
+    }
+
     fun getMinInvoice(): Flow<Invoice>{
         return invoiceUseCases.getMinInvoice()
     }

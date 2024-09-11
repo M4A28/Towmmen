@@ -9,9 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,14 +41,12 @@ fun NotificationCard(
         daysUntilExpiry < 0 -> stringResource(R.string.expired_days_ago, abs(daysUntilExpiry)) to MaterialTheme.colorScheme.error
         else -> stringResource(R.string.expires_today) to MaterialTheme.colorScheme.error
     }
-    Card(
+    ElevatedCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable { onCardClick(product) },
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        elevation = CardDefaults.elevatedCardElevation(8.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -92,85 +89,6 @@ fun NotificationCard(
                 IconBulletPoint(icon = icon, text = text)
             }
         }
-        /*Row(modifier = Modifier.fillMaxWidth()) {
-            // Side indicator
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(indicatorColor)
-            ){
-
-                Column(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .fillMaxWidth()
-                        .background(backgroundColor)
-
-                ) {
-
-                    TextWithIcon(
-                        icon = R.drawable.notifications,
-                        iconColor = Color.Gray,
-                        text = title,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        fontSize = 16.sp,
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    TextWithIcon(
-                        icon = R.drawable.bag,
-                        iconColor = Color.Gray,
-                        text = String.format(stringResource(R.string.product_name), product.name),
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Gray,
-                        fontSize = 12.sp,
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-
-                    TextWithIcon(
-                        icon = R.drawable.tag,
-                        iconColor = Color.Gray,
-                        text = String.format(
-                            stringResource(id = R.string.cost),
-                            formatCurrency(product.price)
-                        ),
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Gray,
-                        fontSize = 12.sp,
-                    )
-
-                    Spacer(modifier = Modifier.height(2.dp))
-
-                    TextWithIcon(
-                        icon = R.drawable.box,
-                        iconColor = Color.Gray,
-                        text = String.format(stringResource(id = R.string.quantity_2),
-                            product.stockQuantity,
-                            product.unit),
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Gray,
-                        fontSize = 12.sp,
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-
-                    TextWithIcon(
-                        icon = R.drawable.action,
-                        iconColor = Color.Gray,
-                        text = String.format(stringResource(R.string.recommended_action), action),
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Gray,
-                        fontSize = 13.sp,
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-
-
-                }
-            }
-
-        }*/
     }
 
 

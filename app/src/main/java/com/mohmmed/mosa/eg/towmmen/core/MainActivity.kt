@@ -9,6 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.work.BackoffPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.AppTheme
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting.AppThemeViewModel
@@ -16,7 +19,10 @@ import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.NavGraph
 import com.mohmmed.mosa.eg.towmmen.ui.theme.DarkColorScheme
 import com.mohmmed.mosa.eg.towmmen.ui.theme.LightColorScheme
 import com.mohmmed.mosa.eg.towmmen.ui.theme.TowmmenTheme
+import com.mohmmed.mosa.eg.towmmen.worker.BackUpDBWork
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -26,6 +32,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //WindowCompat.setDecorFitsSystemWindows(window, false)
+        val dbWork = PeriodicWorkRequestBuilder<BackUpDBWork>(
+            repeatInterval = 1,
+            repeatIntervalTimeUnit = TimeUnit.DAYS)
+            .setBackoffCriteria(
+                backoffPolicy = BackoffPolicy.LINEAR,
+                duration = Duration.ofSeconds(15)
+            )
+            .build()
+        val workManger = WorkManager.getInstance(applicationContext)
+
+        workManger.enqueue(dbWork)
+
         setContent {
             val theme by themeViewModel.theme.collectAsState()
             val isDarkMode = isSystemInDarkTheme()
@@ -48,4 +66,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
 }

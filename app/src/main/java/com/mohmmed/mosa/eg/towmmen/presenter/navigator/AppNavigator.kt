@@ -25,12 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Product
+import com.mohmmed.mosa.eg.towmmen.presenter.accountiong.AccountingScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.barcode.BarcodeScannerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DynamicGreetingTitle
 import com.mohmmed.mosa.eg.towmmen.presenter.customer.CustomerInvoiceScreen
@@ -40,6 +42,9 @@ import com.mohmmed.mosa.eg.towmmen.presenter.customer.FullCustomerInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.dealers.DealerPurchaseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.dealers.DealersScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.dealers.FullDealerInfoScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.debt.AddDebtScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.debt.CustomerDebtScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.debt.DebtScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.DrawerScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.about.AboutScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryScreen
@@ -48,6 +53,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.expanse.AddExpanseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.expanse.EditExpanseScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.home.HomeScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.AddInvoiceScreen
+import com.mohmmed.mosa.eg.towmmen.presenter.invoic.EditInvoiceScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.locker.AddLockerTransactionScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.locker.LockerTransactionsScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
@@ -63,7 +69,6 @@ import com.mohmmed.mosa.eg.towmmen.presenter.product.EditProductScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.FullProductInfoScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.product.ProductsScreen
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.AccountingScreen
 import com.mohmmed.mosa.eg.towmmen.presenter.purchase.AddPurchaseScreen
 import com.mohmmed.mosa.eg.towmmen.util.ONE_MONTH
 import com.mohmmed.mosa.eg.towmmen.util.PRODUCT_KEY
@@ -89,6 +94,9 @@ fun AppNavigator() {
     val expProductsSize = products.filter {
         (it.expireDate.time - Date().time) <= ONE_MONTH
     }.size
+    val outOfStockProduct = products.filter {
+       it.stockQuantity <= 0
+    }.size
     val navController = rememberNavController()
     val backStackState by navController.currentBackStackEntryAsState()
     val scope = rememberCoroutineScope()
@@ -103,7 +111,7 @@ fun AppNavigator() {
             Route.DealersScreen.route -> 3
             Route.AddInvoiceScreen.route -> 4
 
-            else -> -1
+            else ->  -1
         }
     }
 
@@ -147,11 +155,7 @@ fun AppNavigator() {
                                     modifier = Modifier.fillMaxWidth(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                   /* Text(
-                                        text = stringResource(id = R.string.app_name)
-                                    )*/
                                     DynamicGreetingTitle()
-
                                 }
                             },
                             navigationIcon = {
@@ -171,7 +175,7 @@ fun AppNavigator() {
                                 NotificationBadge(
                                     onClick = { navigateToTab(navController,
                                         Route.NotificationScreen.route) },
-                                    notifySize = expProductsSize
+                                    notifySize = expProductsSize + outOfStockProduct
                                 )
 
                             })
@@ -193,7 +197,7 @@ fun AppNavigator() {
                     }
 
                     composable(route = Route.NotificationScreen.route){
-                        NotificationScreen(navyControl = navController)
+                        NotificationScreen(navHostController = navController)
                     }
 
                     composable(route = Route.CustomerScreen.route){
@@ -208,12 +212,27 @@ fun AppNavigator() {
                         DealerPurchaseScreen(navController)
                     }
 
+                    composable(route = Route.AddCustomerDebtScreen.route){
+                        AddDebtScreen(navController)
+                    }
+
+                    composable(route = Route.CustomerDebtScreen.route){
+                        CustomerDebtScreen(navController)
+                    }
+                    composable(route = Route.DebtScreen.route){
+                        DebtScreen()
+                    }
+
                     composable(route = Route.AddPurchasesScreen.route){
                         AddPurchaseScreen(navController)
                     }
 
                     composable(route = Route.DealerFullInfoScreen.route){
                         FullDealerInfoScreen(navController)
+                    }
+
+                    composable(route = Route.EditInvoiceScreen.route){
+                        EditInvoiceScreen(navController)
                     }
 
 
@@ -259,10 +278,6 @@ fun AppNavigator() {
                         BarcodeScannerScreen(navController)
                     }
 
-                    /*composable(route = Route.AddCustomerScreen.route){
-                        AddNewCustomerScreen()
-                    }*/
-
                     composable(route = Route.AddNoteScreen.route){
                         AddNoteScreen()
                     }
@@ -295,9 +310,6 @@ fun AppNavigator() {
                     composable(route = Route.CategoryScreen.route){
                         CategoryScreen(navController)
                     }
-                   /* composable(route = Route.AddCategoryScreen.route){
-                        AddCategoryScreen(navController)
-                    }*/
 
                     composable(route = Route.SettingScreen.route){
                         SettingsScreen()
@@ -311,6 +323,7 @@ fun AppNavigator() {
 
 }
 
+/*
 fun navigateToTab(navController: NavController, route: String){
     navController.navigate(route = route){
         navController.graph.startDestinationRoute?.let{
@@ -318,6 +331,28 @@ fun navigateToTab(navController: NavController, route: String){
             restoreState = true
             launchSingleTop = true
         }
+    }
+}*/
+
+fun navigateToTab(
+    navController: NavController,
+    route: String,
+    saveState: Boolean = true,
+    popUpToRoute: String? = null,
+    inclusive: Boolean = false
+) {
+    navController.navigate(route) {
+        // Pop up to the start destination of the graph to
+        // avoid building up a large stack of destinations
+        popUpToRoute?.let { popUpTo(it) { this.inclusive = inclusive } }
+            ?: popUpTo(navController.graph.findStartDestination().id) {
+                this.saveState = saveState
+            }
+        // Avoid multiple copies of the same destination when
+        // reselecting the same item
+        launchSingleTop = true
+        // Restore state when reselecting a previously selected item
+        restoreState = saveState
     }
 }
 

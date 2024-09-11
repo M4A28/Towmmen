@@ -1,6 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.dealers
 
-import androidx.compose.foundation.Image
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,11 +15,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,6 +55,7 @@ fun FullDealerInfoScreen(navController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     var showDeleteConfirmation by remember { mutableStateOf(false) }
     var showEditDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     navController.previousBackStackEntry
         ?.savedStateHandle
         ?.get<Dealer?>(DEALER_KEY)?.let {
@@ -86,7 +87,10 @@ fun FullDealerInfoScreen(navController: NavHostController) {
                     onConfirm = {
                         coroutineScope.launch {
                             dealerViewModel.deleteDealer(dealer)
-                            navController.popBackStack()
+                            Toast.makeText(context,
+                                context.getString(R.string.dealer_deleted), Toast.LENGTH_LONG).show()
+
+                            navController.navigateUp()
                         }
                     },
                     onDismiss = { showDeleteConfirmation = false }
@@ -96,15 +100,13 @@ fun FullDealerInfoScreen(navController: NavHostController) {
 
             if(showEditDialog){
                 EditDealerDialog(dealer = dealer ,
-                    onEditClick = { dealerViewModel.upsertDealer(it) },
+                    onEditClick = { dealerViewModel.upsertDealer(it)
+                        Toast.makeText(context,
+                            context.getString(R.string.dealer_edited), Toast.LENGTH_LONG).show()
+                    },
                     showDialog = { showEditDialog = it })
             }
         }
-
-
-
-
-
 
 }
 
@@ -137,9 +139,7 @@ fun FullDealerInfoContent(
             horizontalArrangement = Arrangement.SpaceBetween,
         ){
             Button(
-                onClick = { onPurchaseClick(dealer) },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-
+                onClick = { onPurchaseClick(dealer) }
             ) {
                 Spacer(Modifier.width(8.dp))
                 Text(
@@ -147,9 +147,8 @@ fun FullDealerInfoContent(
                     style = MaterialTheme.typography.labelMedium
                 )
             }
-            Button(
-                onClick = {onShowInvoicesClick(dealer)},
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            OutlinedButton(
+                onClick = {onShowInvoicesClick(dealer)}
             ) {
                 Spacer(Modifier.width(8.dp))
                 Text(text = stringResource(R.string.show_invoices),
@@ -174,12 +173,11 @@ fun DealerHeader(
             .height(250.dp)
             .clip(RoundedCornerShape(16.dp))
     ) {
-        Image(
+        Icon(
             painter = painterResource(id = R.drawable.person),
             contentDescription = "Dealer Image",
-            alpha = 0.4f,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            tint = MaterialTheme.colorScheme.secondary
         )
 
         Row(
@@ -242,7 +240,10 @@ fun DealerDetails(dealer: Dealer) {
                 label = stringResource(id = R.string.reg_data_2),
                 value = dateToString(dealer.createDate, "yyyy-MM-dd")
             )
-            DetailItem(icon = R.drawable.notes, label = stringResource(id = R.string.notes), value = dealer.dealerNote)
+
+            DetailItem(icon = R.drawable.notes,
+                label = stringResource(id = R.string.notes),
+                value = dealer.dealerNote)
         }
     }
 }

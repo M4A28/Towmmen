@@ -4,15 +4,260 @@
 - عرض المصروفات
 - عرالمنتجات الاكثر مبيعا و الاكثر ربح
 - عرض عمليات البيع و الشراء
-- اضافة خاصية الجرد للمخزن
-اضضافة الموردين
+- اضافة خاصية الجرد للمخزن محتاجة تعديل 
+اضضافة الموردين تم 
+- اضافة خاصية مشاركة النواقص 
+- اضافة خاصية مشاركة الالمنتجات المنتهية 
+اضافة ملخص حركات اليوم / الاسبوع / الشهر 
+- حل مشكلة تعطل التطبيق و الايقاف المفاجئ 
+- حل مشكلة الريندر البطيئ و معالجته 
+- اكمال خاصية التعديل على الفواتير و الديون و المشتريات 
+- حاسب تكلفة 
+اضافة ملاحطة عند الحذف وهي : سيتم اضافة الفواتير المحذوفة الى المنتجات من جديد و كذلك بالنسبة للديون 
+ااضفة زر ارجاع المشتريات  
+- تعديل المشاكل البرمجية في التطبيق من حيث الجودة و العمل 
+- تحسين هيكلية البرنامج //  شيء اساسي 
+
+
 
 بالنسبة للفواتير
+اضاقة خانة نوع الفاتورة الى الفواتير 
 يوجد ثلاثة انواع
 فاتورة بيع
 فاتورة شراء
 فاتورة ارتاجاع
+فاتورة دين 
 
-اضافة بيانات المحل
+
+اضافة بيانات المحل الاسم  , العنوان  , رقم الهاتف,  السجل التجاري ان وجد 
+اضافة الضريبة و انواع الضرايب و هل هي كلها مفعله 
+هل الاسعار تشمل الضريبة  او لا  
 
 purchaseId column references a foreign key but it is not part of an index. This may trigger full table scans whenever parent table is modified so you are highly advised to create an index that covers this column. - com.mohmmed.mosa.eg.towmmen.data.module.PurchaseItem
+
+
+
+ Fatal signal 11 (SIGSEGV), code 2, fault addr 0x9f686ff8 in tid 20874 (RenderThread)
+2024-09-08 15:22:44.084   753-807   InputDispatcher         system_server                        E  channel '21c05ac1 com.mohmmed.mosa.eg.towmmen/com.mohmmed.mosa.eg.towmmen.core.MainActivity (server)' ~ Channel is unrecoverably broken and will be disposed!
+
+
+
+
+
+Detecting and fixing memory leaks in Android is crucial for maintaining app performance and stability. Here's a comprehensive guide on how to find memory leaks in Android:
+
+
+
+```kotlin
+// 1. Add LeakCanary to your project
+// In your app's build.gradle file:
+dependencies {
+  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+
+}
+
+// 2. Enable StrictMode for detecting common leaks
+// In your Application class or main Activity's onCreate:
+if (BuildConfig.DEBUG) {
+    StrictMode.setVmPolicy(
+        StrictMode.VmPolicy.Builder()
+            .detectLeakedSqlLiteObjects()
+            .detectLeakedClosableObjects()
+            .penaltyLog()
+            .penaltyDeath()
+            .build()
+    )
+}
+
+// 3. Use Android Studio Memory Profiler
+// No code required, use Android Studio's built-in tools
+
+// 4. Manual checks for common leak sources
+class MainActivity : AppCompatActivity() {
+    private var leakyContext: Context? = null
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        
+        // Potential leak: storing Activity context
+        leakyContext = this
+        
+        // Better: Use application context for long-lived objects
+        val safeContext = applicationContext
+    }
+    
+    // Potential leak: not unregistering listeners
+    override fun onResume() {
+        super.onResume()
+        SomeManager.getInstance().registerListener(listener)
+    }
+    
+    override fun onPause() {
+        super.onPause()
+        // Prevent leak: unregister listeners
+        SomeManager.getInstance().unregisterListener(listener)
+    }
+    
+    // Potential leak: inner class holding implicit reference to Activity
+    private val leakyRunnable = object : Runnable {
+        override fun run() {
+            // Using 'this@MainActivity' here creates a strong reference
+        }
+    }
+    
+    // Better: Use a static inner class with a WeakReference
+    private class SafeRunnable(activity: WeakReference<MainActivity>) : Runnable {
+        override fun run() {
+            val activity = activity.get()
+            if (activity != null) {
+                // Safe to use activity here
+            }
+        }
+    }
+}
+
+// 5. Use @Nullable annotations to catch potential null pointer exceptions
+class UserManager {
+    @Nullable
+    private var user: User? = null
+    
+    fun getUser(): User {
+        return user ?: throw IllegalStateException("User is null")
+    }
+}
+
+// 6. Implement proper cleanup in onDestroy
+override fun onDestroy() {
+    super.onDestroy()
+    // Cancel any ongoing operations
+    job.cancel()
+    // Nullify references
+    someReference = null
+    // Unregister any remaining listeners
+    unregisterAllListeners()
+}
+
+```
+
+Now, let me explain the key strategies for finding memory leaks in Android:
+
+1. Use LeakCanary:
+   LeakCanary is a powerful memory leak detection library. It automatically watches for instances of activities and fragments that are garbage collected and triggers a heap dump if they're not collected after a certain time. It then analyzes the heap dump and notifies you of potential leaks.
+
+2. Enable StrictMode:
+   StrictMode is a developer tool that detects things you might be doing by accident. It can help identify disk reads, network access, or SQLite calls on the main thread, as well as detect leaked SQLite cursors, and unclosed resources.
+
+3. Use Android Studio Memory Profiler:
+   The Memory Profiler in Android Studio provides a detailed view of your app's memory usage over time. You can:
+   - Force garbage collection and see if memory usage drops
+   - Capture heap dumps and analyze object references
+   - Record memory allocations during a specific time
+
+4. Manual checks for common leak sources:
+   - Avoid storing references to Activities or Fragments in static fields
+   - Be careful with inner classes and anonymous classes that may hold implicit references to their outer class
+   - Always unregister listeners and observers
+   - Use WeakReferences where appropriate
+   - Be cautious with AsyncTasks and Handlers
+
+5. Use Nullable annotations:
+   Properly annotating your code with @Nullable and @NonNull can help catch null pointer exceptions early, which can sometimes be symptoms of memory leaks.
+
+6. Implement proper cleanup:
+   In your Activity's or Fragment's onDestroy method, make sure to:
+   - Cancel any ongoing operations
+   - Nullify references that are no longer needed
+   - Unregister any remaining listeners
+
+7. Regular testing and profiling:
+   Regularly run your app through various scenarios and monitor memory usage. Look for patterns of increasing memory use that don't return to baseline.
+
+8. Use specialized tools:
+   Tools like MAT (Memory Analyzer Tool) can help analyze heap dumps in detail.
+
+Remember, finding memory leaks is often an iterative process. You may need to combine multiple techniques and tools to identify and fix all leaks in your application.
+
+Would you like me to elaborate on any specific part of this process or provide more details on using any of these tools?
+
+
+Let's analyze why this HomeScreen composable might be slow. There are several potential reasons for performance issues:
+
+
+
+
+
+# HomeScreen Performance Analysis
+
+1. Multiple StateFlow Collections:
+   - The screen collects from many StateFlows (`totalInvoices`, `avgInvoicePerMonth`, etc.).
+   - Each `collectAsState()` causes recomposition when its value changes.
+
+2. Heavy Computations in ViewModel:
+   - Functions like `avgInvoicePerMonth`, `invoicePerMonth`, etc., might be computationally expensive.
+   - These could be causing delays if calculated on the main thread.
+
+3. Large Data Sets:
+   - Handling large lists for invoices, products, and customers could slow down the UI.
+
+4. Unnecessary Recompositions:
+   - The `remember` block for `statisticItems` recreates the list on every recomposition.
+   - `last4Transaction` is recalculated on every recomposition.
+
+5. Complex UI Structure:
+   - The LazyVerticalGrid with multiple items and spans might be heavy to compose and draw.
+
+6. Lack of Pagination:
+   - All data seems to be loaded at once, which could be slow with large datasets.
+
+7. Charting Components:
+   - `ProfitColumnChart` and `ExpanseColumnChart` might be computationally expensive, especially if they're custom implementations.
+
+8. Multiple Text Measurements:
+   - Many Text composables with different styles could cause multiple text measurements, which are expensive.
+
+9. Nested Columnar Layouts:
+   - The use of nested Column composables inside LazyVerticalGrid items can lead to complex layout calculations.
+
+10. Lack of Lazy Loading:
+    - All UI elements are composed at once, rather than being loaded as needed.
+
+
+Based on this analysis, here are some suggestions to improve performance:
+
+1. Optimize StateFlow usage:
+   - Consider combining related states into a single state object to reduce the number of collectors.
+   - Use `distinctUntilChanged()` on your StateFlows to prevent unnecessary updates.
+
+2. Move heavy computations off the main thread:
+   - Use Kotlin coroutines to perform calculations in the background.
+   - Consider caching results of expensive operations.
+
+3. Implement pagination:
+   - Load data in smaller chunks as the user scrolls, rather than all at once.
+
+4. Optimize remember usage:
+   - Move the `remember` blocks for `last4Transaction` and `statisticItems` outside of the composition if possible.
+   - Use `derivedStateOf` for values derived from other state.
+
+5. Simplify UI structure:
+   - Consider breaking down the screen into smaller, reusable components.
+   - Use `LazyColumn` instead of `LazyVerticalGrid` if possible, as it's generally more efficient.
+
+6. Implement lazy loading:
+   - Load and display UI elements as they become visible, rather than all at once.
+
+7. Optimize charting components:
+   - If using custom chart implementations, ensure they're optimized for performance.
+   - Consider using more efficient charting libraries if available.
+
+8. Use Composition Local for shared data:
+   - Pass down shared data (like `context`) using CompositionLocal to avoid unnecessary recompositions.
+
+9. Profile and optimize:
+   - Use Android Studio's Profiler to identify specific performance bottlenecks.
+   - Consider using Compose's `@Stable` annotation for complex data classes to optimize recomposition.
+
+Would you like me to elaborate on any of these points or provide code examples for implementing these optimizations?
+
+

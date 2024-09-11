@@ -1,6 +1,8 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.product
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,9 +34,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
@@ -47,6 +51,7 @@ import com.mohmmed.mosa.eg.towmmen.presenter.drawer.category.CategoryViewModel
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToProductDetails
 import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToScreen
+import com.mohmmed.mosa.eg.towmmen.util.exportAllProducts
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -61,12 +66,37 @@ fun ProductsScreen(
 
     val categoryViewModel: CategoryViewModel = hiltViewModel()
     val categoryList by categoryViewModel.getAllCategory().collectAsState(initial = emptyList())
+    val context = LocalContext.current
 
     ProductsContent(
         products = products,
         onProductClick = { product -> navigateToProductDetails(navController, product) },
         onFapClick = { navigateToScreen(navController, Route.AddProductScreen.route) },
-        categories = categoryList.map{ it.category}
+        categories = categoryList.map{ it.category},
+        onPriceChange = { value, selectedOption , selectedCatgory->
+            if(selectedCatgory == context.getString(R.string.all_products)){
+                if(selectedOption == context.getString(R.string.persentage)){
+                    products.fastForEach {
+                        productViewModel.updateProduct(it.copy(price =  it.price * ((value/100) + 1.0)))
+                    }
+                }else{
+                    products.fastForEach {
+                        productViewModel.updateProduct(it.copy(price =  it.price + value))
+                    }
+                }
+
+            }else{
+                if(selectedOption == context.getString(R.string.persentage)){
+                    products.filter { it.category == selectedCatgory }.fastForEach {
+                        productViewModel.updateProduct(it.copy(price =  it.price * ((value/100) + 1.0)))
+                    }
+                }else{
+                    products.filter { it.category == selectedCatgory }.fastForEach {
+                        productViewModel.updateProduct(it.copy(price =  it.price + value))
+                    }
+                }
+            }
+        }
     )
 }
 
@@ -79,15 +109,22 @@ fun ProductsContent(
     products: List<Product>,
     onProductClick: (Product) -> Unit,
     categories: List<String> = listOf(),
-    onFapClick: () -> Unit = {}
+    onFapClick: () -> Unit = {},
+    onPriceChange: (Double, String, String) -> Unit
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("") }
     var showEditPriceDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
     if(showEditPriceDialog){
-        ModifyProductPriceDialog(
-            onDismissRequest = {},
-            onConfirm = {a,b,c ->})
+        ModifyProductPriceDialog2(
+            categoryOptions = categories,
+            onDismissRequest = { showEditPriceDialog = false },
+            onConfirm = {value, selectedOption, selectedCatgory ->
+                onPriceChange(value, selectedOption, selectedCatgory)
+                showEditPriceDialog = false
+            })
     }
     Scaffold(
         topBar = {
@@ -105,13 +142,27 @@ fun ProductsContent(
                       actions = {
                           CustomDropDownMenu(
                               actionOne = stringResource(R.string.increase_decrees_price),
-                              actionTwo = stringResource(R.string.import_product_from_csv_file),
-                              onActionOne = {
-                                            showEditPriceDialog = true
-
-                              },
+                              actionTwo = stringResource(R.string.export_product_to_txt),
+                              onActionOne = { showEditPriceDialog = true },
                               onActionTwo = {
-                                  // todo
+                                  if(products.isNotEmpty()){
+                                      val product = exportAllProducts(products, context)
+                                      Intent(Intent.ACTION_SEND).also {
+                                          it.setType("text/plain")
+                                          it.putExtra(Intent.EXTRA_TEXT, product)
+                                          if (it.resolveActivity(context.packageManager) != null) {
+                                              context.startActivity(Intent.createChooser(it, context.getString(R.string.share_to)))
+                                          }
+                                      }
+                                      Toast.makeText(context,
+                                          context.getString(R.string.exported_done),
+                                          Toast.LENGTH_LONG).show()
+                                  }else{
+                                      Toast.makeText(context,
+                                          context.getString(R.string.no_product_found_to_export),
+                                          Toast.LENGTH_LONG).show()
+                                  }
+
                               }
                           )
                       })
@@ -151,7 +202,8 @@ fun ProductsContent(
                         // Filter Chips
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth().horizontalScroll(rememberScrollState())
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState())
                                 .padding(bottom = 4.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {

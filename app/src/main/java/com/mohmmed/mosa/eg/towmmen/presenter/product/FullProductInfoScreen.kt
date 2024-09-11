@@ -1,6 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.product
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +58,7 @@ import java.util.Date
 fun FullProductInfoScreen(navController: NavHostController) {
     val productViewModel:ProductViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     var showDeleteConfirmation by remember { mutableStateOf(false) }
 
@@ -83,7 +85,9 @@ fun FullProductInfoScreen(navController: NavHostController) {
                     onConfirm = {
                         coroutineScope.launch {
                             productViewModel.deleteProduct(product)
-                            navController.popBackStack()
+                            navController.navigateUp()
+                            Toast.makeText(context,
+                                context.getString(R.string.product_deleted), Toast.LENGTH_LONG).show()
                         }
                     },
                     onDismiss = { showDeleteConfirmation = false }

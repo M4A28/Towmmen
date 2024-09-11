@@ -2,6 +2,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.dealers
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -65,7 +66,11 @@ fun DealersScreen(navHostController: NavHostController) {
     if(showAddDealerDialog){
         AddDealerDialog(
             onAddClick = {
-                dealerViewModel.upsertDealer(it) },
+                dealerViewModel.upsertDealer(it)
+                Toast.makeText(context,
+                    context.getString(R.string.dealer_has_been_add), Toast.LENGTH_LONG).show()
+
+            },
             showDialog = {showAddDealerDialog = it})
 
     }

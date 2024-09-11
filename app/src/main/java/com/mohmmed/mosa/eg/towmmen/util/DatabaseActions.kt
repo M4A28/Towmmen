@@ -1,6 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.util
 
 import android.content.Context
+import android.os.Build
 import android.os.Environment
 import java.io.File
 import java.util.Date
@@ -8,7 +9,10 @@ import java.util.Date
 
 fun backupDatabase(context: Context) {
     val createDate = dateToString(Date(),"yyyy-MM-dd")
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) APP_DIR_R
+    else APP_DIR
+
+
     val currentDayDir = File(parentDir.path + "/${createDate}")
     if(!parentDir.exists()){
         parentDir.mkdirs()

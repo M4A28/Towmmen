@@ -2,6 +2,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.invoic
 
 import android.Manifest
 import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +47,7 @@ import com.mohmmed.mosa.eg.towmmen.data.module.TransactionType
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.BarcodeReader
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.InvoiceItemCard
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ModernSearchBarWithBarcode
-import com.mohmmed.mosa.eg.towmmen.presenter.invoic.comman.InvoiceDialog
+import com.mohmmed.mosa.eg.towmmen.presenter.invoic.comman.InvoiceDialog2
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
 import com.mohmmed.mosa.eg.towmmen.util.generateInvoiceNumber
 import kotlinx.coroutines.delay
@@ -61,8 +62,8 @@ fun AddInvoiceScreen(navController: NavHostController){
     val products by invoiceViewModel.products.collectAsState(initial = emptyList())
     var cameraPermissionGranted by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val cameraPermissionState =
-        rememberPermissionState(permission = Manifest.permission.CAMERA)
+
+    val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts
             .RequestPermission()
@@ -84,7 +85,9 @@ fun AddInvoiceScreen(navController: NavHostController){
             && cameraPermissionState.status.shouldShowRationale
         ) {
 
-            // todo
+            Toast.makeText(context,
+                context.getString(R.string.permission_is_important),
+                Toast.LENGTH_LONG).show()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
@@ -119,6 +122,9 @@ fun AddInvoiceScreen(navController: NavHostController){
                     transActionNote = invoice.invoiceId
                 ))
             }
+            Toast.makeText(context,
+                context.getString(R.string.invoice_has_been_add), Toast.LENGTH_LONG).show()
+
         })
 
 
@@ -141,6 +147,7 @@ fun AddInvoiceContent(
     var showInvoiceDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
     var invoiceId = generateInvoiceNumber()
+
     var invoiceDate = Date()
     val scannerSound = remember { MediaPlayer.create(context, R.raw.scanner_beep) }
     val cashierSound = remember { MediaPlayer.create(context, R.raw.cashier_chingquot) }
@@ -159,16 +166,13 @@ fun AddInvoiceContent(
         ){ paddingValue ->
         val topPadding = paddingValue.calculateTopPadding()
         LazyColumn(modifier = Modifier.padding(top = topPadding, start = 4.dp, end = 4.dp)) {
-
                 item{
-
                     if(showBarcodeScan){
                         // Clean up MediaPlayer when leaving the composition
                         DisposableEffect(Unit) {
                             onDispose {
                                 scannerSound.release()
                                 cashierSound.release()
-
                             }
                         }
 
@@ -200,13 +204,11 @@ fun AddInvoiceContent(
                     )
                 }
 
-                val selectedProduct = products.firstOrNull {
+            val selectedProduct = products.firstOrNull {
                     it.barcode == searchQuery ||
                             it.barcode == barcodeValue ||
                             it.name == searchQuery
                 }
-
-
 
             if (selectedProduct != null) {
                 if(invoiceItem.none { it.productId == selectedProduct.productId }){
@@ -281,16 +283,18 @@ fun AddInvoiceContent(
         }
 
         if(showInvoiceDialog){
-            InvoiceDialog(finalInvoice!!, invoiceItem,
+            InvoiceDialog2(finalInvoice!!, invoiceItem,
                 onDismiss = {
                 showInvoiceDialog = !showInvoiceDialog
             },
                 onConform = {
                     try{
-                        onSaveInvoiceClick(finalInvoice!!, invoiceItem.toMutableList())
+                        onSaveInvoiceClick(finalInvoice!!.copy(customerName = it), invoiceItem.toMutableList())
                         showInvoiceDialog = false
                         cashierSound.start()
                         invoiceItem.clear()
+                        searchQuery = ""
+
                     }catch (e: Exception){
                         e.printStackTrace()
                     }

@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.mohmmed.mosa.eg.towmmen.data.local.converters.DateTypeConverter
 import com.mohmmed.mosa.eg.towmmen.data.local.db.TowmmenDatabase
 import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_10_11
+import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_11_12
 import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_5_6
 import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_6_7
 import com.mohmmed.mosa.eg.towmmen.data.local.db.migration.migration_7_8
@@ -33,12 +34,14 @@ object TowmmenModule {
             klass = TowmmenDatabase::class.java,
             name = DB_NAME)
             .addTypeConverter(DateTypeConverter())
-            .addMigrations(migration_5_6,
+            .addMigrations(
+                migration_5_6,
                 migration_6_7,
                 migration_7_8,
                 migration_8_9,
                 migration_9_10,
-                migration_10_11)
+                migration_10_11,
+                migration_11_12)
             .fallbackToDestructiveMigration()
             .build()
     }

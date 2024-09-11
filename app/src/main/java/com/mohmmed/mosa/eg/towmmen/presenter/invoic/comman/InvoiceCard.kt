@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +29,7 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceItem
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.SaveEditDropDownMenu
+import com.mohmmed.mosa.eg.towmmen.ui.theme.Green40
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 import java.util.Locale
@@ -43,26 +44,18 @@ fun InvoiceCard(invoice: Invoice,
 
     var showItems by remember { mutableStateOf(false) }
 
-    Card(
+    ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 8.dp)
             .clickable { showItems = !showItems },
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(6.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        elevation = CardDefaults.elevatedCardElevation(8.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-
-            SaveEditDropDownMenu(deleteMessage = stringResource(id = R.string.invoice_deleted),
-                onDelete = {onDeleteClick(invoice)},
-                onEdit = {onEditClick(invoice)}
-            )
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -74,10 +67,16 @@ fun InvoiceCard(invoice: Invoice,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Medium
                 )
+                Spacer(modifier = Modifier.width(50.dp))
+
                 Text(
                     text = invoice.invoiceId,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary
+                )
+                SaveEditDropDownMenu(
+                    onDelete = {onDeleteClick(invoice)},
+                    onEdit = {onEditClick(invoice)}
                 )
 
             }
@@ -86,7 +85,7 @@ fun InvoiceCard(invoice: Invoice,
             Text(
                 text = stringResource(id = R.string.invoice_date,
                     dateToString(invoice.date,
-                        pattern = "yyyy MMMM dd",
+                        pattern = "yyyy-MM-dd",
                         locale = Locale.getDefault())
                 ) ,
                 fontWeight = FontWeight.Bold,
@@ -96,25 +95,32 @@ fun InvoiceCard(invoice: Invoice,
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = invoice.customerName,
+                text = stringResource(id = R.string.customer_name, invoice.customerName),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium
             )
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            Text(
-                text = stringResource(id = R.string.total, formatCurrency(invoice.totalAmount)),
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Text(
-                text = stringResource(id = R.string.profit_, formatCurrency(invoice.profit) ),
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                Text(
+                    text = stringResource(id = R.string.total, formatCurrency(invoice.totalAmount)),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                Text(
+                    text = stringResource(id = R.string.profit_, formatCurrency(invoice.profit) ),
+                    color = Green40,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
 
             Spacer(modifier = Modifier.height(6.dp))
 

@@ -72,7 +72,7 @@ fun DrawerContent(navController: NavController,
             contentDescription = "Image"
         )
         Spacer(modifier = Modifier.height(40.dp))
-        NavigationItem.entries.toTypedArray().take(5).forEach { navigationItem ->
+        NavigationItem.entries.toTypedArray().take(6).forEach { navigationItem ->
             NavigationDrawerItem(
                 navigationItem = navigationItem,
                 selected = navigationItem == selectedNavigationItem,
@@ -81,6 +81,9 @@ fun DrawerContent(navController: NavController,
                     when(navigationItem){
                         NavigationItem.Locker -> {
                             navigateToScreen(navController, Route.LockerScreen.route)
+                        }
+                        NavigationItem.Debt -> {
+                            navigateToScreen(navController, Route.DebtScreen.route)
                         }
 
                         NavigationItem.Settings -> {
@@ -113,6 +116,7 @@ fun DrawerContent(navController: NavController,
                     onNavigationItemClick(navigationItem)
                                when (navigationItem) {
                                    NavigationItem.Share -> {
+                                       // todo
 
                                    }
                                    NavigationItem.About -> {

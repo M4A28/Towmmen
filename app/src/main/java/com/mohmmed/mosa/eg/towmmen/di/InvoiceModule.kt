@@ -10,9 +10,9 @@ import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAllInvoice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAllInvoiceProfit
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAllInvoicesWithItems
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetAvgInvoicePerMonth
-import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoice
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceAvg
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceByCustomer
+import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceById
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceCountByMonth
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceItems
 import com.mohmmed.mosa.eg.towmmen.domin.usecases.invoice.GetInvoiceProfitByDay
@@ -61,7 +61,7 @@ object InvoiceModule {
             upsertInvoice = UpsertInvoice(invoiceRepo),
             deleteInvoice = DeleteInvoice(invoiceRepo),
             getAllInvoice = GetAllInvoice(invoiceRepo),
-            getInvoice = GetInvoice(invoiceRepo),
+            getInvoiceById = GetInvoiceById(invoiceRepo),
             upsertInvoiceItems = UpsertInvoiceItems(invoiceRepo),
             getInvoiceItems = GetInvoiceItems(invoiceRepo),
             deleteInvoiceItem = DeleteInvoiceItem(invoiceRepo),

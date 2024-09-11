@@ -1,15 +1,14 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,7 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -29,12 +28,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.ExpansePerPeriod
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceProfitByPeriod
+import com.mohmmed.mosa.eg.towmmen.presenter.accountiong.comman.ExpanseColumnChart
+import com.mohmmed.mosa.eg.towmmen.presenter.accountiong.comman.ProfitColumnChart
+import com.mohmmed.mosa.eg.towmmen.presenter.accountiong.comman.SimpleStatCard
+import com.mohmmed.mosa.eg.towmmen.presenter.accountiong.comman.StatisticItem
+import com.mohmmed.mosa.eg.towmmen.presenter.accountiong.comman.TransactionItem
 import com.mohmmed.mosa.eg.towmmen.presenter.home.comman.TopProductExplainedCard
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ExpanseColumnChart
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.ProfitColumnChart
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.SimpleStatCard
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.StatisticItem
-import com.mohmmed.mosa.eg.towmmen.presenter.profit.comman.TransactionItem
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 
 
@@ -45,95 +44,86 @@ fun HomeScreen() {
     val totalInvoice by homeViewModel.totalInvoices.collectAsState()
     val avgInvoice by homeViewModel.avgInvoicePerMonth.collectAsState()
     val invoiceProfitByMonth by homeViewModel.invoicePerMonth.collectAsState()
-    val invoiceProfitByDay by homeViewModel.invoicePerDay.collectAsState()
-    val invoiceProfitByWeek by homeViewModel.invoicePerWeek.collectAsState()
-/*    val invoicePeriod by remember {
-        mutableStateOf(listOf(
-            invoiceProfitByDay,
-            invoiceProfitByWeek,
-            invoiceProfitByMonth
-        ))
-    }*/
-
     val totalProducts by homeViewModel.productCount.collectAsState()
     val productsCost by homeViewModel.productsCost.collectAsState()
     val expanseAvg by homeViewModel.avgExpansePerMonth.collectAsState()
     val totalCustomers by homeViewModel.customerCount.collectAsState()
     val topProduct by homeViewModel.mostTopSellingProduct.collectAsState()
     val expansePerMonth by homeViewModel.expansePerMonth.collectAsState()
-    val expansePerDay by homeViewModel.expansePerDay.collectAsState()
-    val expansePerWeek by homeViewModel.expansePerWeek.collectAsState()
-/*    val expansePeriod by remember {
-        mutableStateOf(listOf(
-            expansePerDay,
-            expansePerWeek,
-            expansePerMonth
-        ))
-    }*/
     val latestTransaction by homeViewModel.invoices.collectAsState()
     val context = LocalContext.current
-
+    val emptyProfit by remember {
+        mutableStateOf( listOf(InvoiceProfitByPeriod("", 0.0)))}
+    val emptyExpanse by remember {
+        mutableStateOf( listOf(ExpansePerPeriod("", 0.0)))}
     val last4Transaction by remember {
         mutableStateOf(latestTransaction.take(4))
     }
-    val options by remember { mutableStateOf(listOf(
-        context.getString(R.string.day),
-        context.getString(R.string.week),
-        context.getString(R.string.month)
-    )) }
 
-    val optionsMap = mapOf(
-        context.getString(R.string.day) to 0,
-        context.getString(R.string.week) to 1,
-        context.getString(R.string.month) to 2
-    )
-    var selectedExpansePeriod by remember { mutableStateOf(context.getString(R.string.day))}
 
-    var selectedInvoicePeriod by remember { mutableStateOf(context.getString(R.string.day))}
-
-    val statisticItems by remember {
-        mutableStateOf(listOf(
-            StatisticItem(title = context.getString(R.string.total_product),
-                value = totalProducts.toString() ),
-
+    val customersStatics by remember {
+        mutableStateOf(listOf(            
             StatisticItem(title = context.getString(R.string.total_customer),
-                value = "${totalCustomers?: 0}"),
+            value = "${totalCustomers?: 0}"),
 
             StatisticItem(title = context.getString(R.string.total_invoice_Value),
-                value = formatCurrency(totalInvoice?: 0.0)),
-
-            StatisticItem(title = context.getString(R.string.produts_cost),
-                value = formatCurrency(productsCost?: 0.0)),
-        ))
+                value = formatCurrency(totalInvoice?: 0.0)),))
     }
+    val productsStatics by remember { mutableStateOf(listOf(
+        StatisticItem(title = context.getString(R.string.total_product),
+            value = totalProducts.toString() ),
+        StatisticItem(title = context.getString(R.string.produts_cost),
+            value = formatCurrency(productsCost?: 0.0)),))
+    }
+    
 
-    LazyVerticalGrid(
-        modifier = Modifier
-            .fillMaxSize(),
-        columns = GridCells.Fixed(2)
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
     ) {
 
-        items(statisticItems, key = {
-            it.title
-        }){ item ->
-            SimpleStatCard(
-                modifier = Modifier.padding(8.dp),
-                title = item.title,  value = item.value
-            )
-        }
-        item(span = { GridItemSpan(2) }) {
-            Spacer(modifier = Modifier.height(24.dp))
+        // customers ststics
+        item{
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                customersStatics.fastForEach {
+                    SimpleStatCard(modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                        title = it.title,
+                        value = it.value)
+                }
+            }
+
         }
 
-        item(span = {
-            GridItemSpan(2)
-        }) {
+        // products statics
+        item{
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                productsStatics.fastForEach {
+                    SimpleStatCard(modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp),
+                        title = it.title,
+                        value = it.value)
+                }
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+
+        }
+
+
+        item {
             Column(modifier = Modifier.padding(10.dp)) {
-                val emptyProfit = listOf(InvoiceProfitByPeriod("", 0.0))
-                val emptyExpanse = listOf(ExpansePerPeriod("", 0.0))
 
                 Text(
-                    text = stringResource(R.string.total_invoice_per),
+                    text = stringResource(R.string.invoices_total_ber_month),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -144,7 +134,7 @@ fun HomeScreen() {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = stringResource(R.string.total_expanse_per),
+                    text = stringResource(R.string.expanse_total_ber_month),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -154,17 +144,11 @@ fun HomeScreen() {
             }
         }
 
-        item(span = {
-            GridItemSpan(2)
-        }) {
-
+        item{
             TopProductExplainedCard(top = topProduct, total = totalInvoice?: 0.0)
-
         }
 
-        item(span = {
-            GridItemSpan(2)
-        }) {
+        item{
             Spacer(modifier = Modifier.height(24.dp))
 
             ElevatedCard(modifier = Modifier
@@ -197,7 +181,6 @@ fun HomeScreen() {
             }
 
         }
-
 
     }
 }

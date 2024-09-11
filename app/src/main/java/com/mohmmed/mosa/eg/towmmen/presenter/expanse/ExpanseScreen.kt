@@ -9,10 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -129,11 +130,11 @@ fun ExpanseItemCard(
     onDeleteClick:(Expanse) -> Unit,
     onEditClick :(Expanse) -> Unit
 ) {
-    Card(
+    ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.elevatedCardElevation(8.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -144,14 +145,16 @@ fun ExpanseItemCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = expanse.expanse, style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.width(25.dp))
                 Text(text = formatCurrency(expanse.amount), style = MaterialTheme.typography.titleLarge)
-                SaveEditDropDownMenu(deleteMessage = stringResource(id = R.string.expanse_deleted),
+
+                SaveEditDropDownMenu(
                     onDelete = {onDeleteClick(expanse)},
                     onEdit = {onEditClick(expanse)})
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = dateToString(expanse.payDate,
-                "yyyy MMMM dd",
+                "yyyy-MM-dd",
                         locale = Locale.getDefault()), style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(8.dp))
         }

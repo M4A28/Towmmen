@@ -5,10 +5,10 @@ import com.mohmmed.mosa.eg.towmmen.data.repository.InvoiceRepositoryImp
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetInvoice @Inject constructor(
+class GetInvoiceById @Inject constructor(
     private val invoiceRepositoryImp: InvoiceRepositoryImp
 ){
-    operator fun invoke(customerName: String): Flow<List<Invoice>>{
-        return invoiceRepositoryImp.getAllInvoices() // todo remove this
+    operator fun invoke(invoiceId: String): Flow<Invoice> {
+        return invoiceRepositoryImp.getInvoiceById(invoiceId)
     }
 }

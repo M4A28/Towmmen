@@ -3,6 +3,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.drawer.setting
 import android.Manifest
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -230,6 +231,9 @@ fun SettingsScreen() {
             && storagePermissionState.status.shouldShowRationale
         ) {
             // todo enhance this
+            Toast.makeText(context,
+                context.getString(R.string.permission_is_important),
+                Toast.LENGTH_LONG).show()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
@@ -333,7 +337,6 @@ fun SettingsScreen() {
                     }
                 )
             }
-
             item {
                 CategoryHeader(stringResource(R.string.data_management))
             }
@@ -454,6 +457,9 @@ fun SettingsScreen() {
                                         Log.d("PATH", filePath)
                                         snackBarHostState.showSnackbar(context.getString(R.string.database_restored))
                                         filePath = ""
+                                        Toast.makeText(context,
+                                            context.getString(R.string.restore_complete_),
+                                            Toast.LENGTH_LONG).show()
                                     }
                                 }
                         }) {

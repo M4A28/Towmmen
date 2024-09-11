@@ -1,6 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.util
 
-import android.os.Environment
+import android.os.Build
 import com.mohmmed.mosa.eg.towmmen.data.module.Category
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
 import com.mohmmed.mosa.eg.towmmen.data.module.Dealer
@@ -15,7 +15,9 @@ import java.util.Date
 
 fun exportProductsToCsv(products: List<Product>) {
     val createDate = Date()
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        APP_DIR_R
+    else APP_DIR
     val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
@@ -54,8 +56,8 @@ fun exportProductsToCsv(products: List<Product>) {
                 append("${product.category},")
                 append("${product.stockQuantity},")
                 append("${product.unit},")
-                append("${product.manufactureDate},")
-                append("${product.expireDate},")
+                append("${dateToString(product.manufactureDate, "yyyy-MM-dd")},")
+                append("${dateToString(product.expireDate, "yyyy-MM-dd")},")
                 append("\n")
             })
         }
@@ -67,7 +69,10 @@ fun exportProductsToCsv(products: List<Product>) {
 
 fun exportCustomersToCsv(customers: List<Customer>) {
     val createDate = Date()
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        APP_DIR_R
+        else APP_DIR
+
     val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
@@ -102,16 +107,18 @@ fun exportCustomersToCsv(customers: List<Customer>) {
                 append("\n")
             })
         }
+        fileWriter.flush()
+        fileWriter.close()
     }
 
-    fileWriter.flush()
-    fileWriter.close()
 }
 
 fun exportCategoryToCsv(categorys: List<Category>) {
 
     val createDate = Date()
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        APP_DIR_R
+    else APP_DIR
     val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
@@ -136,15 +143,17 @@ fun exportCategoryToCsv(categorys: List<Category>) {
             })
         }
 
+        fileWriter.flush()
+        fileWriter.close()
     }
 
-    fileWriter.flush()
-    fileWriter.close()
 }
 
 fun exportDealers(dealers: List<Dealer>){
     val createDate = Date()
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        APP_DIR_R
+    else APP_DIR
     val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
@@ -177,15 +186,17 @@ fun exportDealers(dealers: List<Dealer>){
                 append("\n")
             })
         }
+        fileWriter.flush()
+        fileWriter.close()
     }
 
-    fileWriter.flush()
-    fileWriter.close()
 }
 
 fun exportInvoice(invoices: List<Invoice>){
     val createDate = Date()
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        APP_DIR_R
+    else APP_DIR
     val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
@@ -215,15 +226,17 @@ fun exportInvoice(invoices: List<Invoice>){
                 append("\n")
             })
         }
+        fileWriter.flush()
+        fileWriter.close()
     }
 
-    fileWriter.flush()
-    fileWriter.close()
 }
 
 fun exportExpanses(expanses: List<Expanse>){
     val createDate = Date()
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        APP_DIR_R
+    else APP_DIR
     val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
@@ -263,7 +276,9 @@ fun exportExpanses(expanses: List<Expanse>){
 
 fun exportNotes(notes: List<Note>){
     val createDate = Date()
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        APP_DIR_R
+    else APP_DIR
     val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
@@ -296,14 +311,16 @@ fun exportNotes(notes: List<Note>){
                 append("\n")
             })
         }
+        fileWriter.flush()
+        fileWriter.close()
     }
 
-    fileWriter.flush()
-    fileWriter.close()
 }
 fun exportLockers(lockers: List<Locker>){
     val createDate = Date()
-    val parentDir = File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+    val parentDir = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        APP_DIR_R
+    else APP_DIR
     val currentDayDir = File(parentDir.path + "/${dateToString(createDate,"yyyy-MM-dd")}")
     if(!parentDir.exists()){
         parentDir.mkdirs()
@@ -336,10 +353,10 @@ fun exportLockers(lockers: List<Locker>){
                 append("\n")
             })
         }
+        fileWriter.flush()
+        fileWriter.close()
     }
 
-    fileWriter.flush()
-    fileWriter.close()
 }
 
 

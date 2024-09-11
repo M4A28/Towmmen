@@ -1,5 +1,7 @@
 package com.mohmmed.mosa.eg.towmmen.util
 
+import android.os.Environment
+import java.io.File
 
 
 const val ONE_HOUR = 1000L * 60L * 60L
@@ -36,4 +38,15 @@ const val DB_NAME = "towwmen_db"
 
 const val INVOICE_KEY = "invoice_key"
 
+const val INVOICE_ID = "invoice_id"
+
 const val USER_SETTING = "USER_SETTING"
+
+const val DB_WORK = "DB_WORK"
+
+const val EXP_PRODUCT_WORK = "EXP_PRODUCT_WORK"
+
+val APP_DIR_R = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).path + "/Shop_Manger")
+
+val APP_DIR =   File(Environment.getExternalStorageDirectory().path + "/Shop_Manger")
+

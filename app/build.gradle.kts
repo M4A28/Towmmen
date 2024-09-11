@@ -14,8 +14,8 @@ android {
         applicationId = "com.mohmmed.mosa.eg.towmmen"
         minSdk = 22
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.2.0_beta"
+        versionCode = 5
+        versionName = "1.2.5-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -34,6 +34,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -49,6 +50,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -80,7 +82,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.leakcanary.android)
 
     // for desugring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -124,8 +126,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     // pretty time
     implementation(libs.prettytime)
-    // to show fake data eg: name, emil
-    //implementation(libs.javafaker)
+    // to seleporite
+    implementation(libs.dionsegijn.konfetti)
     // chart vice
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)

@@ -1,4 +1,4 @@
-package com.mohmmed.mosa.eg.towmmen.presenter.profit
+package com.mohmmed.mosa.eg.towmmen.presenter.accountiong
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -11,8 +11,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -39,9 +39,7 @@ import kotlinx.coroutines.launch
 fun AccountingScreen(navController: NavHostController){
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { Tabs.entries.size })
-    val selectedTabIndex by remember{
-        derivedStateOf { pagerState.currentPage }
-    }
+    val selectedTabIndex by remember{ derivedStateOf { pagerState.currentPage } }
 
     Scaffold(
         topBar = {
@@ -51,7 +49,7 @@ fun AccountingScreen(navController: NavHostController){
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) { Text(
-                        text = stringResource(id = R.string.profit),
+                        text = stringResource(id = R.string.accounting),
                     ) }
                 }
             )
@@ -64,7 +62,7 @@ fun AccountingScreen(navController: NavHostController){
                 .padding(top = paddingVale.calculateTopPadding())
         ) {
 
-            TabRow(
+            ScrollableTabRow(
                 modifier = Modifier.fillMaxWidth(),
                 selectedTabIndex = selectedTabIndex) {
                 Tabs.entries.forEachIndexed { index, currentTab ->
@@ -95,10 +93,10 @@ fun AccountingScreen(navController: NavHostController){
                     .weight(1f),
                 state = pagerState) {
                 when(selectedTabIndex){
-                    0 -> InvoiceScreen()
+                    0 -> InvoiceScreen(navController)
                     1 -> PurchaseScreen()
                     2 -> TopSellingItemScreen()
-                    3 -> ExpanseScreen(navController = navController) // todo refactor
+                    3 -> ExpanseScreen(navController = navController)
                 }
             }
         }

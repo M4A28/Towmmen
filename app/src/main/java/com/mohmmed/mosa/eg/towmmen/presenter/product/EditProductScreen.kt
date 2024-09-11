@@ -2,6 +2,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.product
 
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -71,6 +72,7 @@ fun EditProductScreen(navController: NavHostController){
     val categoryViewModel: CategoryViewModel = hiltViewModel()
     val categoryList by categoryViewModel.getAllCategory().collectAsState(initial = emptyList())
     var code by remember { mutableStateOf("") }
+    val context = LocalContext.current
     navController.currentBackStackEntry
         ?.savedStateHandle
         ?.get<String?>(SCANNED_BARCODE)?.let {
@@ -84,7 +86,10 @@ fun EditProductScreen(navController: NavHostController){
             editedProduct = product,
             onEditClick = {
                 productViewModel.updateProduct(it)
-                navController.popBackStack() },
+                navController.navigateUp()
+                Toast.makeText(context,
+                    context.getString(R.string.product_edited_done), Toast.LENGTH_LONG).show()
+                          },
             onBackClick = { navController.popBackStack() },
             options = categoryList.map{ it.category},
             barCode = code,

@@ -19,7 +19,7 @@ import java.util.Calendar
 class ProductExpirationWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val productUseCase: ProductUseCases
+    @Assisted private val productUseCase: ProductUseCases
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {

@@ -28,6 +28,9 @@ interface InvoiceDao {
     @Query("SELECT * FROM invoices WHERE invoiceId = :invoiceId")
     fun getInvoiceWithItems(invoiceId: String): Flow<InvoiceWithItems?>
 
+    @Query("SELECT * FROM invoices WHERE invoiceId = :invoiceId")
+    fun getInvoiceById(invoiceId: String):Flow<Invoice>
+
 
     @Query("SELECT SUM((totalAmount)) FROM invoices")
     fun getAllInvoiceProfit(): Flow<Double?>

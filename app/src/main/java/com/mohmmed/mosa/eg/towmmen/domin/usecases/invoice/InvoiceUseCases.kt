@@ -4,7 +4,7 @@ data class InvoiceUseCases(
     val upsertInvoice: UpsertInvoice,
     val deleteInvoice: DeleteInvoice,
     val getAllInvoice: GetAllInvoice,
-    val getInvoice: GetInvoice,
+    val getInvoiceById: GetInvoiceById,
     val upsertInvoiceItems: UpsertInvoiceItems,
     val getInvoiceItems: GetInvoiceItems,
     val deleteInvoiceItem: DeleteInvoiceItem,
@@ -30,4 +30,4 @@ data class InvoiceUseCases(
     val getInvoiceProfitByDay: GetInvoiceProfitByDay,
     val getInvoiceProfitByWeek: GetInvoiceProfitByWeek,
 
-)
+    )

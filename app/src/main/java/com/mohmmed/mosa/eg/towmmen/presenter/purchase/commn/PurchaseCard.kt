@@ -9,12 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,13 +22,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Purchase
 import com.mohmmed.mosa.eg.towmmen.data.module.PurchaseItem
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.SaveEditDropDownMenu
 import com.mohmmed.mosa.eg.towmmen.util.dateToString
 import java.util.Locale
 
@@ -44,14 +41,12 @@ fun PurchaseCard(purchase: Purchase,
 
     var showItems by remember { mutableStateOf(false) }
 
-    Card(
+    ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 8.dp)
             .clickable { showItems = !showItems },
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(6.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        elevation = CardDefaults.elevatedCardElevation(8.dp)
     ) {
         Column(
             modifier = Modifier
@@ -69,18 +64,22 @@ fun PurchaseCard(purchase: Purchase,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Medium
                 )
+                Spacer(modifier = Modifier.width(50.dp))
                 Text(
                     text = purchase.purchaseId,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary
                 )
+                SaveEditDropDownMenu(
+                    onEdit = {onEditClick(purchase)},
+                    onDelete = {onDeleteClick(purchase)})
             }
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
                 text = stringResource(id = R.string.purchase_date,
                     dateToString(purchase.date,
-                        pattern = "yyyy MMMM dd",
+                        pattern = "yyyy-MM-dd",
                         locale = Locale.getDefault())
                 ) ,
                 fontWeight = FontWeight.Bold,
@@ -90,7 +89,7 @@ fun PurchaseCard(purchase: Purchase,
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = purchase.dealerName,
+                text = stringResource(R.string.dealer_name_, purchase.dealerName),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -120,12 +119,12 @@ fun PurchaseCard(purchase: Purchase,
 
             Spacer(modifier = Modifier.height(6.dp))
 
-
+/*
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                IconButton(onClick = { onEditClick(purchase) }) {
+                IconButton(onClick = {  }) {
                     Icon(
                         painter = painterResource(R.drawable.edit),
                         contentDescription = "Edit",
@@ -135,14 +134,14 @@ fun PurchaseCard(purchase: Purchase,
 
                 Spacer(modifier = Modifier.width(10.dp))
 
-                IconButton(onClick = { onDeleteClick(purchase) }) {
+                IconButton(onClick = {  }) {
                     Icon(
                         painter = painterResource(R.drawable.delete),
                         contentDescription = "Delete",
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
-            }
+            }*/
 
         }
     }

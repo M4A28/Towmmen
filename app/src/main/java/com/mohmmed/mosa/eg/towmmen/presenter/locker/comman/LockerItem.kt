@@ -51,8 +51,7 @@ fun LockerItem(
             Spacer(modifier = Modifier.width(50.dp))
             SaveEditDropDownMenu(
                 onEdit = { onEdit(lockerItem) },
-                onDelete = { onDelete(lockerItem) },
-                deleteMessage = stringResource(id = R.string.locker_item_delete),
+                onDelete = { onDelete(lockerItem) }
             )
         }
         Row(

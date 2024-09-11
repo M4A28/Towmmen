@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.mohmmed.mosa.eg.towmmen.R
 
@@ -25,14 +24,10 @@ import com.mohmmed.mosa.eg.towmmen.R
 @Composable
 fun SaveEditDropDownMenu(
     modifier: Modifier = Modifier,
-    deleteMessage: String,
     onEdit: () -> Unit = {},
     onDelete: () -> Unit = {},
 ) {
-    val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
-
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -98,6 +93,55 @@ fun CustomDropDownMenu(
                 text = { Text(actionTwo) },
                 onClick = {
                     onActionTwo()
+                }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun CustomTriDropDownMenu(
+    actionOne: String,
+    actionTwo: String,
+    actionThree: String,
+    onActionOne: () -> Unit = {},
+    onActionTwo: () -> Unit = {},
+    onActionThree: () -> Unit = {},
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+
+    Box{
+        IconButton(onClick = { expanded = !expanded }) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = "More"
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text(actionOne) },
+
+                onClick = {
+                    onActionOne()
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(actionTwo) },
+                onClick = {
+                    onActionTwo()
+                }
+            )
+
+            DropdownMenuItem(
+               text = { Text(actionThree) },
+                onClick = {
+                    onActionThree()
                 }
             )
         }

@@ -49,6 +49,11 @@ enum class NavigationItem(
         title = R.string.category
     ),
 
+    Debt(
+        title = R.string.debt_,
+        icon = R.drawable.debt
+    ),
+
     Note(
         icon = R.drawable.notes,
         title = R.string.notes

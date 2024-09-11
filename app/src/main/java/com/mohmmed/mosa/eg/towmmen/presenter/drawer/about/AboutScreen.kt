@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.mohmmed.mosa.eg.towmmen.BuildConfig
 import com.mohmmed.mosa.eg.towmmen.R
 
 @Composable
@@ -126,14 +127,12 @@ fun AboutScreen() {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    String.format(stringResource(R.string.app_name_2),
-                    stringResource(id = R.string.app_name)),
+                    stringResource(id = R.string.app_name, stringResource(R.string.app_name_2)),
                     style = MaterialTheme.typography.bodyMedium
                 )
 
                 Text(
-                    String.format(stringResource(R.string.app_version),
-                    stringResource(id = R.string.version)),
+                    stringResource(R.string.app_version, BuildConfig.VERSION_NAME),
                     style = MaterialTheme.typography.bodyMedium
                 )
 

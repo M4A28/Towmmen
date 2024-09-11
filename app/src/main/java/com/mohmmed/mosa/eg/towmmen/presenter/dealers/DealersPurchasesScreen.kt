@@ -1,5 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.dealers
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -30,7 +32,7 @@ fun DealerPurchaseScreen(navController: NavHostController){
     val allProducts by purchaseViewModel.products.collectAsState(initial = emptyList())
     var purchase by remember{ mutableStateOf<Purchase?>(null) }
     var mPurchaseWithItems by remember{ mutableStateOf<PurchaseWithItems?>(null) }
-
+    val context = LocalContext.current
     navController
         .previousBackStackEntry
         ?.savedStateHandle
@@ -74,6 +76,9 @@ fun DealerPurchaseScreen(navController: NavHostController){
 
                 }
                 showDeleteDialog = !showDeleteDialog
+                Toast.makeText(context,
+                    context.getString(R.string.purchase_deleted), Toast.LENGTH_LONG).show()
+
             },
             onDismiss = { showDeleteDialog = !showDeleteDialog }
         )

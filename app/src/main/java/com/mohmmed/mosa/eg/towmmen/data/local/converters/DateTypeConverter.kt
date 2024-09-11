@@ -8,8 +8,8 @@ import java.util.Date
 class DateTypeConverter {
 
     @TypeConverter
-    fun fromDateToLong(date: Date): Long{
-        return date.time
+    fun fromDateToLong(date: Date?): Long{
+        return date?.time ?: 0L
     }
 
     @TypeConverter

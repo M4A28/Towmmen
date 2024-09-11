@@ -1,4 +1,4 @@
-package com.mohmmed.mosa.eg.towmmen.presenter.profit.comman
+package com.mohmmed.mosa.eg.towmmen.presenter.accountiong.comman
 
 data class StatisticItem(
     val title: String,

@@ -39,6 +39,106 @@ import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.formatCurrency
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DebtItemCard(
+    itemName: String,
+    price: Double,
+    initialQuantity: Int = 1,
+    onQuantityChange: (Int) -> Unit,
+    onCloseClick: () -> Unit
+) {
+    var quantity by remember { mutableStateOf(initialQuantity) }
+    val elevation by animateFloatAsState(if (quantity > 1) 8f else 2f)
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp, horizontal = 8.dp)
+            .shadow(elevation.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row(horizontalArrangement = Arrangement.End){
+                IconButton(onClick = { onCloseClick()}) {
+                    Icon(painter = painterResource(id = R.drawable.close),
+                        contentDescription = null)
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = itemName,
+                    fontFamily = CairoFont,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+
+                Text(
+                    text = stringResource(id = R.string.price_, formatCurrency(price)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontFamily = CairoFont,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Text(
+                    text = stringResource(id = R.string.total_cost ,formatCurrency(price * quantity)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontFamily = CairoFont,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                QuantityControl(
+                    quantity = quantity,
+                    onIncrement = {
+                        quantity++
+                        onQuantityChange(quantity)
+                    },
+                    onDecrement = {
+                        if (quantity > 1) {
+                            quantity--
+                            onQuantityChange(quantity)
+                        }
+                    }
+                )
+                Text(
+                    text = stringResource(id = R.string.quantity, quantity),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontFamily = CairoFont,
+
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InvoiceItemCard(

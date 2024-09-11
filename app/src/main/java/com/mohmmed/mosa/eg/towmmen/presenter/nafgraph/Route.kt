@@ -5,6 +5,7 @@ sealed class Route(
 )
 {
 
+
     // main screens
     object HomeScreen: Route(route = "homeScreen")
     object CustomerScreen: Route(route = "customerScreen")
@@ -16,18 +17,18 @@ sealed class Route(
     // secondary screens
     object AddProductScreen: Route(route = "addProductScreen")
     object CustomerInvoiceScreen: Route(route = "customerInvoiceScreen")
+    object EditInvoiceScreen: Route(route = "editInvoiceScreen")
     object AddCustomerScreen: Route(route = "addCustomerScreen")
     object AddNoteScreen: Route(route = "addNoteScreen")
     object DealerFullInfoScreen: Route(route = "dealerFullInfoScreen")
     object AddPurchasesScreen: Route(route = "addPurchasesScreen")
     object DealerPurchasesScreen: Route(route = "dealerPurchasesScreen")
     object PurchasesScreen: Route(route = "purchasesScreen")
-    object DealerEditInfoScreen: Route(route = "dealerEditInfoScreen")
-    object EditLockerScreen: Route(route = "editLockerScreen")
+    //object DealerEditInfoScreen: Route(route = "dealerEditInfoScreen")
+    //object EditLockerScreen: Route(route = "editLockerScreen")
     object AddLockerScreen: Route(route = "addLockerScreen")
     object LockerScreen: Route(route = "lockerScreen")
 
-    object AddCategoryScreen: Route(route = "addCategoryScreen")
     object AddExpanseScreen: Route(route = "addExpanseScreen")
     object EditExpanseScreen: Route(route = "editExpanseScreen")
     object ProductFullInfoScreen: Route(route = "productFullInfoScreen")
@@ -39,7 +40,7 @@ sealed class Route(
     object EmployeeFullInfoScreen: Route(route = "employeeFullInfoScreen")
     object SettingScreen: Route(route = "settingScreen")
     object AddInvoiceScreen: Route(route = "addInvoiceScreen")
-    object InvoiceScreen: Route(route = "invoiceScreen")
+    //object InvoiceScreen: Route(route = "invoiceScreen")
 
     object ProfitScreen: Route(route = "profitScreen")
     object AboutScreen: Route(route = "aboutScreen")
@@ -49,4 +50,9 @@ sealed class Route(
     object AppStartNavigation: Route(route = "appStartNavigation")
     object AppNavigationScreen: Route(route = "appNavigationScreen")
     object NavigationScreen: Route(route = "navigationScreen")
+    object DebtScreen: Route(route = "debtScreen")
+    object CustomerDebtScreen: Route(route = "customerDebtScreen")
+    object AddCustomerDebtScreen: Route(route = "AddCustomerDebtScreen")
+
+
 }

@@ -2,6 +2,7 @@ package com.mohmmed.mosa.eg.towmmen.presenter.purchase
 
 import android.Manifest
 import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -66,6 +67,7 @@ fun AddPurchaseScreen(navController: NavHostController) {
     val canSavePurchaseToDb  by purchaseViewModel.canSavePurchaseToDb.collectAsState()
     var cameraPermissionGranted by remember { mutableStateOf(false) }
     val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+    val context = LocalContext.current
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts
             .RequestPermission()
@@ -75,6 +77,7 @@ fun AddPurchaseScreen(navController: NavHostController) {
         if (!cameraPermissionState.status.isGranted
             && cameraPermissionState.status.shouldShowRationale
         ) {
+            Toast.makeText(context, context.getString(R.string.permission_is_important), Toast.LENGTH_LONG).show()
 
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -105,6 +108,9 @@ fun AddPurchaseScreen(navController: NavHostController) {
                         )
                         purchaseViewModel.upsertLockerTransaction(locker)
                     }
+                    Toast.makeText(context,
+                        context.getString(R.string.purchase_has_been_add), Toast.LENGTH_LONG).show()
+
                 }
             )
 

@@ -119,33 +119,6 @@ fun BarcodeScannerScreen(navController: NavController) {
             }
         }
     }
-
-/*    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            "Scan BarCode",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-
-            BarcodeScanner(onBarcodeDetected = {
-                viewModel.onBarcodeDetected(it)
-            })
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ){
-
-            ScannerOverlay()
-        }
-    }*/
 }
 
 
@@ -235,7 +208,7 @@ fun ScannerOverlay() {
         animationSpec = infiniteRepeatable(
             animation = tween(1000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
-        )
+        ), label = ""
     )
     
     Canvas(modifier = Modifier.fillMaxSize()) {

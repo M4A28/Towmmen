@@ -1,5 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.customer
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,11 +15,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,10 +41,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Customer
+import com.mohmmed.mosa.eg.towmmen.presenter.comman.CustomDropDownMenu
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DeleteConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.DetailItem
 import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
-import com.mohmmed.mosa.eg.towmmen.presenter.navigator.navigateToTab
 import com.mohmmed.mosa.eg.towmmen.ui.theme.CairoFont
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_ID
 import com.mohmmed.mosa.eg.towmmen.util.CUSTOMER_KEY
@@ -53,6 +55,7 @@ import kotlinx.coroutines.launch
 fun FullCustomerInfoScreen(navController: NavHostController) {
     val customerViewModel: CustomerViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     var showDeleteConfirmation by remember { mutableStateOf(false) }
     navController.previousBackStackEntry
         ?.savedStateHandle
@@ -69,13 +72,21 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
                 },
                 onPurchaseClick = {
                     navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
-                    navigateToTab(navController, Route.AddInvoiceScreen.route)
-                    //navController.navigate(Route.AddInvoiceScreen.route)
+                    navController.navigate(Route.AddInvoiceScreen.route)
 
                 },
                 onShowInvoicesClick = {
                     navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_ID, customer.customerId)
                     navController.navigate(Route.CustomerInvoiceScreen.route)
+                },
+                onAddDebtClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
+                    navController.navigate(Route.AddCustomerDebtScreen.route)
+                },
+                onShowDebtClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(CUSTOMER_KEY, customer)
+                    navController.navigate(Route.CustomerDebtScreen.route)
+
                 }
             )
 
@@ -88,6 +99,8 @@ fun FullCustomerInfoScreen(navController: NavHostController) {
                         coroutineScope.launch {
                             customerViewModel.deleteCustomer(customer)
                             navController.navigateUp()
+                            Toast.makeText(context,
+                                context.getString(R.string.customer_delete), Toast.LENGTH_LONG).show()
                         }
                     },
                     onDismiss = { showDeleteConfirmation = false }
@@ -106,6 +119,8 @@ fun FullCustomerInfoContent(
     customer: Customer,
     onDeleteClick:  (Customer)  -> Unit,
     onEditClick: (Customer)  -> Unit,
+    onAddDebtClick: (Customer) -> Unit,
+    onShowDebtClick: (Customer) -> Unit,
     onPurchaseClick: (Customer) -> Unit = {},
     onShowInvoicesClick: (Customer) -> Unit = {}
 ) {
@@ -118,7 +133,10 @@ fun FullCustomerInfoContent(
     ) {
         CustomerHeader(customer,
             onEditClick = {onEditClick(customer)},
-            onDeleteClick = { onDeleteClick(customer) })
+            onDeleteClick = { onDeleteClick(customer) },
+            onShowDebtClick = {onShowDebtClick(customer)},
+            onAddDebtClick = {onAddDebtClick(customer)}
+        )
         Spacer(modifier = Modifier.height(16.dp))
         CustomerDetails(customer)
         Spacer(modifier = Modifier.height(24.dp))
@@ -129,24 +147,19 @@ fun FullCustomerInfoContent(
             horizontalArrangement = Arrangement.SpaceBetween,
         ){
             Button(
-                onClick = { onPurchaseClick(customer) },
-                colors = ButtonDefaults
-                    .buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                onClick = { onPurchaseClick(customer) }
             ) {
                 Spacer(Modifier.width(8.dp))
-                Text(
-                    text = stringResource(R.string.record_purchase),
-                    fontFamily = CairoFont
-                )
+                Text(text = stringResource(R.string.record_purchase))
             }
-            Button(
+            OutlinedButton(
                 onClick = {onShowInvoicesClick(customer)},
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
             ) {
                 Spacer(Modifier.width(8.dp))
-                Text(text = stringResource(R.string.show_invoices),
-                    fontFamily = CairoFont)
+                Text(text = stringResource(R.string.show_invoices))
             }
+
+
         }
     }
 
@@ -158,7 +171,9 @@ fun FullCustomerInfoContent(
 fun CustomerHeader(
     customer: Customer,
     onEditClick: (Customer) -> Unit,
-    onDeleteClick: (Customer) -> Unit
+    onDeleteClick: (Customer) -> Unit,
+    onAddDebtClick: (Customer) -> Unit,
+    onShowDebtClick: (Customer) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -169,13 +184,13 @@ fun CustomerHeader(
         Icon(
             painter = painterResource(id = R.drawable.person),
             contentDescription = "Customer Image",
-            //alpha = 0.4f,
             modifier = Modifier.fillMaxSize(),
             tint = MaterialTheme.colorScheme.secondary
         )
 
         Row(
             modifier = Modifier
+                .fillMaxWidth()
                 .align(Alignment.TopEnd)
                 .padding(8.dp) //
         ) {
@@ -201,6 +216,15 @@ fun CustomerHeader(
                     tint = MaterialTheme.colorScheme.error,
                     painter = painterResource(id = R.drawable.delete ),
                     contentDescription = null
+                )
+            }
+            Box(modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.TopEnd){
+                CustomDropDownMenu(
+                    actionOne = stringResource(R.string.add_debt),
+                    actionTwo = stringResource(R.string.show_debt),
+                    onActionOne = {onAddDebtClick(customer)},
+                    onActionTwo = {onShowDebtClick(customer)}
                 )
             }
         }

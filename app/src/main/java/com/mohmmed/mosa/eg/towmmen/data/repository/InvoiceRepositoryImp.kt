@@ -19,6 +19,10 @@ class InvoiceRepositoryImp @Inject constructor(
         invoiceDao.upsertInvoice(invoice)
     }
 
+    override fun getInvoiceById(invoiceId: String): Flow<Invoice> {
+        return invoiceDao.getInvoiceById(invoiceId)
+    }
+
     override suspend fun upsertInvoiceItems(items: List<InvoiceItem>) {
          invoiceDao.upsertInvoiceItems(items)
     }

@@ -1,5 +1,6 @@
 package com.mohmmed.mosa.eg.towmmen.presenter.expanse
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,6 +53,7 @@ import java.util.Date
 @Composable
 fun EditExpanseScreen(navController: NavHostController){
     val expanseViewModel: ExpanseViewModel = hiltViewModel()
+    val context = LocalContext.current
 
     navController
         .previousBackStackEntry
@@ -60,7 +63,9 @@ fun EditExpanseScreen(navController: NavHostController){
             EditExpanseContent( nacController = navController,
                 onEditClick = {
                     expanseViewModel.upsertExpanse(it)
-                    navController.popBackStack()
+                    navController.navigateUp()
+                    Toast.makeText(context,
+                        context.getString(R.string.expanse_edited), Toast.LENGTH_LONG).show()
                 },
                 expanse = expanse
             )

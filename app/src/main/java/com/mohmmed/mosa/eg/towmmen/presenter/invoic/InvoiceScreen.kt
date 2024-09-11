@@ -14,16 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.mohmmed.mosa.eg.towmmen.R
 import com.mohmmed.mosa.eg.towmmen.data.module.Invoice
 import com.mohmmed.mosa.eg.towmmen.data.module.InvoiceWithItems
 import com.mohmmed.mosa.eg.towmmen.presenter.comman.ConfirmationDialog
 import com.mohmmed.mosa.eg.towmmen.presenter.invoic.comman.InvoiceCard
+import com.mohmmed.mosa.eg.towmmen.presenter.nafgraph.Route
+import com.mohmmed.mosa.eg.towmmen.util.INVOICE_ID
 
 
 @Composable
-fun InvoiceScreen(){
-    // todo refactor this
+fun InvoiceScreen(navHostController: NavHostController){
     val invoiceViewModel: InvoiceViewModel = hiltViewModel()
     val invoiceWithItem by invoiceViewModel.getAllInvoicesWithItems().collectAsState(initial = emptyList())
     val context = LocalContext.current
@@ -40,7 +42,9 @@ fun InvoiceScreen(){
             showDeleteDialog = !showDeleteDialog
                    },
         onEdit = { // todo
-             },
+            navHostController.currentBackStackEntry?.savedStateHandle?.set(INVOICE_ID, it.invoice.invoiceId)
+            navHostController.navigate(Route.EditInvoiceScreen.route)
+        },
     )
     if(showDeleteDialog){
         ConfirmationDialog(

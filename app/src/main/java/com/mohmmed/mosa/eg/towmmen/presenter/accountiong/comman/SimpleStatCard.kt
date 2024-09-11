@@ -1,11 +1,11 @@
-package com.mohmmed.mosa.eg.towmmen.presenter.profit.comman
+package com.mohmmed.mosa.eg.towmmen.presenter.accountiong.comman
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,12 +18,9 @@ fun SimpleStatCard(title: String,
                    modifier: Modifier = Modifier,
                    value: String
 ) {
-    Card(
+    ElevatedCard(
         modifier = modifier.animateContentSize(),
-        elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-
+        elevation = CardDefaults.cardElevation(8.dp),
     ) {
         Column(modifier = Modifier
             .padding(10.dp)

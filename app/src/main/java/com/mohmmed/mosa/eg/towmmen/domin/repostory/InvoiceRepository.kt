@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface InvoiceRepository {
     suspend fun upsertInvoice(invoice: Invoice)
+    fun getInvoiceById(invoiceId: String):Flow<Invoice>
+
 
     suspend fun upsertInvoiceItems(items: List<InvoiceItem>)
 
