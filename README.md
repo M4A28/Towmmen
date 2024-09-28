@@ -1,4 +1,4 @@
-# README for Shop Management Android App
+# Shop Management Android App
 
 ## Overview
 
@@ -79,7 +79,7 @@ Thank you for choosing the Shop Management App! We hope it enhances your Shop ma
 
 
 
-# README لتطبيق إدارة المتجر على الأندرويد
+#  تطبيق إدارة المتجر على الأندرويد
 
 ## نظرة عامة
 
