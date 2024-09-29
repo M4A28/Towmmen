@@ -61,6 +61,12 @@ Welcome to the Shop Management App! This application is designed to streamline t
 - **Utilizing the Dashboard**
   - Access the dashboard for insights into your Shop, sales, and customer activities.
 
+## Image Table
+
+| Product Image | Customer Image | Dealer Image |
+|---------------|----------------|--------------|
+| ![Product](path/to/product-image.jpg) | ![Customer](path/to/customer-image.jpg) | ![Dealer](path/to/dealer-image.jpg) |
+
 ## Support
 
 For any questions, feedback, or support, please reach out to our support team at [mohammed.mosa.eg@gmail.com].
